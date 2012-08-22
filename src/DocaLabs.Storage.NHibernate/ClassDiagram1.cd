@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DocaLabs.Storage.NHibernate.DefaultSessionManager">
+    <Position X="0.5" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgABAAAAA=</HashCode>
+      <FileName>DefaultSessionManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DocaLabs.Storage.NHibernate.DefaultTransientRepositoryFactory">
+    <Position X="0.75" Y="10" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAACAAAAAAAAA=</HashCode>
+      <FileName>DefaultTransientRepositoryFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DocaLabs.Storage.NHibernate.PartitionedSessionManager">
+    <Position X="3" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>PartitionedSessionManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DocaLabs.Storage.NHibernate.PartitionedTransientRepositoryFactory">
+    <Position X="3.75" Y="10" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>PartitionedTransientRepositoryFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DocaLabs.Storage.NHibernate.Repository&lt;TEntity&gt;" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAIABAAAAgBEIBAgIAAABAAAAAAIAAgUAAAAAAAAAAA=</HashCode>
+      <FileName>Repository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DocaLabs.Storage.NHibernate.SessionContext" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="3.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gAAAAIAAACBAAQBAAAAAAACAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SessionContext.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DocaLabs.Storage.NHibernate.SessionManagerBase">
+    <Position X="1.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAACAAAQAAAAAAAAAAAAAAAAAQAAAggBAAAAA=</HashCode>
+      <FileName>SessionManagerBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DocaLabs.Storage.NHibernate.TransientRepositoryFactoryBase">
+    <Position X="2.25" Y="6.25" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="DocaLabs.Storage.NHibernate.TransientRepositoryFactoryBase.TransientRepository&lt;TEntity&gt;" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>TransientRepositoryFactoryBase.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>TransientRepositoryFactoryBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="DocaLabs.Storage.NHibernate.INHibernateRepository&lt;TEntity&gt;">
+    <Position X="6.25" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>INHibernateRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DocaLabs.Storage.NHibernate.ISessionContext">
+    <Position X="9.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAABAAQBAAAAAAACAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ISessionContext.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DocaLabs.Storage.NHibernate.ISessionManager">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>ISessionManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

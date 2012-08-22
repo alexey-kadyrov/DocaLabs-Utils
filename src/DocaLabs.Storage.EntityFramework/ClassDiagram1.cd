@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DocaLabs.Storage.EntityFramework.DbConnectionManagerBase">
+    <Position X="2" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAACAAAAEAAAAAAAAAAQgAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>DbConnectionManagerBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DocaLabs.Storage.EntityFramework.DbContextAggregateRoot&lt;TEntity&gt;">
+    <Position X="9" Y="5.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DbContextAggregateRoot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DocaLabs.Storage.EntityFramework.DefaultDbConnectionManager">
+    <Position X="0.5" Y="6.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DefaultDbConnectionManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DocaLabs.Storage.EntityFramework.DefaultTransientRepositoryFactory">
+    <Position X="4.5" Y="11.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAACAAAAAAAAA=</HashCode>
+      <FileName>DefaultTransientRepositoryFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DocaLabs.Storage.EntityFramework.PartitionedDbConnectionManager">
+    <Position X="3.25" Y="6.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PartitionedDbConnectionManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DocaLabs.Storage.EntityFramework.PartitionedTransientRepositoryFactory">
+    <Position X="1.5" Y="11.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>PartitionedTransientRepositoryFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DocaLabs.Storage.EntityFramework.Repository&lt;TEntity&gt;" BaseTypeListCollapsed="true">
+    <Position X="4.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAIABAAAAEBEBBAAIAAAJAAAIAAIAAAUAAAAAAAAAAA=</HashCode>
+      <FileName>Repository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DocaLabs.Storage.EntityFramework.RepositoryConfiguration">
+    <Position X="6" Y="5.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAACAAAAAAAAEAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>RepositoryConfiguration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DocaLabs.Storage.EntityFramework.RepositoryContext&lt;TEntity&gt;" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAiBAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RepositoryContext.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DocaLabs.Storage.EntityFramework.TransientRepositoryFactoryBase">
+    <Position X="3" Y="8" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="DocaLabs.Storage.EntityFramework.TransientRepositoryFactoryBase.TransientRepository&lt;TEntity&gt;">
+        <TypeIdentifier>
+          <NewMemberFileName>TransientRepositoryFactoryBase.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TransientRepositoryFactoryBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="DocaLabs.Storage.EntityFramework.IDbConnectionManager">
+    <Position X="2" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>IDbConnectionManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DocaLabs.Storage.EntityFramework.IEntityFrameworkRepository&lt;TEntity&gt;">
+    <Position X="6.75" Y="0.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IEntityFrameworkRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DocaLabs.Storage.EntityFramework.IRepositoryContext&lt;TEntity&gt;">
+    <Position X="6.75" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgBAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IRepositoryContext.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

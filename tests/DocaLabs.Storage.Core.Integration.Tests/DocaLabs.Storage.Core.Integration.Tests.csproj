@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{870A5E15-973A-44A3-ABAC-DFD39808CBA0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DocaLabs.Storage.Core.Integration.Tests</RootNamespace>
+    <AssemblyName>DocaLabs.Storage.Core.Integration.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Machine.Specifications, Version=0.5.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Machine.Specifications.0.5.7\lib\net40\Machine.Specifications.dll</HintPath>
+    </Reference>
+    <Reference Include="Machine.Specifications.Clr4, Version=0.5.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Machine.Specifications.0.5.7\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.7\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Services" />
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="DataService\DataServiceRepositoryExtensionsTests.cs" />
+    <Compile Include="DataService\DataServiceRepositoryTests.cs" />
+    <Compile Include="DataService\DataServiceStorageContextManagerTests.cs" />
+    <Compile Include="DataService\DataServiceStorageContextTests.cs" />
+    <Compile Include="DataServiceTestsSetup.cs" />
+    <Compile Include="DummyProvider\DummyDbCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DummyProvider\DummyDbDataReader.cs" />
+    <Compile Include="DummyProvider\DummyDbParameter.cs" />
+    <Compile Include="DummyProvider\DummyDbParameterCollection.cs" />
+    <Compile Include="DummyProvider\DummyDbTransaction.cs" />
+    <Compile Include="Partitioning\CurrentPartitionProxyTests.cs" />
+    <Compile Include="Utils\DbConnectionStringTests.cs" />
+    <Compile Include="Utils\StoredProcedureExtensionsTests.cs" />
+    <Compile Include="Partitioning\HashedPartitionProviderTests.cs" />
+    <Compile Include="Partitioning\KeyMapPartitionProviderTests.cs" />
+    <Compile Include="Partitioning\PartitionValidator.cs" />
+    <Compile Include="DummyProvider\DummyDbConnection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DummyProvider\DummyProviderFactory.cs" />
+    <Compile Include="Partitioning\SinglePartitionProviderTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\RepositoryExtensionsTests.cs" />
+    <Compile Include="TestProviders\Product.cs" />
+    <Compile Include="TestProviders\ProductDataSource.cs" />
+    <Compile Include="TestProviders\ProductDataServiceHost.cs" />
+    <Compile Include="TestProviders\ProductDataService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DocaLabs.Storage.Core.Integration.Tests.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DocaLabs.Storage.Core\DocaLabs.Storage.Core.csproj">
+      <Project>{23723D40-3801-4658-BBA8-56925BC5DD11}</Project>
+      <Name>DocaLabs.Storage.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\DocaLabs.Testing\DocaLabs.Testing.csproj">
+      <Project>{9EBA5341-6817-4710-982C-0340CE32771D}</Project>
+      <Name>DocaLabs.Testing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\DocaLabs.Utils\DocaLabs.Utils.csproj">
+      <Project>{5EF7D2C9-BA29-4EF9-AC6F-CA4A15150A6D}</Project>
+      <Name>DocaLabs.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DocaLabs.Testing.Common\DocaLabs.Testing.Common.csproj">
+      <Project>{40A96AE2-C931-4AC1-A38E-5FBB3045216C}</Project>
+      <Name>DocaLabs.Testing.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\DocaLabs.Storage.Core\Partitioning\1-base-partitioning-create-tables-and-sprocs.sql">
+      <Link>Partitioning\1-base-partitioning-create-tables-and-sprocs.sql</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\src\DocaLabs.Storage.Core\Partitioning\2-extended-partitioning-create-tables-and-sprocs.sql">
+      <Link>Partitioning\2-extended-partitioning-create-tables-and-sprocs.sql</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Partitioning\create-dummy-table.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Partitioning\stored-procedure-extensions-tests-support.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
