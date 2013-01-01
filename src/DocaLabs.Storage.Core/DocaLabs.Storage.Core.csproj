@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DocaLabs.Storage.Core</RootNamespace>
     <AssemblyName>DocaLabs.Storage.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\DocaLabs.Storage.Core.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,48 +33,39 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\DocaLabs.Storage.Core.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Transactions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Configuration\EntityTableNameSection.cs" />
-    <Compile Include="Configuration\EntityTableNameElement.cs" />
-    <Compile Include="Configuration\EntityTableNameCollection.cs" />
-    <Compile Include="DataService\DataServiceStorageContextManager.cs" />
-    <Compile Include="DataService\DataServiceRepository.cs" />
-    <Compile Include="DataService\DataServiceRepositoryExtensions.cs" />
-    <Compile Include="DataService\IDataServiceRepository.cs" />
-    <Compile Include="DataService\DataServiceStorageContext.cs" />
-    <Compile Include="DataService\IDataServiceStorageContext.cs" />
-    <Compile Include="DataService\IDataServiceStorageContextManager.cs" />
-    <Compile Include="DefaultDbConnectionWrapper.cs" />
-    <Compile Include="IBlobName.cs" />
-    <Compile Include="IDbConnectionWrapper.cs" />
-    <Compile Include="IEntity.cs" />
-    <Compile Include="IRefreshableRepository.cs" />
-    <Compile Include="IRepository.cs" />
-    <Compile Include="IStorageSet.cs" />
-    <Compile Include="StorageUnitGenerator.cs" />
-    <Compile Include="TransientRepositoryFactory.cs" />
-    <Compile Include="Partitioning\CurrentPartitionProxy.cs" />
-    <Compile Include="Utils\StoredProcedureExtensions.cs" />
-    <Compile Include="Utils\DbConnectionString.cs" />
+    <Compile Include="Repositories\DataService\DataServiceQuery.cs" />
+    <Compile Include="Repositories\DataService\DataServiceRepositorySession.cs" />
+    <Compile Include="Repositories\DataService\DataServiceRepository.cs" />
+    <Compile Include="Repositories\DataService\DataServiceRepositoryExtensions.cs" />
+    <Compile Include="DatabaseConnection.cs" />
+    <Compile Include="Repositories\DataService\IDataServiceRepository.cs" />
+    <Compile Include="EntityToNameMap.cs" />
+    <Compile Include="Partitioning\FederatedDatabaseConnection.cs" />
+    <Compile Include="Partitioning\FederationCommand.cs" />
+    <Compile Include="IDatabaseConnection.cs" />
+    <Compile Include="Partitioning\FederatedPartitionProvider.cs" />
+    <Compile Include="Repositories\IQuery.cs" />
+    <Compile Include="Repositories\IQueryableRepository.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\IRepositoryFactory.cs" />
+    <Compile Include="Repositories\IRepositorySessionFactory.cs" />
+    <Compile Include="Repositories\IRepositorySession.cs" />
+    <Compile Include="DatabaseConnectionString.cs" />
     <Compile Include="Partitioning\DummyPartitionKeyProvider.cs" />
     <Compile Include="Partitioning\HashedPartitionProvider.cs" />
     <Compile Include="Partitioning\IPartitionKeyProvider.cs" />
@@ -82,16 +75,8 @@
     <Compile Include="Partitioning\KeyMapPartitionProvider.cs" />
     <Compile Include="Partitioning\PartitionProxy.cs" />
     <Compile Include="Partitioning\SinglePartitionProvider.cs" />
-    <Compile Include="Utils\QueryFilter.cs" />
-    <Compile Include="Utils\QueryFilterExtensions.cs" />
-    <Compile Include="Utils\RepositoryExtensions.cs" />
-    <Compile Include="Utils\EntityTableNameProvider.cs" />
-    <Compile Include="Utils\QueryableEntityFinder.cs" />
-    <Compile Include="Utils\EntityTableNameResolver.cs" />
-    <Compile Include="Utils\IEntityTableNameProvider.cs" />
-    <Compile Include="Utils\EntityTableNameArgs.cs" />
-    <Compile Include="Utils\TableNameAttribute.cs" />
-    <Compile Include="IStorageUnit.cs" />
+    <Compile Include="Repositories\RepositoryExtensions.cs" />
+    <Compile Include="Repositories\DataService\FindByKeysExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Text.Designer.cs">
       <AutoGen>True</AutoGen>

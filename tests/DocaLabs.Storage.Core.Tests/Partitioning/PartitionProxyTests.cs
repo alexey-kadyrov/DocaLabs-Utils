@@ -15,7 +15,7 @@ namespace DocaLabs.Storage.Core.Tests.Partitioning
         static Mock<IPartitionConnectionProvider> mock_partition_provider;
         static Mock<IPartitionKeyProvider> mock_partition_key_provider;
         static Mock<DbConnection> mock_connection;
-        static Mock<IDbConnectionWrapper> mock_connection_wrapper; 
+        static Mock<IDatabaseConnection> mock_connection_wrapper; 
         static Guid partition_key;
 
         [UsedImplicitly] Establish context = () =>
@@ -24,7 +24,7 @@ namespace DocaLabs.Storage.Core.Tests.Partitioning
 
             mock_connection = new Mock<DbConnection>();
 
-            mock_connection_wrapper = new Mock<IDbConnectionWrapper>();
+            mock_connection_wrapper = new Mock<IDatabaseConnection>();
             mock_connection_wrapper.Setup(x => x.Connection).Returns(mock_connection.Object);
 
             mock_partition_key_provider = new Mock<IPartitionKeyProvider>();

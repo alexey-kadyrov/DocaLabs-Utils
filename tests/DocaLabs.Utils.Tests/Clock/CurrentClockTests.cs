@@ -7,7 +7,7 @@ using It = Machine.Specifications.It;
 
 namespace DocaLabs.Utils.Tests.Clock
 {
-    [Subject(typeof(CurrentClock)), UnitTestTag]
+    [Subject(typeof(CurrentClock))]
     class when_utcnow_on_current_clock_is_called
     {
         static DateTime target_time;
@@ -30,7 +30,7 @@ namespace DocaLabs.Utils.Tests.Clock
             () => CurrentClock.UtcNow.ShouldEqual(target_time);
     }
 
-    [Subject(typeof(CurrentClock)), UnitTestTag]
+    [Subject(typeof(CurrentClock))]
     class current_clock_in_default_state
     {
         It should_have_non_null_provider = 
@@ -40,7 +40,7 @@ namespace DocaLabs.Utils.Tests.Clock
             () => CurrentClock.Provider.ShouldBeOfType<DefaultClockProvider>();
     }
 
-    [Subject(typeof(CurrentClock)), UnitTestTag]
+    [Subject(typeof(CurrentClock))]
     class when_provider_on_current_clock_is_set_to_null
     {
         Cleanup after_each = 

@@ -5,7 +5,7 @@ using DocaLabs.Storage.Core;
 namespace DocaLabs.Storage.EntityFramework
 {
     /// <summary>
-    /// Base class to manage IDbConnectionWrapper instances.
+    /// Base class to manage IDatabaseConnection instances.
     /// </summary>
     public abstract class DbConnectionManagerBase : IDbConnectionManager
     {
@@ -14,7 +14,7 @@ namespace DocaLabs.Storage.EntityFramework
         /// <summary>
         /// Gets the current instance of the connection.
         /// </summary>
-        public IDbConnectionWrapper Connection { get; protected set; }
+        public IDatabaseConnection Connection { get; protected set; }
 
         /// <summary>
         /// Initializes an instance of the DbConnectionManagerBase class with null connection.
@@ -27,7 +27,7 @@ namespace DocaLabs.Storage.EntityFramework
         /// <summary>
         /// Initializes an instance of the DbConnectionManagerBase class with provided connection.
         /// </summary>
-        protected DbConnectionManagerBase(IDbConnectionWrapper connection) : this()
+        protected DbConnectionManagerBase(IDatabaseConnection connection) : this()
         {
             if(connection == null)
                 throw new ArgumentNullException("connection");
@@ -63,7 +63,7 @@ namespace DocaLabs.Storage.EntityFramework
         /// Opens the context or returns already existing.
         /// </summary>
         /// <returns>The new session object.</returns>
-        public abstract IDbConnectionWrapper OpenConnection();
+        public abstract IDatabaseConnection OpenConnection();
 
         /// <summary>
         /// Gets a value indicating whether the context is open.

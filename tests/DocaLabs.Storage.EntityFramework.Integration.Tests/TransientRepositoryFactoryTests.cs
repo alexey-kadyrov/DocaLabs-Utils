@@ -1,7 +1,6 @@
 ﻿using System.Transactions;
 using DocaLabs.Storage.Core;
 using DocaLabs.Storage.Core.Partitioning;
-using DocaLabs.Storage.Core.Utils;
 using DocaLabs.Testing.Common.Database;
 using DocaLabs.Testing.Common.Database.RepositoryScenarios;
 using DocaLabs.Testing.Common.MSpec;
@@ -27,7 +26,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
             RepositoryConfiguration.RemoveInitializer<Tile>();
 
-            factory = new DefaultTransientRepositoryFactory(new DbConnectionString(RepositoryTestsScenarioBase.ConnectionString));
+            factory = new DefaultTransientRepositoryFactory(new DatabaseConnectionString(RepositoryTestsScenarioBase.ConnectionString));
 
             scenario = new AddingEntitiesScenario();
         };
@@ -41,7 +40,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
                 tiles.Add(tile);
 
-                tiles.Unit.SaveChanges();
+                tiles.Context.SaveChanges();
                 scope.Complete();
             }
         };
@@ -72,7 +71,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
             mock_partition_proxy = new Mock<IPartitionProxy>();
             mock_partition_proxy.Setup(x => x.GetConnection()).Returns(
-                new DefaultDbConnectionWrapper(new DbConnectionString(RepositoryTestsScenarioBase.ConnectionString)));
+                new DatabaseConnection(new DatabaseConnectionString(RepositoryTestsScenarioBase.ConnectionString)));
 
             CurrentPartitionProxy.Current = mock_partition_proxy.Object;
 
@@ -90,7 +89,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
                 tiles.Add(tile);
 
-                tiles.Unit.SaveChanges();
+                tiles.Context.SaveChanges();
                 scope.Complete();
             }
         };

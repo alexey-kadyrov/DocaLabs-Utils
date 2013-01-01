@@ -1,4 +1,5 @@
 ﻿using DocaLabs.Http.Client.Serialization;
+using DocaLabs.Http.Client.Tests.Serialization._Utils;
 using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;
 using It = Machine.Specifications.It;

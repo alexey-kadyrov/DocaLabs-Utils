@@ -75,7 +75,7 @@ namespace DocaLabs.Storage.EntityFramework
         /// <summary>
         /// Provides access to unit of work for such operations as committing any pending changes.
         /// </summary>
-        public IStorageUnit Unit
+        public IStorageContext Context
         {
             get { return RepositoryContext; }
         }

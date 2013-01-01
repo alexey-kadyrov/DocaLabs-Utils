@@ -7,7 +7,7 @@ using System.Linq;
 using System.Transactions;
 using DocaLabs.Storage.Core;
 using DocaLabs.Storage.Core.Partitioning;
-using DocaLabs.Storage.Core.Utils;
+using DocaLabs.Storage.Core.Repositories;
 using DocaLabs.Testing.Common.Database;
 using DocaLabs.Testing.Common.Database.RepositoryScenarios;
 using DocaLabs.Testing.Common.MSpec;
@@ -40,8 +40,8 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
             RepositoryConfiguration.RemoveInitializer<Tile>();
 
-            connection_manager = new DefaultDbConnectionManager(new DefaultDbConnectionWrapper(
-                new DbConnectionString(RepositoryTestsScenarioBase.ConnectionString)));
+            connection_manager = new DefaultDbConnectionManager(new DatabaseConnection(
+                new DatabaseConnectionString(RepositoryTestsScenarioBase.ConnectionString)));
 
             tiles = new Repository<Tile>(connection_manager);
         };
@@ -63,7 +63,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
                 tiles.Add(tile);
 
-                tiles.Unit.SaveChanges();
+                tiles.Context.SaveChanges();
 
                 scope.Complete();
             }
@@ -90,7 +90,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
                 tiles.Add(tile);
 
-                tiles.Unit.SaveChanges();
+                tiles.Context.SaveChanges();
 
                 is_empty_before_commit = scenario.IsDatabaseEmpty();
 
@@ -121,7 +121,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
                 tiles.Add(tile);
 
-                tiles.Unit.SaveChanges();
+                tiles.Context.SaveChanges();
             }
         };
 
@@ -141,11 +141,11 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
         {
             using (var scope = new TransactionScope())
             {
-                var tile = tiles.Find(scenario.KnownTileId);
+                var tile = tiles.Get(scenario.KnownTileId);
 
                 tiles.Remove(tile);
 
-                tiles.Unit.SaveChanges();
+                tiles.Context.SaveChanges();
 
                 scope.Complete();
             }
@@ -167,13 +167,13 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
         {
             using (var scope = new TransactionScope())
             {
-                var tile = tiles.Find(scenario.KnownTileId);
+                var tile = tiles.Get(scenario.KnownTileId);
 
                 scenario.GetEntities(tile);
 
                 scenario.UpdateEntities();
 
-                tiles.Unit.SaveChanges();
+                tiles.Context.SaveChanges();
 
                 scope.Complete();
             }
@@ -194,7 +194,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
         Because of = () =>
         {
-            var tile = tiles.Find(scenario.KnownTileId);
+            var tile = tiles.Get(scenario.KnownTileId);
 
             scenario.GetEntities(tile);
 
@@ -205,7 +205,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
             try
             {
-                tiles.Unit.SaveChanges();
+                tiles.Context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException e)
             {
@@ -215,7 +215,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
                 scenario.UpdateEntities();
 
-                tiles.Unit.SaveChanges();
+                tiles.Context.SaveChanges();
             }
             catch (Exception e)
             {
@@ -241,7 +241,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
         Because of = () =>
         {
-            tile = tiles.Find(scenario.KnownTileId);
+            tile = tiles.Get(scenario.KnownTileId);
         };
 
         It should_fetch_entity =
@@ -259,7 +259,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
         Because of = () =>
         {
-            actual_exception = Catch.Exception(() => tiles.Find(null));
+            actual_exception = Catch.Exception(() => tiles.Get(null));
         };
 
         It should_throw_argument_null_exception =
@@ -280,7 +280,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
 
         Because of = () =>
         {
-            actual_exception = Catch.Exception(() => tiles.Find(Guid.NewGuid(), Guid.NewGuid()));
+            actual_exception = Catch.Exception(() => tiles.Get(Guid.NewGuid(), Guid.NewGuid()));
         };
 
         It should_throw_argument_exception =
@@ -408,8 +408,8 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
             RepositoryConfiguration.RemoveInitializer<InterestingPoint>();
             RepositoryConfiguration.SetOnModelCreatingAction<InterestingPoint>(m => is_action_called = true);
 
-            connection_manager = new DefaultDbConnectionManager(new DefaultDbConnectionWrapper(
-                new DbConnectionString(RepositoryTestsScenarioBase.ConnectionString)));
+            connection_manager = new DefaultDbConnectionManager(new DatabaseConnection(
+                new DatabaseConnectionString(RepositoryTestsScenarioBase.ConnectionString)));
 
             interesting_points = new Repository<InterestingPoint>(connection_manager);
         };
@@ -458,7 +458,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
     [Subject(typeof(PartitionedDbConnectionManager)), IntegrationTag]
     class when_partitioned_session_context_manager_is_used
     {
-        static Mock<IDbConnectionWrapper> mock_connection_wrapper; 
+        static Mock<IDatabaseConnection> mock_connection_wrapper; 
         static Mock<DbConnection> mock_connection;
         static Mock<IPartitionProxy> mock_partition_proxy;
         static PartitionedDbConnectionManager connection_manager;
@@ -470,7 +470,7 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
         {
             mock_connection = new Mock<DbConnection>();
 
-            mock_connection_wrapper = new Mock<IDbConnectionWrapper>();
+            mock_connection_wrapper = new Mock<IDatabaseConnection>();
             mock_connection_wrapper.Setup(x => x.Connection).Returns(mock_connection.Object);
 
             mock_partition_proxy = new Mock<IPartitionProxy>();
@@ -492,14 +492,14 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
     class when_session_manager_base_is_disposed_it_disposes_all_allocated_resources
     {
         static Mock<DbConnection> mock_connection; 
-        static Mock<IDbConnectionWrapper> mock_connection_wrapper;
+        static Mock<IDatabaseConnection> mock_connection_wrapper;
         static Mock<DbConnectionManagerBase> mock_connection_manager;
 
         Establish context = () =>
         {
             mock_connection = new Mock<DbConnection>();
 
-            mock_connection_wrapper = new Mock<IDbConnectionWrapper>();
+            mock_connection_wrapper = new Mock<IDatabaseConnection>();
             mock_connection_wrapper.Setup(x => x.Connection).Returns(mock_connection.Object);
 
             mock_connection_manager = new Mock<DbConnectionManagerBase>(mock_connection_wrapper.Object)
@@ -521,12 +521,12 @@ namespace DocaLabs.Storage.EntityFramework.Integration.Tests
     [Subject(typeof(DefaultDbConnectionManager)), IntegrationTag]
     class when_disposing_session_manager_several_times : RepositoryTestsContext
     {
-        static IDbConnectionWrapper connection_wrapper;
+        static IDatabaseConnection connection;
         static bool result;
 
         Establish context = () =>
         {
-            connection_wrapper = connection_manager.OpenConnection();
+            connection = connection_manager.OpenConnection();
             result = false;
         };
 

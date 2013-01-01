@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Transactions;
-using DocaLabs.Storage.Core.Utils;
 
 namespace DocaLabs.Storage.Core.Partitioning
 {
@@ -15,20 +14,20 @@ namespace DocaLabs.Storage.Core.Partitioning
     /// </remarks>
     public class HashedPartitionProvider : IPartitionConnectionProvider
     {
-        Dictionary<int, DbConnectionString> ConnectionStringCache { get; set; }
+        Dictionary<int, DatabaseConnectionString> _connectionStringCache;
 
         /// <summary>
         /// Gets number of allocated partitions.
         /// IMPORTANT NOTE: The number of partitions must never change for a given application as this implementation is not rebalancing. 
         /// </summary>
-        public int PartitionCount { get { return ConnectionStringCache.Count; } }
+        public int PartitionCount { get { return _connectionStringCache.Count; } }
 
         /// <summary>
         /// Initialize an instance of the HashedPartitionProvider class with specified number of partitions.
         /// IMPORTANT NOTE: The number of partitions must never change for a given application as this implementation is not rebalancing. 
         /// </summary>
         /// <param name="partitionMapConnectionString">Connection information to a database where to find the partition connection strings.</param>
-        public HashedPartitionProvider(DbConnectionString partitionMapConnectionString)
+        public HashedPartitionProvider(DatabaseConnectionString partitionMapConnectionString)
         {
             if (partitionMapConnectionString == null)
                 throw new ArgumentNullException("partitionMapConnectionString");
@@ -43,17 +42,24 @@ namespace DocaLabs.Storage.Core.Partitioning
             }
         }
 
-        void CacheAllConnectionStrings(DbConnectionString partitionMapConnectionString)
+        void CacheAllConnectionStrings(DatabaseConnectionString partitionMapConnectionString)
         {
-            ConnectionStringCache = new Dictionary<int, DbConnectionString>();
+            _connectionStringCache = new Dictionary<int, DatabaseConnectionString>();
 
             using (new TransactionScope(TransactionScopeOption.Suppress))
             using (var connection = partitionMapConnectionString.CreateDbConnection())
-            using (var command = connection.OpenCommand("GetApplicationConnectionStrings"))
-            using (var reader = command.ExecuteReader())
+            using (var command = connection.CreateCommand())
             {
-                while (reader.Read())
-                    ConnectionStringCache[PartitionCount] = MakeConnectionFromCurrentRow(reader);
+                command.CommandText = "GetApplicationConnectionStrings";
+                command.CommandType = CommandType.StoredProcedure;
+
+                connection.Open();
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                        _connectionStringCache[PartitionCount] = MakeConnectionFromCurrentRow(reader);
+                }
             }
         }
 
@@ -63,9 +69,9 @@ namespace DocaLabs.Storage.Core.Partitioning
         /// <param name="partitionKey">The partition key which is used to get associated partition.</param>
         /// <returns>A new instance of a connection wrapper for the partition.</returns>
         /// <exception cref="PartitionException">If the partition's connection is not found.</exception>
-        public IDbConnectionWrapper GetConnection(object partitionKey)
+        public IDatabaseConnection GetConnection(object partitionKey)
         {
-            return new DefaultDbConnectionWrapper(ConnectionStringCache[CalculatePartition(partitionKey)]);
+            return new DatabaseConnection(_connectionStringCache[CalculatePartition(partitionKey)]);
         }
 
         /// <summary>
@@ -83,9 +89,9 @@ namespace DocaLabs.Storage.Core.Partitioning
             return (int)(((uint)partitionKey.GetHashCode()) % (uint)PartitionCount);
         }
 
-        static DbConnectionString MakeConnectionFromCurrentRow(IDataRecord reader)
+        static DatabaseConnectionString MakeConnectionFromCurrentRow(IDataRecord reader)
         {
-            return new DbConnectionString(reader.IsDBNull(1) ? null : reader.GetString(1), reader.GetString(2));
+            return new DatabaseConnectionString(reader.IsDBNull(1) ? null : reader.GetString(1), reader.GetString(2));
         }
     }
 }

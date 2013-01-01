@@ -4,7 +4,7 @@ using DocaLabs.Storage.Core.Partitioning;
 namespace DocaLabs.Storage.EntityFramework
 {
     /// <summary>
-    /// Manages the IDbConnectionWrapper using CurrentPartitionProxy to get the connection string.
+    /// Manages the IDatabaseConnection using CurrentPartitionProxy to get the connection string.
     /// </summary>
     public class PartitionedDbConnectionManager : DbConnectionManagerBase
     {
@@ -12,7 +12,7 @@ namespace DocaLabs.Storage.EntityFramework
         /// Opens the context or returns already existing.
         /// </summary>
         /// <returns>The new session object.</returns>
-        public override IDbConnectionWrapper OpenConnection()
+        public override IDatabaseConnection OpenConnection()
         {
             if (!IsOpen)
                 Connection = CurrentPartitionProxy.Current.GetConnection();

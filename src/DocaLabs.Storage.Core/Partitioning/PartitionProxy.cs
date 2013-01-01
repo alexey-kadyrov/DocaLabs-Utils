@@ -41,7 +41,7 @@ namespace DocaLabs.Storage.Core.Partitioning
         /// <remarks>
         /// The current partition key is supplied by implementation of the IPartitionKeyProvider interface.
         /// </remarks>
-        public IDbConnectionWrapper GetConnection()
+        public IDatabaseConnection GetConnection()
         {
             return PartitionConnectionProvider.GetConnection(PartitionKeyProvider.GetPartitionKey());
         }

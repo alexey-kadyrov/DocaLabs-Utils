@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using DocaLabs.Utils.Configuration;
+using DocaLabs.Utils.Tests.Configuration._Utils;
 using Moq;
 using NUnit.Framework;
 

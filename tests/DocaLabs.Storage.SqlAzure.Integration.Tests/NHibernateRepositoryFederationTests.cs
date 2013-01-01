@@ -1,9 +1,8 @@
-﻿using DocaLabs.Storage.Core;
+﻿using DocaLabs.NHibernateStorage;
+using DocaLabs.Storage.Core;
 using DocaLabs.Storage.Core.Partitioning;
-using DocaLabs.Storage.Core.Utils;
-using DocaLabs.Storage.NHibernate;
+using DocaLabs.Storage.Core.Repositories;
 using DocaLabs.Storage.SqlAzure.Integration.Tests.Entities;
-using DocaLabs.Storage.SqlAzure.Partitioning;
 using DocaLabs.Testing.Common.Database;
 using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;
@@ -24,7 +23,7 @@ namespace DocaLabs.Storage.SqlAzure.Integration.Tests
 
         static Mock<IPartitionKeyProvider> partition_key_provider;
         static ISessionFactory session_factory;
-        static ISessionManager session_manager;
+        static INHibernateRepositorySession session_manager;
         static IRepository<Customer> customers;
         static Customer customer;
         static long customer_id;
@@ -57,17 +56,17 @@ namespace DocaLabs.Storage.SqlAzure.Integration.Tests
 
             CurrentPartitionProxy.Current = new PartitionProxy(
                 partition_key_provider.Object,
-                new FederatedPartitionProvider(new DbConnectionString(ConnectionString), "CustomerFederation", "cid"));
+                new FederatedPartitionProvider(new DatabaseConnectionString(ConnectionString), "CustomerFederation", "cid"));
 
             session_factory = SetupSessionFactory();
 
-            session_manager = new PartitionedSessionManager(session_factory);
+            session_manager = new PartitionedRepositorySession(session_factory);
 
             customers = new Repository<Customer>(session_manager);
         };
 
         Because of =
-            () => customer = customers.Find(customer_id);
+            () => customer = customers.Get(customer_id);
 
         It should_fetch_expected_customer = () => customer.ShouldBeSimilar(new Customer
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using DocaLabs.Storage.Core.Utils;
 
 namespace DocaLabs.Storage.Core.Partitioning
 {
@@ -11,13 +10,13 @@ namespace DocaLabs.Storage.Core.Partitioning
         /// <summary>
         /// Gets the current connection string.
         /// </summary>
-        public DbConnectionString ConnectionString { get; private set; }
+        public DatabaseConnectionString ConnectionString { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the SinglePartitionProvider using specified connection string instance.
         /// </summary>
-        /// <param name="connectionString">Instance of the DbConnectionString class.</param>
-        public SinglePartitionProvider(DbConnectionString connectionString)
+        /// <param name="connectionString">Instance of the DatabaseConnectionString class.</param>
+        public SinglePartitionProvider(DatabaseConnectionString connectionString)
         {
             if (connectionString == null)
                 throw new ArgumentNullException("connectionString");
@@ -29,9 +28,9 @@ namespace DocaLabs.Storage.Core.Partitioning
         /// Always returns the configured connection for the same connection string regardless of the partition key argument.
         /// </summary>
         /// <returns>A new instance of a connection wrapper, the partition parameter is ignored.</returns>
-        public IDbConnectionWrapper GetConnection(object partitionKey)
+        public IDatabaseConnection GetConnection(object partitionKey)
         {
-            return new DefaultDbConnectionWrapper(ConnectionString);
+            return new DatabaseConnection(ConnectionString);
         }
     }
 }

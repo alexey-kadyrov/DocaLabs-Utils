@@ -21,7 +21,7 @@ namespace DocaLabs.Http.Client
     ///     MyData Execute(MyQuery query);
     /// }
     /// public class MyService : HttpClient&lt;MyQuery, MyData>, IMyService
-    /// { // the Url should be placed into the AppSettings using the full class name as the key.
+    /// { // the Url must be placed into the AppSettings using the full class name as the key.
     /// }
     /// or
     /// public class MyService : HttpClient&lt;MyQuery, MyData>, IMyService

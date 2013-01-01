@@ -1,4 +1,5 @@
 ﻿using DocaLabs.Utils.Configuration;
+using DocaLabs.Utils.Tests.Configuration._Utils;
 using NUnit.Framework;
 
 namespace DocaLabs.Utils.Tests.Configuration

@@ -1,5 +1,4 @@
 ﻿using DocaLabs.Storage.Core;
-using DocaLabs.Storage.Core.Utils;
 
 namespace DocaLabs.Storage.EntityFramework
 {
@@ -9,14 +8,14 @@ namespace DocaLabs.Storage.EntityFramework
     /// </summary>
     public class DefaultTransientRepositoryFactory : TransientRepositoryFactoryBase
     {
-        DbConnectionString ConnectionString { get; set; }
+        DatabaseConnectionString ConnectionString { get; set; }
 
         /// <summary>
         /// Initializes an instance of the TransientRepositoryFactory class with specified connection string.
-        /// The class accepts the DbConnectionString instance instead of IDbConnectionWrapper (as the DefaultSessionManager does)
+        /// The class accepts the DatabaseConnectionString instance instead of IDatabaseConnection (as the DefaultSessionManager does)
         /// in order to be able to establish a new database connection for each repository.
         /// </summary>
-        public DefaultTransientRepositoryFactory(DbConnectionString connectionString)
+        public DefaultTransientRepositoryFactory(DatabaseConnectionString connectionString)
         {
             ConnectionString = connectionString;
         }
@@ -26,7 +25,7 @@ namespace DocaLabs.Storage.EntityFramework
         /// </summary>
         public override ITransientRepository<TEntity> Create<TEntity>()
         {
-            return new TransientRepository<TEntity>(new DefaultDbConnectionManager(new DefaultDbConnectionWrapper(ConnectionString)));
+            return new TransientRepository<TEntity>(new DefaultDbConnectionManager(new DatabaseConnection(ConnectionString)));
         }
     }
 }

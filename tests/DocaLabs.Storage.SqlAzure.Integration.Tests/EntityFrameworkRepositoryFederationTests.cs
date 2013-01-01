@@ -1,9 +1,8 @@
 ﻿using DocaLabs.Storage.Core;
 using DocaLabs.Storage.Core.Partitioning;
-using DocaLabs.Storage.Core.Utils;
+using DocaLabs.Storage.Core.Repositories;
 using DocaLabs.Storage.EntityFramework;
 using DocaLabs.Storage.SqlAzure.Integration.Tests.Entities;
-using DocaLabs.Storage.SqlAzure.Partitioning;
 using DocaLabs.Testing.Common.Database;
 using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;
@@ -53,7 +52,7 @@ namespace DocaLabs.Storage.SqlAzure.Integration.Tests
 
             CurrentPartitionProxy.Current = new PartitionProxy(
                 partition_key_provider.Object,
-                new FederatedPartitionProvider(new DbConnectionString(ConnectionString), "CustomerFederation", "cid"));
+                new FederatedPartitionProvider(new DatabaseConnectionString(ConnectionString), "CustomerFederation", "cid"));
 
             session_manager = new PartitionedDbConnectionManager();
 
@@ -61,7 +60,7 @@ namespace DocaLabs.Storage.SqlAzure.Integration.Tests
         };
 
         Because of =
-            () => customer = customers.Find(customer_id);
+            () => customer = customers.Get(customer_id);
 
         It should_fetch_expected_customer = () => customer.ShouldBeSimilar(new Customer
         {

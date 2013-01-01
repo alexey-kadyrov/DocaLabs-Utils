@@ -124,7 +124,7 @@
     <value>Faled to get the connection string for the partition key {0}.</value>
   </data>
   <data name="get_unique_returned_more_than_one_entity" xml:space="preserve">
-    <value>The get uniqie query returned more than one entity.</value>
+    <value>The get unique query returned more than one entity.</value>
   </data>
   <data name="internal_error_see_inner_exception" xml:space="preserve">
     <value>Internal error, see the inner exception.</value>

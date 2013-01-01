@@ -7,7 +7,7 @@ namespace DocaLabs.Storage.EntityFramework
     /// <summary>
     /// Defines methods for querying and working with entity data as objects.
     /// </summary>
-    public interface IRepositoryContext<TEntity> : IStorageUnit, IDisposable
+    public interface IRepositoryContext<TEntity> : IStorageContext, IDisposable
         where TEntity : class, IEntity
     {
         /// <summary>

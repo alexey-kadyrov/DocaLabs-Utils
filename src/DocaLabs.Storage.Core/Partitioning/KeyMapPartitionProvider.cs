@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Data;
 using System.Transactions;
-using DocaLabs.Storage.Core.Utils;
 
 namespace DocaLabs.Storage.Core.Partitioning
 {
@@ -13,20 +12,20 @@ namespace DocaLabs.Storage.Core.Partitioning
     /// </summary>
     public class KeyMapPartitionProvider : IPartitionConnectionProvider
     {
-        ConnectionStringMap ConnectionStrings { get; set; }
-        ConcurrentDictionary<object, int> PartitionKeyCache { get; set; }
+        readonly ConnectionStringMap _connectionStrings;
+        readonly ConcurrentDictionary<object, int> _partitionKeyCache;
 
         /// <summary>
         /// Initializes a new  instance of the KeyMapPartitionProvider class with specified connection to the partition map database.
         /// </summary>
         /// <param name="partitionMapConnectionString">Connection information to a database where to find the partition connection strings.</param>
-        public KeyMapPartitionProvider(DbConnectionString partitionMapConnectionString)
+        public KeyMapPartitionProvider(DatabaseConnectionString partitionMapConnectionString)
         {
             if (partitionMapConnectionString == null)
                 throw new ArgumentNullException("partitionMapConnectionString");
 
-            ConnectionStrings = new ConnectionStringMap(partitionMapConnectionString);
-            PartitionKeyCache = new ConcurrentDictionary<object, int>();
+            _connectionStrings = new ConnectionStringMap(partitionMapConnectionString);
+            _partitionKeyCache = new ConcurrentDictionary<object, int>();
         }
 
         /// <summary>
@@ -36,12 +35,12 @@ namespace DocaLabs.Storage.Core.Partitioning
         /// <param name="partitionKey">The partition key which is used to get associated partition.</param>
         /// <returns>A new instance of a connection wrapper for the partition.</returns>
         /// <exception cref="PartitionException">If the partition's connection is not found.</exception>
-        public IDbConnectionWrapper GetConnection(object partitionKey)
+        public IDatabaseConnection GetConnection(object partitionKey)
         {
             try
             {
-                return new DefaultDbConnectionWrapper(
-                    ConnectionStrings.GetConnectionString(PartitionKeyCache.GetOrAdd(partitionKey, ExecuteGetOrAutoAssignPartition)));
+                return new DatabaseConnection(
+                    _connectionStrings.GetConnectionString(_partitionKeyCache.GetOrAdd(partitionKey, ExecuteGetOrAutoAssignPartition)));
             }
             catch (PartitionException)
             {
@@ -58,7 +57,7 @@ namespace DocaLabs.Storage.Core.Partitioning
         /// </summary>
         /// <param name="partition">Partition to create.</param>
         /// <param name="connectionString">Connection string to be used for the partition.</param>
-        public void AddNewManualPartition(int partition, DbConnectionString connectionString)
+        public void AddNewManualPartition(int partition, DatabaseConnectionString connectionString)
         {
             if (partition < 0)
                 throw new ArgumentOutOfRangeException("partition");
@@ -81,7 +80,7 @@ namespace DocaLabs.Storage.Core.Partitioning
         /// </summary>
         /// <param name="partition">Partition to create.</param>
         /// <param name="connectionString">Connection string to be used for the partition.</param>
-        public void AddNewAutoAssignPartition(int partition, DbConnectionString connectionString)
+        public void AddNewAutoAssignPartition(int partition, DatabaseConnectionString connectionString)
         {
             if (partition < 0)
                 throw new ArgumentOutOfRangeException("partition");
@@ -122,12 +121,25 @@ namespace DocaLabs.Storage.Core.Partitioning
         void ExecuteAddKeyToManualPartition(int partition, object partitionKey)
         {
             using (var transaction = new TransactionScope(TransactionScopeOption.RequiresNew))
-            using (var connection = ConnectionStrings.PartitionMapConnectionString.CreateDbConnection())
-            using (var command = connection.OpenCommand("AddKeyToManualPartition"))
+            using (var connection = _connectionStrings.PartitionMapConnectionString.CreateDbConnection())
+            using (var command = connection.CreateCommand())
             {
-                command
-                    .With("partition", partition)
-                    .With("key", partitionKey.ToString());
+                command.CommandText = "AddKeyToManualPartition";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var p1 = command.CreateParameter();
+                p1.ParameterName = "partition";
+                p1.Direction = ParameterDirection.Input;
+                p1.Value = partition;
+                command.Parameters.Add(p1);
+
+                var p2 = command.CreateParameter();
+                p2.ParameterName = "key";
+                p2.Direction = ParameterDirection.Input;
+                p2.Value = partitionKey.ToString();
+                command.Parameters.Add(p2);
+
+                connection.Open();
 
                 command.ExecuteNonQuery();
 
@@ -138,32 +150,71 @@ namespace DocaLabs.Storage.Core.Partitioning
         int ExecuteGetOrAutoAssignPartition(object partitionKey)
         {
             using (var transaction = new TransactionScope(TransactionScopeOption.RequiresNew))
-            using (var connection = ConnectionStrings.PartitionMapConnectionString.CreateDbConnection())
-            using (var command = connection.OpenCommand("GetOrAutoAssignPartition"))
+            using (var connection = _connectionStrings.PartitionMapConnectionString.CreateDbConnection())
+            using (var command = connection.CreateCommand())
             {
-                command
-                    .With("key", partitionKey.ToString())
-                    .Return();
+                command.CommandText = "GetOrAutoAssignPartition";
+                command.CommandType = CommandType.StoredProcedure;
 
-                var partition = command.Execute();
+                var p1 = command.CreateParameter();
+                p1.ParameterName = "key";
+                p1.Direction = ParameterDirection.Input;
+                p1.Value = partitionKey.ToString();
+                command.Parameters.Add(p1);
+
+                var r = command.CreateParameter();
+                r.ParameterName = "ret_val";
+                r.Direction = ParameterDirection.ReturnValue;
+                r.DbType = DbType.Int32;
+                command.Parameters.Add(r);
+
+                connection.Open();
+
+                command.ExecuteNonQuery();
 
                 transaction.Complete();
 
-                return partition;
+                return (int)r.Value;
             }
         }
 
-        void ExecuteAddNewPartition(int partition, DbConnectionString connectionString, bool autoAssign)
+        void ExecuteAddNewPartition(int partition, DatabaseConnectionString connectionString, bool autoAssign)
         {
             using (var transaction = new TransactionScope(TransactionScopeOption.RequiresNew))
-            using (var connection = ConnectionStrings.PartitionMapConnectionString.CreateDbConnection())
-            using (var command = connection.OpenCommand("AddNewPartition"))
+            using (var connection = _connectionStrings.PartitionMapConnectionString.CreateDbConnection())
+            using (var command = connection.CreateCommand())
             {
-                command
-                    .With("newPartition", partition)
-                    .With("providerName", connectionString.ProviderName)
-                    .With("connectionString", connectionString.ConnectionString)
-                    .With("autoAssign", autoAssign);
+                command.CommandText = "AddNewPartition";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var p1 = command.CreateParameter();
+                p1.ParameterName = "newPartition";
+                p1.Direction = ParameterDirection.Input;
+                p1.Value = partition;
+                command.Parameters.Add(p1);
+
+                var p2 = command.CreateParameter();
+                p2.ParameterName = "providerName";
+                p2.Direction = ParameterDirection.Input;
+                if (connectionString.ProviderName == null)
+                    p2.Value = DBNull.Value;
+                else
+                    p2.Value = connectionString.ProviderName;
+                command.Parameters.Add(p2);
+
+                var p3 = command.CreateParameter();
+                p3.ParameterName = "connectionString";
+                p3.Direction = ParameterDirection.Input;
+                p3.Value = connectionString.ConnectionString;
+                command.Parameters.Add(p3);
+
+                var p4 = command.CreateParameter();
+                p4.ParameterName = "autoAssign";
+                p4.Direction = ParameterDirection.Input;
+                p4.Value = autoAssign;
+                command.Parameters.Add(p4);
+
+                connection.Open();
 
                 command.ExecuteNonQuery();
 
@@ -173,33 +224,42 @@ namespace DocaLabs.Storage.Core.Partitioning
 
         class ConnectionStringMap
         {
-            ConcurrentDictionary<int, DbConnectionString> ConnectionStringCache { get; set; }
+            ConcurrentDictionary<int, DatabaseConnectionString> ConnectionStringCache { get; set; }
 
-            public DbConnectionString PartitionMapConnectionString { get; private set; }
+            public DatabaseConnectionString PartitionMapConnectionString { get; private set; }
 
-            public ConnectionStringMap(DbConnectionString partitionMapConnectionString)
+            public ConnectionStringMap(DatabaseConnectionString partitionMapConnectionString)
             {
-                ConnectionStringCache = new ConcurrentDictionary<int, DbConnectionString>();
+                ConnectionStringCache = new ConcurrentDictionary<int, DatabaseConnectionString>();
                 PartitionMapConnectionString = partitionMapConnectionString;
             }
 
-            public DbConnectionString GetConnectionString(int partition)
+            public DatabaseConnectionString GetConnectionString(int partition)
             {
                 return ConnectionStringCache.GetOrAdd(partition, ExecuteGetConnectionString);
             }
 
-            static DbConnectionString MakeConnectionFromCurrentRow(IDataRecord reader)
+            static DatabaseConnectionString MakeConnectionFromCurrentRow(IDataRecord reader)
             {
-                return new DbConnectionString(reader.IsDBNull(1) ? null : reader.GetString(1), reader.GetString(2));
+                return new DatabaseConnectionString(reader.IsDBNull(1) ? null : reader.GetString(1), reader.GetString(2));
             }
 
-            DbConnectionString ExecuteGetConnectionString(int partition)
+            DatabaseConnectionString ExecuteGetConnectionString(int partition)
             {
                 using (new TransactionScope(TransactionScopeOption.Suppress))
                 using (var connection = PartitionMapConnectionString.CreateDbConnection())
-                using (var command = connection.OpenCommand("GetConnectionString"))
+                using (var command = connection.CreateCommand())
                 {
-                    command.With("partition", partition);
+                    command.CommandText = "GetConnectionString";
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    var p1 = command.CreateParameter();
+                    p1.ParameterName = "partition";
+                    p1.Direction = ParameterDirection.Input;
+                    p1.Value = partition;
+                    command.Parameters.Add(p1);
+
+                    connection.Open();
 
                     using (var reader = command.ExecuteReader())
                     {

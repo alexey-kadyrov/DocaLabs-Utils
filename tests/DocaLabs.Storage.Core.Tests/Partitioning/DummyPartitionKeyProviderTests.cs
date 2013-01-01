@@ -6,7 +6,7 @@ using It = Machine.Specifications.It;
 
 namespace DocaLabs.Storage.Core.Tests.Partitioning
 {
-    [Subject(typeof(DummyPartitionKeyProvider)), UnitTestTag]
+    [Subject(typeof(DummyPartitionKeyProvider))]
     class when_dummy_partition_key_is_used
     {
         static DummyPartitionKeyProvider key_provider;

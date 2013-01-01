@@ -52,7 +52,7 @@ namespace DocaLabs.Http.Client.Tests
             () => test_context.MockWebResponse.Verify(x => x.Close(), Times.AtLeastOnce());
 
         It should_dispose_the_response_stream =
-            () => ShouldThrow.Exception<ObjectDisposedException>(() => response_stream.ReadByte());
+            () => (Catch.Exception(() => response_stream.ReadByte()) as ObjectDisposedException).ShouldNotBeNull();
     }
 
     [Subject(typeof(HttpResponse))]

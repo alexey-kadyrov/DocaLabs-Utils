@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;
 using It = Machine.Specifications.It;
 
 namespace DocaLabs.Utils.Tests
 {
-    [Subject(typeof (ExceptionExtensions)), UnitTestTag]
+    [Subject(typeof (ExceptionExtensions))]
     class when_tyring_to_find_existing_inner_exception_type_in_non_aggregate_exception
     {
         static Exception root_exception;
@@ -27,7 +26,7 @@ namespace DocaLabs.Utils.Tests
             () => found.Select(x => x.Message).ShouldContainOnly("first", "second");
     }
 
-    [Subject(typeof(ExceptionExtensions)), UnitTestTag]
+    [Subject(typeof(ExceptionExtensions))]
     class when_tyring_to_find_exception_in_non_aggregate_exception
     {
         static Exception root_exception;

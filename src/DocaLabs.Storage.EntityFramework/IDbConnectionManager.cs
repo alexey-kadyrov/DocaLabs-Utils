@@ -4,20 +4,20 @@ using DocaLabs.Storage.Core;
 namespace DocaLabs.Storage.EntityFramework
 {
     /// <summary>
-    /// Defines methods to manage IDbConnectionWrapper instances.
+    /// Defines methods to manage IDatabaseConnection instances.
     /// </summary>
     public interface IDbConnectionManager : IDisposable
     {
         /// <summary>
         /// Gets the current context.
         /// </summary>
-        IDbConnectionWrapper Connection { get; }
+        IDatabaseConnection Connection { get; }
 
         /// <summary>
         /// Opens the context or returns already existing.
         /// </summary>
         /// <returns>The new session object.</returns>
-        IDbConnectionWrapper OpenConnection();
+        IDatabaseConnection OpenConnection();
 
         /// <summary>
         /// Gets a value indicating whether the context is open.
