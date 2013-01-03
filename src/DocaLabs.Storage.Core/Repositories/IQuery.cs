@@ -3,7 +3,7 @@
 namespace DocaLabs.Storage.Core.Repositories
 {
     /// <summary>
-    /// Defines methods to execute a query on a repository.
+    /// Defines methods to execute a query on a repository which gives a list of entities as a result.
     /// </summary>
     /// <typeparam name="TEntity">The entity this repository is handling.</typeparam>
     public interface IQuery<TEntity>

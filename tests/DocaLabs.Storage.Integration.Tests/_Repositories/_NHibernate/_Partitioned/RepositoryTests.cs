@@ -336,6 +336,69 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._NHibernate._Partitio
     }
 
     [Subject(typeof(Repository<>), "with partitioned repository session")]
+    class when_executing_a_scalar_query
+    {
+        static ScalarExecuting<PartitionedScenarioProvider> scenario;
+        static TestQuery query;
+
+        Cleanup after_each =
+            () => scenario.Dispose();
+
+        Establish context = () =>
+        {
+            scenario = new ScalarExecuting<PartitionedScenarioProvider>();
+            query = new TestQuery(scenario.OriginalBooks[0].Id, scenario.OriginalBooks[1].Id);
+        };
+
+        Because of =
+            () => scenario.Run(query);
+
+        It should_return_expected_number_of_books =
+            () => scenario.FoundBooks.ShouldEqual(2);
+
+        class TestQuery : ScalarQuery<Book, int>
+        {
+            readonly Guid _id1;
+            readonly Guid _id2;
+
+            public TestQuery(Guid id1, Guid id2)
+            {
+                _id1 = id1;
+                _id2 = id2;
+            }
+
+            protected override int Execute(ISession session)
+            {
+                return session.QueryOver<Book>()
+                       .Where(x => x.Id == _id1 || x.Id == _id2)
+                       .RowCount();
+            }
+        }
+    }
+
+    [Subject(typeof(Repository<>), "with partitioned repository session")]
+    class when_executing_a_null_scalar_query
+    {
+        static ScalarExecuting<PartitionedScenarioProvider> scenario;
+        static Exception actual_exception;
+
+        Cleanup after_each =
+            () => scenario.Dispose();
+
+        Establish context =
+            () => scenario = new ScalarExecuting<PartitionedScenarioProvider>();
+
+        Because of =
+            () => actual_exception = Catch.Exception(() => scenario.Run(null));
+
+        It should_throw_argument_null_exception =
+            () => actual_exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_query_argument =
+            () => ((ArgumentNullException)actual_exception).ParamName.ShouldEqual("query");
+    }
+
+    [Subject(typeof(Repository<>), "with partitioned repository session")]
     class when_newing_repository_with_null_session
     {
         static Exception actual_exception;

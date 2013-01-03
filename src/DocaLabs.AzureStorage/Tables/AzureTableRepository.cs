@@ -96,6 +96,18 @@ namespace DocaLabs.AzureStorage.Tables
         }
 
         /// <summary>
+        /// Executes the configured query which gives a list of entities as a result.
+        /// </summary>
+        /// <returns>The result of the query.</returns>
+        public TResult Execute<TResult>(IScalarQuery<TEntity, TResult> query)
+        {
+            if (query == null)
+                throw new ArgumentNullException("query");
+
+            return query.Execute(this);
+        }
+
+        /// <summary>
         /// Updates the specified entity in the repository.
         /// </summary>
         /// <param name="entity">The entity to update.</param>

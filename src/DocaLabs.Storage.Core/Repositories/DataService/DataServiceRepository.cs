@@ -90,5 +90,17 @@ namespace DocaLabs.Storage.Core.Repositories.DataService
 
             return query.Execute(this);
         }
+
+        /// <summary>
+        /// Executes the configured query which gives a list of entities as a result.
+        /// </summary>
+        /// <returns>The result of the query.</returns>
+        public TResult Execute<TResult>(IScalarQuery<TEntity, TResult> query)
+        {
+            if (query == null)
+                throw new ArgumentNullException("query");
+
+            return query.Execute(this);
+        }
     }
 }

@@ -132,7 +132,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._DataService
             () => ProductDataSource.AddSource(first_product.Clone(), second_product.Clone(), third_product.Clone());
 
         Because of =
-            () => found_products = products.Execute(new TestQuery());
+            () => found_products = products.Execute(new FirstProductQuery());
 
         It should_return_expected_number_of_entities =
             () => found_products.Count().ShouldEqual(1);
@@ -140,7 +140,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._DataService
         It should_find_entity =
             () => found_products[0].ShouldMatch(first_product);
 
-        class TestQuery : DataServiceQuery<Product>
+        class FirstProductQuery : DataServiceQuery<Product>
         {
             protected override IList<Product> Execute(IQueryable<Product> query)
             {
@@ -156,6 +156,47 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._DataService
 
         Because of =
             () => actual_exception = Catch.Exception(() => products.Execute(null));
+
+        It should_throw_argument_null_exception =
+            () => actual_exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_query_argument =
+            () => ((ArgumentNullException)actual_exception).ParamName.ShouldEqual("query");
+    }
+
+    [Subject(typeof(DataServiceRepository<>))]
+    class when_executing_scalar_query : data_service_repository_tests_context
+    {
+        static int number_of_products;
+
+        Establish context =
+            () => ProductDataSource.AddSource(first_product.Clone(), second_product.Clone(), third_product.Clone());
+
+        Because of =
+            () => number_of_products = products.Execute(new NumberofFirstProductsQuery());
+
+        It should_return_expected_number_of_product =
+            () => number_of_products.ShouldEqual(1);
+
+        class NumberofFirstProductsQuery : DataServiceScalarQuery<Product, int>
+        {
+            // ReSharper disable RemoveToList.2
+            // Count is not supported on the Data Service yet
+            protected override int Execute(IQueryable<Product> query)
+            {
+                return query.Where(x => x.Name == "First Product").ToList().Count;
+            }
+            // ReSharper restore RemoveToList.2
+        }
+    }
+
+    [Subject(typeof(DataServiceRepository<>))]
+    class when_executing_a_null_sclar_query : data_service_repository_tests_context
+    {
+        static Exception actual_exception;
+
+        Because of =
+            () => actual_exception = Catch.Exception(() => products.Execute<int>(null));
 
         It should_throw_argument_null_exception =
             () => actual_exception.ShouldBeOfType<ArgumentNullException>();

@@ -34,9 +34,15 @@ namespace DocaLabs.Storage.Core.Repositories
         TEntity Get(params object[] keyValues);
 
         /// <summary>
-        /// Executes the configured query.
+        /// Executes the configured query which gives a list of entities as a result.
         /// </summary>
         /// <returns>The list of entities which satisfy the query.</returns>
         IList<TEntity> Execute(IQuery<TEntity> query);
+
+        /// <summary>
+        /// Executes the configured query which gives a list of entities as a result.
+        /// </summary>
+        /// <returns>The result of the query.</returns>
+        TResult Execute<TResult>(IScalarQuery<TEntity, TResult> query);
     }
 }

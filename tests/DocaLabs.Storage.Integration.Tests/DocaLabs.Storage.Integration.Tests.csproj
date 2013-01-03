@@ -118,6 +118,10 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="_Repositories\_Azure\AzureScalarQueryTests.cs" />
+    <Compile Include="_Repositories\_DataService\DataServiceScalarQueryTests.cs" />
+    <Compile Include="_Repositories\_NHibernate\ScalarQueryTests.cs" />
+    <Compile Include="_Repositories\_Scenarios\ScalarExecuting.cs" />
     <Compile Include="_Utils\MsSqlHelper.cs" />
     <Compile Include="_Core\Partitioning\HashedPartitionProviderTests.cs" />
     <Compile Include="_Core\Partitioning\KeyMapPartitionProviderTests.cs" />
@@ -126,11 +130,11 @@
     <Compile Include="_Repositories\_Azure\AzureTableRepositorySessionTests.cs" />
     <Compile Include="_Repositories\_Azure\_Utils\Entities.cs" />
     <Compile Include="_Repositories\_Azure\AzureQueryTests.cs" />
-    <Compile Include="_Repositories\_Azure\RepositoryTests.cs" />
+    <Compile Include="_Repositories\_Azure\AzureTableRepositoryTests.cs" />
     <Compile Include="_Repositories\_Azure\TableExtensionsTests.cs" />
     <Compile Include="_Repositories\_DataService\DataServiceQueryTests.cs" />
     <Compile Include="_Repositories\_DataService\DataServiceRepositorySessionTests.cs" />
-    <Compile Include="_Repositories\_DataService\RepositoryTests.cs" />
+    <Compile Include="_Repositories\_DataService\DataServiceRepositoryTests.cs" />
     <Compile Include="_Repositories\_DataService\_Utils\Product.cs" />
     <Compile Include="_Repositories\_DataService\_Utils\DataServiceTestsSetup.cs" />
     <Compile Include="_Repositories\_DataService\_Utils\ProductDataService.cs" />

@@ -840,7 +840,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Azure
         };
 
         Because of = 
-            () => found_products = products.Execute(new TestQuery());
+            () => found_products = products.Execute(new BlueProductsQuery());
 
         It should_return_expected_number_of_entities =
             () => found_products.Count.ShouldEqual(1);
@@ -848,7 +848,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Azure
         It should_find_the_entity =
             () => found_products[0].ShouldMatch(original_products[1]);
 
-        class TestQuery : AzureQuery<AzureRepositoryTestProduct>
+        class BlueProductsQuery : AzureQuery<AzureRepositoryTestProduct>
         {
             protected override IList<AzureRepositoryTestProduct> Execute(AzureTableRepositorySession session)
             {
@@ -867,6 +867,75 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Azure
 
         Because of =
             () => actual_exception = Catch.Exception(() => products.Execute(null));
+
+        It should_throw_argument_null_exception =
+            () => actual_exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_query_argument =
+            () => ((ArgumentNullException)actual_exception).ParamName.ShouldEqual("query");
+    }
+
+    [Subject(typeof(AzureTableRepository<>))]
+    class when_executing_a_scalar_query : repository_test_context
+    {
+        static AzureRepositoryTestProduct[] original_products;
+        static int number_of_products;
+
+        Establish context = () =>
+        {
+            original_products = new[]
+            {
+                new AzureRepositoryTestProduct
+                {
+                    PartitionKey = "Green",
+                    RowKey = Guid.NewGuid().ToString(),
+                    Name = "A Green Product 1"
+                },
+                new AzureRepositoryTestProduct
+                {
+                    PartitionKey = "Blue",
+                    RowKey = Guid.NewGuid().ToString(),
+                    Name = "A Blue Product 2"
+                },
+                new AzureRepositoryTestProduct
+                {
+                    PartitionKey = "Green",
+                    RowKey = Guid.NewGuid().ToString(),
+                    Name = "A Green Product 3"
+                }
+            };
+
+            // products have different partition keys, so no batch operation there
+            Save(original_products[0]);
+            Save(original_products[1]);
+            Save(original_products[2]);
+        };
+
+        Because of =
+            () => number_of_products = products.Execute(new NumberOfBlueProductsQuery());
+
+        It should_return_expected_number_of_products =
+            () => number_of_products.ShouldEqual(1);
+
+        class NumberOfBlueProductsQuery : AzureScalarQuery<AzureRepositoryTestProduct, int>
+        {
+            protected override int Execute(AzureTableRepositorySession session)
+            {
+                var query = new TableQuery<AzureRepositoryTestProduct>().Where(
+                    TableQuery.GenerateFilterCondition("Name", QueryComparisons.Equal, "A Blue Product 2"));
+
+                return session.Table.ExecuteQuery(query).Count();
+            }
+        }
+    }
+
+    [Subject(typeof(AzureTableRepository<>))]
+    class when_executing_a_null_scalar_query : repository_test_context
+    {
+        static Exception actual_exception;
+
+        Because of =
+            () => actual_exception = Catch.Exception(() => products.Execute<int>(null));
 
         It should_throw_argument_null_exception =
             () => actual_exception.ShouldBeOfType<ArgumentNullException>();

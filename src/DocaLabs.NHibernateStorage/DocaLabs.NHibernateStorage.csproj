@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="PartitionedRepositorySession.cs" />
     <Compile Include="PartitionedRepositorySessionFactory.cs" />
+    <Compile Include="ScalarQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DocaLabs.Storage.Core\DocaLabs.Storage.Core.csproj">

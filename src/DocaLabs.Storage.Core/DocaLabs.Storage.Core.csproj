@@ -53,6 +53,7 @@
     <Compile Include="Repositories\DataService\DataServiceRepository.cs" />
     <Compile Include="Repositories\DataService\DataServiceRepositoryExtensions.cs" />
     <Compile Include="DatabaseConnection.cs" />
+    <Compile Include="Repositories\DataService\DataServiceScalarQuery.cs" />
     <Compile Include="Repositories\DataService\IDataServiceRepository.cs" />
     <Compile Include="EntityToNameMap.cs" />
     <Compile Include="Partitioning\FederatedDatabaseConnection.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Partitioning\KeyMapPartitionProvider.cs" />
     <Compile Include="Partitioning\PartitionProxy.cs" />
     <Compile Include="Partitioning\SinglePartitionProvider.cs" />
+    <Compile Include="Repositories\IScalarQuery.cs" />
     <Compile Include="Repositories\RepositoryExtensions.cs" />
     <Compile Include="Repositories\DataService\FindByKeysExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
