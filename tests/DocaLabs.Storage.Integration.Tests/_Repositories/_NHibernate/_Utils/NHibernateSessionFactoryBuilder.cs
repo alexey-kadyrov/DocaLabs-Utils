@@ -64,6 +64,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._NHibernate._Utils
                 {
                     c.Cascade(Cascade.All);
                     c.Lazy(CollectionLazy.NoLazy);
+                    c.Key(m => m.Column("BookId"));
                 }, m => m.OneToMany(x => x.Class(typeof(Price))));
             }
         }

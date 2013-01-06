@@ -70,7 +70,9 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
 
         public void Run()
         {
-            FoundBooks = Books.Query.Where(x => x.Id == OriginalBooks[0].Id || x.Id == OriginalBooks[1].Id).ToList();
+            var id0 = OriginalBooks[0].Id;
+            var id1 = OriginalBooks[1].Id;
+            FoundBooks = Books.Query.Where(x => x.Id == id0 || x.Id == id1).ToList();
         }
 
         public Book GetOriginalBook(Guid id)

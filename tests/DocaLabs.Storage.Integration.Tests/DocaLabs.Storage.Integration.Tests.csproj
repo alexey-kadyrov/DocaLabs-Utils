@@ -120,6 +120,13 @@
     </Compile>
     <Compile Include="_Repositories\_Azure\AzureScalarQueryTests.cs" />
     <Compile Include="_Repositories\_DataService\DataServiceScalarQueryTests.cs" />
+    <Compile Include="_Repositories\_EntityFramework\QueryTests.cs" />
+    <Compile Include="_Repositories\_EntityFramework\ScalarQueryTests.cs" />
+    <Compile Include="_Repositories\_EntityFramework\_Ordinary\RepositoryTests.cs" />
+    <Compile Include="_Repositories\_EntityFramework\_Partitioned\RepositoryTests.cs" />
+    <Compile Include="_Repositories\_EntityFramework\_Utils\OrdinaryScenarioProvider.cs" />
+    <Compile Include="_Repositories\_EntityFramework\_Utils\PartitionedScenarioProvider.cs" />
+    <Compile Include="_Repositories\_EntityFramework\_Utils\ScenarioProviderBase.cs" />
     <Compile Include="_Repositories\_NHibernate\ScalarQueryTests.cs" />
     <Compile Include="_Repositories\_Scenarios\ScalarExecuting.cs" />
     <Compile Include="_Utils\MsSqlHelper.cs" />
@@ -169,6 +176,10 @@
     <ProjectReference Include="..\..\src\DocaLabs.AzureStorage\DocaLabs.AzureStorage.csproj">
       <Project>{e073fda4-6b90-4a2e-a12d-955f1dfd5397}</Project>
       <Name>DocaLabs.AzureStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\DocaLabs.EntityFrameworkStorage\DocaLabs.EntityFrameworkStorage.csproj">
+      <Project>{daa776b9-f2ae-41ee-aed7-9ce6ea13e0e8}</Project>
+      <Name>DocaLabs.EntityFrameworkStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\DocaLabs.Storage.Core\DocaLabs.Storage.Core.csproj">
       <Project>{23723D40-3801-4658-BBA8-56925BC5DD11}</Project>

@@ -10,6 +10,8 @@ namespace DocaLabs.Storage.Integration.Tests._Utils
 {
     static class MsSqlHelper
     {
+        public const string EfConnectionStringName = "name=DatabaseTestsConnectionString";
+
         public static ConnectionStringSettings ConnectionStringSettings
         {
             get { return ConfigurationManager.ConnectionStrings["DatabaseTestsConnectionString"]; }

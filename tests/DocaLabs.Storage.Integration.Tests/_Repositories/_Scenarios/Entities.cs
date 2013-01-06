@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Machine.Specifications;
 
@@ -9,11 +8,10 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
     public class Book
     {
         public Guid Id { get; set; }
-        [ConcurrencyCheck]
         public byte[] Version { get; set; }
         public string Isbn { get; set; }
         public string Title { get; set; }
-        public IList<Price> Prices { get; set; }
+        public virtual IList<Price> Prices { get; set; }
     }
 
     public class Price
@@ -66,7 +64,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
             }
             catch (SpecificationException e)
             {
-                throw new SpecificationException("Expected the actual book matching to expected but it differs by:\n" + e.Message, e); ;
+                throw new SpecificationException("Expected the actual book matching to expected but it differs by:\n" + e.Message, e);
             }
         }
 
@@ -81,7 +79,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
             }
             catch (SpecificationException e)
             {
-                throw new SpecificationException("Expected the actual price matching to expected but it differs by:\n" + e.Message, e); ;
+                throw new SpecificationException("Expected the actual price matching to expected but it differs by:\n" + e.Message, e);
             }
         }
     }

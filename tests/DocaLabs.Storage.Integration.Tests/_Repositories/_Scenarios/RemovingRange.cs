@@ -69,7 +69,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
             ScenarioProvider.Save(OriginalBooks);
         }
 
-        public void RunEnumerableRange()
+        public void RunEnumerableRange(bool bForceLoadPrices = false)
         {
             using (var scope = new TransactionScope())
             {
@@ -79,17 +79,26 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
                     Books.Get(OriginalBooks[1].Id)
                 };
 
+                if (bForceLoadPrices)   // for the EF sake to force load prices otherwise they won't be deleted
+                    Console.WriteLine(@"Loaded {0} and {1} prices", b[0].Prices.Count, b[1].Prices.Count);
+
                 Books.RemoveRange(b);
                 Books.Session.SaveChanges();    // that's optional for NHibernate
                 scope.Complete();
             }
         }
 
-        public void RunParamListRange()
+        public void RunParamListRange(bool bForceLoadPrices = false)
         {
             using (var scope = new TransactionScope())
             {
-                Books.RemoveRange(Books.Get(OriginalBooks[0].Id), Books.Get(OriginalBooks[1].Id));
+                var b0 = Books.Get(OriginalBooks[0].Id);
+                var b1 = Books.Get(OriginalBooks[1].Id);
+
+                if (bForceLoadPrices)   // for the EF sake to force load prices otherwise they won't be deleted
+                    Console.WriteLine(@"Loaded {0} and {1} prices", b0.Prices.Count, b1.Prices.Count);
+
+                Books.RemoveRange(b0, b1);
                 Books.Session.SaveChanges();    // that's optional for NHibernate
                 scope.Complete();
             }

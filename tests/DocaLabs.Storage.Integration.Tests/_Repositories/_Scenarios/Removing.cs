@@ -53,11 +53,15 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
             ScenarioProvider.Save(OriginalBooks);
         }
 
-        public void Run()
+        public void Run(bool bForceLoadPrices = false)
         {
             using (var scope = new TransactionScope())
             {
                 var book = Books.Get(OriginalBooks[0].Id);
+
+                if (bForceLoadPrices)   // for the EF sake to force load prices otherwise they won't be deleted
+                    Console.WriteLine(@"Loaded {0} prices", book.Prices.Count);
+
                 Books.Remove(book);
                 Books.Session.SaveChanges();    // that's optional for NHibernate
                 scope.Complete();

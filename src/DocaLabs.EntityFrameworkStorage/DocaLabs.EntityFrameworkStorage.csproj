@@ -8,8 +8,8 @@
     <ProjectGuid>{DAA776B9-F2AE-41EE-AED7-9CE6EA13E0E8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DocaLabs.Storage.EntityFramework</RootNamespace>
-    <AssemblyName>DocaLabs.Storage.EntityFramework</AssemblyName>
+    <RootNamespace>DocaLabs.EntityFrameworkStorage</RootNamespace>
+    <AssemblyName>DocaLabs.EntityFrameworkStorage</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -22,7 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\DocaLabs.Storage.EntityFramework.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\DocaLabs.EntityFrameworkStorage.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -32,13 +32,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\DocaLabs.Storage.EntityFramework.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\DocaLabs.EntityFrameworkStorage.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+      <HintPath>..\..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -55,20 +55,17 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="DefaultDbConnectionManager.cs" />
-    <Compile Include="DbConnectionManagerBase.cs" />
-    <Compile Include="DbContextAggregateRoot.cs" />
-    <Compile Include="DefaultTransientRepositoryFactory.cs" />
-    <Compile Include="IEntityFrameworkRepository.cs" />
-    <Compile Include="PartitionedTransientRepositoryFactory.cs" />
-    <Compile Include="RepositoryContext.cs" />
-    <Compile Include="IRepositoryContext.cs" />
-    <Compile Include="IDbConnectionManager.cs" />
-    <Compile Include="PartitionedDbConnectionManager.cs" />
+    <Compile Include="DbContextFactory.cs" />
+    <Compile Include="IDbContextFactory.cs" />
+    <Compile Include="IDbRepositorySession.cs" />
+    <Compile Include="PartitionedDbContextFactory.cs" />
+    <Compile Include="Query.cs" />
+    <Compile Include="RepositoryAggregateRoot.cs" />
+    <Compile Include="RepositorySession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
-    <Compile Include="RepositoryConfiguration.cs" />
-    <Compile Include="TransientRepositoryFactoryBase.cs" />
+    <Compile Include="RepositorySessionFactory.cs" />
+    <Compile Include="ScalarQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DocaLabs.Storage.Core\DocaLabs.Storage.Core.csproj">
@@ -78,7 +75,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
