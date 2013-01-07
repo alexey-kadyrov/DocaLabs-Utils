@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Data;
 using DocaLabs.Storage.Core;
+using DocaLabs.Storage.Core.Partitioning;
 using DocaLabs.Storage.Core.Repositories;
 using NHibernate;
 
 namespace DocaLabs.NHibernateStorage
 {
     /// <summary>
-    /// Manages the NHibrnate sessions using provided connection and session factory.
+    /// Manages the NHibrnate sessions using provided partition proxy and session factory.
     /// </summary>
     /// <remarks>
     /// The PartitionedRepositorySession is more suited when the same data model is used in several databases (partitions/shards)
@@ -16,8 +17,8 @@ namespace DocaLabs.NHibernateStorage
     public class PartitionedRepositorySession : INHibernateRepositorySession
     {
         readonly ISessionFactory _sessionFactory;
-        readonly IDatabaseConnection _connection;
-        bool _selfOpenConnection;
+        readonly IPartitionProxy _partitionProxy;
+        IDatabaseConnection _connection;
         ISession _session;
 
         /// <summary>
@@ -32,21 +33,17 @@ namespace DocaLabs.NHibernateStorage
                 {
                     try
                     {
+                        _connection = _partitionProxy.GetConnection();
+
                         if (_connection.Connection.State == ConnectionState.Closed)
-                        {
                             _connection.Connection.Open();
-                            _selfOpenConnection = true;
-                        }
 
                         _session = _sessionFactory.OpenSession(_connection.Connection);
                     }
                     catch
                     {
-                        if (_selfOpenConnection)
-                        {
-                            _connection.Connection.Close();
-                            _selfOpenConnection = false;
-                        }
+                        if (_connection != null)
+                            _connection.Dispose();
 
                         throw;
                     }
@@ -57,18 +54,18 @@ namespace DocaLabs.NHibernateStorage
         }
 
         /// <summary>
-        /// Initializes an instance of the PartitionedRepositorySession class with specified session factory and connection string.
+        /// Initializes an instance of the PartitionedRepositorySession class with specified session factory and partition proxy.
         /// </summary>
-        public PartitionedRepositorySession(ISessionFactory sessionFactory, IDatabaseConnection connection)
+        public PartitionedRepositorySession(ISessionFactory sessionFactory, IPartitionProxy partitionProxy)
         {
             if (sessionFactory == null)
                 throw new ArgumentNullException("sessionFactory");
 
-            if (connection == null)
-                throw new ArgumentNullException("connection");
+            if (partitionProxy == null)
+                throw new ArgumentNullException("partitionProxy");
 
             _sessionFactory = sessionFactory;
-            _connection = connection;
+            _partitionProxy = partitionProxy;
         }
 
         /// <summary>
@@ -95,11 +92,8 @@ namespace DocaLabs.NHibernateStorage
             }
             finally 
             {
-                if (_selfOpenConnection)
-                {
-                    _connection.Connection.Close();
-                    _selfOpenConnection = false;
-                }
+                if (_connection != null)
+                    _connection.Dispose();
             }
         }
 

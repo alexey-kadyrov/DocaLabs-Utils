@@ -42,7 +42,7 @@ namespace DocaLabs.NHibernateStorage
         /// </summary>
         public IRepositoryFactory Create()
         {
-            return new PartitionedRepositorySession(_sessionFactory, _partitionProxy.GetConnection());
+            return new PartitionedRepositorySession(_sessionFactory, _partitionProxy);
         }
     }
 }

@@ -2,9 +2,11 @@
 using System.Transactions;
 using DocaLabs.NHibernateStorage;
 using DocaLabs.Storage.Core;
+using DocaLabs.Storage.Core.Partitioning;
 using DocaLabs.Storage.Core.Repositories;
 using DocaLabs.Storage.Integration.Tests._Repositories._Scenarios;
 using DocaLabs.Storage.Integration.Tests._Utils;
+using Moq;
 using NHibernate;
 
 namespace DocaLabs.Storage.Integration.Tests._Repositories._NHibernate._Utils
@@ -12,6 +14,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._NHibernate._Utils
     class PartitionedScenarioProvider : IRepositoryScenarioProvider
     {
         readonly ISessionFactory _sessionFactory;
+        readonly Mock<IPartitionProxy> _partitionProxy;
         readonly IDatabaseConnection _databaseConnection;
         readonly INHibernateRepositorySession _sessionManager;
 
@@ -19,7 +22,11 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._NHibernate._Utils
         {
             _sessionFactory = NHibernateSessionFactoryBuilder.Build();
             _databaseConnection = new DatabaseConnection(new DatabaseConnectionString(MsSqlHelper.ConnectionStringSettings));
-            _sessionManager = new PartitionedRepositorySession(_sessionFactory, _databaseConnection);
+
+            _partitionProxy = new Mock<IPartitionProxy>();
+            _partitionProxy.Setup(x => x.GetConnection()).Returns(_databaseConnection);
+
+            _sessionManager = new PartitionedRepositorySession(_sessionFactory, _partitionProxy.Object);
         }
 
         public void Dispose()

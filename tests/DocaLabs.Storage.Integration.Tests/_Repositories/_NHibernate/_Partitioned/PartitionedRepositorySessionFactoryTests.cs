@@ -48,8 +48,9 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._NHibernate._Partitio
             session_factory = NHibernateSessionFactoryBuilder.Build();
 
             partition_proxy = new Mock<IPartitionProxy>();
+            // important to have lambda expression in order each time the getConnection is called to return a new connection object as expected from the contract
             partition_proxy.Setup(x => x.GetConnection())
-                           .Returns(new DatabaseConnection(new DatabaseConnectionString(MsSqlHelper.ConnectionStringSettings)));
+                           .Returns(() => new DatabaseConnection(new DatabaseConnectionString(MsSqlHelper.ConnectionStringSettings)));
 
             repository_session_factory = new PartitionedRepositorySessionFactory(session_factory, partition_proxy.Object);
         };
