@@ -53,7 +53,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._EntityFramework._Uti
             }
         }
 
-        static void OnModelCreating(DbModelBuilder builder)
+        public static void OnModelCreating(DbModelBuilder builder)
         {
             builder.Entity<Book>().HasKey(x => x.Id);
             builder.Entity<Book>().Property(x => x.Version)

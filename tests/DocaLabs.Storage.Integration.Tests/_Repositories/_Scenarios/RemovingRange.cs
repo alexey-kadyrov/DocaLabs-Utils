@@ -11,6 +11,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
         public IList<Book> OriginalBooks { get; set; }
         public Book OriginalUnchangedBook { get { return OriginalBooks[2]; } }
         public Book UnchangedBook { get { return GetPersistedBook(OriginalBooks[2].Id); } }
+        public bool ForceLoadPrices { get; set; }
 
         public RemovingRange()
         {
@@ -69,7 +70,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
             ScenarioProvider.Save(OriginalBooks);
         }
 
-        public void RunEnumerableRange(bool bForceLoadPrices = false)
+        public void RunEnumerableRange()
         {
             using (var scope = new TransactionScope())
             {
@@ -79,7 +80,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
                     Books.Get(OriginalBooks[1].Id)
                 };
 
-                if (bForceLoadPrices)   // for the EF sake to force load prices otherwise they won't be deleted
+                if (ForceLoadPrices)   // for the EF sake to force load prices otherwise they won't be deleted
                     Console.WriteLine(@"Loaded {0} and {1} prices", b[0].Prices.Count, b[1].Prices.Count);
 
                 Books.RemoveRange(b);
@@ -88,14 +89,14 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
             }
         }
 
-        public void RunParamListRange(bool bForceLoadPrices = false)
+        public void RunParamListRange()
         {
             using (var scope = new TransactionScope())
             {
                 var b0 = Books.Get(OriginalBooks[0].Id);
                 var b1 = Books.Get(OriginalBooks[1].Id);
 
-                if (bForceLoadPrices)   // for the EF sake to force load prices otherwise they won't be deleted
+                if (ForceLoadPrices)   // for the EF sake to force load prices otherwise they won't be deleted
                     Console.WriteLine(@"Loaded {0} and {1} prices", b0.Prices.Count, b1.Prices.Count);
 
                 Books.RemoveRange(b0, b1);

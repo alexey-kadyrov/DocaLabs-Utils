@@ -11,6 +11,7 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
         public Book OriginalUnchangedBook { get { return OriginalBooks[1]; } }
         public Book RemovedBook { get { return GetPersistedBook(OriginalBooks[0].Id); } }
         public Book UnchangedBook { get { return GetPersistedBook(OriginalBooks[1].Id); } }
+        public bool ForceLoadPrices { get; set; }
 
         public Removing()
         {
@@ -53,13 +54,13 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._Scenarios
             ScenarioProvider.Save(OriginalBooks);
         }
 
-        public void Run(bool bForceLoadPrices = false)
+        public void Run()
         {
             using (var scope = new TransactionScope())
             {
                 var book = Books.Get(OriginalBooks[0].Id);
 
-                if (bForceLoadPrices)   // for the EF sake to force load prices otherwise they won't be deleted
+                if (ForceLoadPrices)   // for the EF sake to force load prices otherwise they won't be deleted
                     Console.WriteLine(@"Loaded {0} prices", book.Prices.Count);
 
                 Books.Remove(book);

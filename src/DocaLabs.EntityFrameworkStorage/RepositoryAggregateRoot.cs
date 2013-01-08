@@ -58,8 +58,9 @@ namespace DocaLabs.EntityFrameworkStorage
         /// Constructs a new context instance using the existing connection to connect to a database. The connection will not be disposed when the context is disposed.
         /// </summary>
         /// <param name="connection">An existing connection to use for the new context.</param>
-        public RepositoryAggregateRoot(DbConnection connection)
-            : base(connection, false)
+        /// <param name="contextOwnsConnection">If set to <c>true</c> the connection is disposed when the context is disposed, otherwise the caller must dispose the connection.</param>
+        public RepositoryAggregateRoot(DbConnection connection, bool contextOwnsConnection)
+            : base(connection, contextOwnsConnection)
         {
         }
 
@@ -75,14 +76,6 @@ namespace DocaLabs.EntityFrameworkStorage
             var action = OnModelCreatingAction;
             if (action != null)
                 action(modelBuilder);
-        }
-
-        /// <summary>
-        /// Removes database initializer for a given entity.
-        /// </summary>
-        public static void RemoveDatabaseInitializer()
-        {
-            Database.SetInitializer<RepositoryAggregateRoot<TEntity>>(null);
         }
     }
 }

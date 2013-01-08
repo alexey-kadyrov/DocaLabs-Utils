@@ -121,7 +121,9 @@
     <Compile Include="_Repositories\_Azure\AzureScalarQueryTests.cs" />
     <Compile Include="_Repositories\_DataService\DataServiceScalarQueryTests.cs" />
     <Compile Include="_Repositories\_EntityFramework\QueryTests.cs" />
+    <Compile Include="_Repositories\_EntityFramework\RepositorySessionFactoryTests.cs" />
     <Compile Include="_Repositories\_EntityFramework\ScalarQueryTests.cs" />
+    <Compile Include="_Repositories\_EntityFramework\RepositorySessionTests.cs" />
     <Compile Include="_Repositories\_EntityFramework\_Ordinary\RepositoryTests.cs" />
     <Compile Include="_Repositories\_EntityFramework\_Partitioned\RepositoryTests.cs" />
     <Compile Include="_Repositories\_EntityFramework\_Utils\OrdinaryScenarioProvider.cs" />

@@ -4,7 +4,7 @@ using System.Data.Entity;
 namespace DocaLabs.EntityFrameworkStorage
 {
     /// <summary>
-    /// Base class to manage IDatabaseConnection instances.
+    /// Implements DbContext factory which uses either the database name or a connection string.
     /// </summary>
     public class DbContextFactory<TContext> : IDbContextFactory
         where TContext : DbContext
@@ -12,7 +12,7 @@ namespace DocaLabs.EntityFrameworkStorage
         readonly string _nameOrConnectionString;
 
         /// <summary>
-        /// Initializes an instance of the DbContextFactory class with provided connection.
+        /// Initializes an instance of the DbContextFactory class with either the database name or a connection string.
         /// </summary>
         public DbContextFactory(string nameOrConnectionString)
         {
@@ -20,7 +20,7 @@ namespace DocaLabs.EntityFrameworkStorage
         }
 
         /// <summary>
-        /// Creates a new instance of the repository context.
+        /// Creates a new instance of a context.
         /// </summary>
         public virtual DbContext Create()
         {

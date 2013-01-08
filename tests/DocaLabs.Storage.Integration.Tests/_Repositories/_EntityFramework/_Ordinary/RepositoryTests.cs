@@ -98,10 +98,10 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._EntityFramework._Ord
             () => scenario.Dispose();
 
         Establish context =
-            () => scenario = new Removing<OrdinaryScenarioProvider>();
+            () => scenario = new Removing<OrdinaryScenarioProvider> { ForceLoadPrices = true };
 
         Because of =
-            () => scenario.Run(true);
+            () => scenario.Run();
 
         It should_delete_entity =
             () => scenario.RemovedBook.ShouldBeNull();
@@ -119,10 +119,10 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._EntityFramework._Ord
             () => scenario.Dispose();
 
         Establish context =
-            () => scenario = new RemovingRange<OrdinaryScenarioProvider>();
+            () => scenario = new RemovingRange<OrdinaryScenarioProvider> { ForceLoadPrices = true };
 
         Because of =
-            () => scenario.RunEnumerableRange(true);
+            () => scenario.RunEnumerableRange();
 
         It should_delete_first_entity =
             () => scenario.GetPersistedBook(scenario.OriginalBooks[0].Id).ShouldBeNull();
@@ -143,10 +143,10 @@ namespace DocaLabs.Storage.Integration.Tests._Repositories._EntityFramework._Ord
             () => scenario.Dispose();
 
         Establish context =
-            () => scenario = new RemovingRange<OrdinaryScenarioProvider>();
+            () => scenario = new RemovingRange<OrdinaryScenarioProvider> { ForceLoadPrices = true };
 
         Because of =
-            () => scenario.RunParamListRange(true);
+            () => scenario.RunParamListRange();
 
         It should_delete_first_entity =
             () => scenario.GetPersistedBook(scenario.OriginalBooks[0].Id).ShouldBeNull();
