@@ -12,12 +12,14 @@ namespace DocaLabs.EntityFrameworkStorage
         readonly IDbContextFactory _contextFactory;
         DbContext _context;
 
+        /// <summary>
+        /// Creates the context or returns already existing.
+        /// </summary>
         public DbContext Context { get { return _context ?? (_context = _contextFactory.Create()); } }
 
         /// <summary>
         /// Initializes an instance of the RepositorySession class.
         /// </summary>
-        /// <param name="contextFactory">A DbContext factory.</param>
         public RepositorySession(IDbContextFactory contextFactory)
         {
             if (contextFactory == null)
@@ -52,11 +54,17 @@ namespace DocaLabs.EntityFrameworkStorage
             Context.SaveChanges();
         }
 
+        /// <summary>
+        /// Creates a new instance of a repository for the specified entity type.
+        /// </summary>
         public IRepository<TEntity> CreateRepository<TEntity>() where TEntity : class
         {
             return new Repository<TEntity>(this);
         }
 
+        /// <summary>
+        /// Returns a DbSet for the specified type.
+        /// </summary>
         public IDbSet<TEntity> GetSet<TEntity>() where TEntity : class
         {
             return Context.Set<TEntity>();

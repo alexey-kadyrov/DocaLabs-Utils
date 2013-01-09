@@ -41,12 +41,12 @@ namespace DocaLabs.EntityFrameworkStorage
         }
 
         /// <summary>
-        /// The entity set as aggregate root.
+        /// The entity set as aggregate root. The property is initialized by the DbContext.
         /// </summary>
         public IDbSet<TEntity> Entities { get; set; }
 
         /// <summary>
-        /// Constructs a new context instance using the given string as the name or connection string for the database to which a connection will be made.
+        /// Initializes a new context instance using the given string as the name or connection string for the database to which a connection will be made.
         /// </summary>
         /// <param name="nameOrConnectionString">Either the database name or a connection string</param>
         public RepositoryAggregateRoot(string nameOrConnectionString)
@@ -55,7 +55,7 @@ namespace DocaLabs.EntityFrameworkStorage
         }
 
         /// <summary>
-        /// Constructs a new context instance using the existing connection to connect to a database. The connection will not be disposed when the context is disposed.
+        /// Initializes a new context instance using the existing connection to connect to a database. The connection will not be disposed when the context is disposed.
         /// </summary>
         /// <param name="connection">An existing connection to use for the new context.</param>
         /// <param name="contextOwnsConnection">If set to <c>true</c> the connection is disposed when the context is disposed, otherwise the caller must dispose the connection.</param>

@@ -73,7 +73,6 @@
     <Compile Include="Serialization\InRequestAsFormAttributeTests.cs" />
     <Compile Include="Serialization\InRequestAsJsonAttributeTests.cs" />
     <Compile Include="Serialization\InRequestAsXmlAttributeTests.cs" />
-    <Compile Include="Mapping\TypeMapTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\InResponseAsJsonAttributeTests.cs" />
     <Compile Include="Serialization\_Utils\ResponseAttributeTestContext.cs" />
@@ -95,7 +94,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Mapping\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

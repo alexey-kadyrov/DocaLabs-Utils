@@ -84,7 +84,7 @@ namespace DocaLabs.NHibernateStorage
         }
 
         /// <summary>
-        /// Executes the configured query which gives a list of entities as a result.
+        /// Executes the configured scalar query which gives a list of entities as a result.
         /// </summary>
         /// <returns>The result of the query.</returns>
         public TResult Execute<TResult>(IScalarQuery<TEntity, TResult> query)

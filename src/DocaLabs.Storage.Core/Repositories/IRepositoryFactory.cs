@@ -6,7 +6,7 @@
     public interface IRepositoryFactory : IRepositorySession
     {
         /// <summary>
-        /// Creates a new instance of a repository.
+        /// Creates a new instance of a repository for the specified entity type.
         /// </summary>
         IRepository<TEntity> CreateRepository<TEntity>() where TEntity : class;
     }

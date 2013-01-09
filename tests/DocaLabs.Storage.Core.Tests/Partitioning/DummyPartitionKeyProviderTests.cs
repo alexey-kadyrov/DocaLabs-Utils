@@ -1,6 +1,5 @@
 ﻿using System;
 using DocaLabs.Storage.Core.Partitioning;
-using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;
 using It = Machine.Specifications.It;
 

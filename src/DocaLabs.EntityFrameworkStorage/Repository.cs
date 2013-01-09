@@ -7,7 +7,7 @@ using DocaLabs.Storage.Core.Repositories;
 namespace DocaLabs.EntityFrameworkStorage
 {
     /// <summary>
-    /// Provides implementation of IEntityFrameworkRepository and IRepository for Entity Framework.
+    /// Provides implementation of IQueryableRepository for Entity Framework.
     /// </summary>
     /// <typeparam name="TEntity">The entity this repository is handling.</typeparam>
     public class Repository<TEntity> : IQueryableRepository<TEntity>
@@ -23,8 +23,14 @@ namespace DocaLabs.EntityFrameworkStorage
             get { return _session; }
         }
 
+        /// <summary>
+        /// Gets IQueryable for the repository
+        /// </summary>
         public IQueryable<TEntity> Query { get { return RootSet; } }
 
+        /// <summary>
+        /// Gets the IDbSet for the entities which are handled by this repository.
+        /// </summary>
         public IDbSet<TEntity> RootSet { get { return _session.GetSet<TEntity>(); } }
 
         /// <summary>
@@ -57,6 +63,11 @@ namespace DocaLabs.EntityFrameworkStorage
             RootSet.Remove(item);
         }
 
+        /// <summary>
+        /// Gets the entity by its primary key value.
+        /// </summary>
+        /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
+        /// <returns>Returns the found entity, or null.</returns>
         public TEntity Get(params object[] keyValues)
         {
             // as the DbSet won't throw exception and in order to make behaviour similar to NHibernate repository.
@@ -66,6 +77,10 @@ namespace DocaLabs.EntityFrameworkStorage
             return RootSet.Find(keyValues);
         }
 
+        /// <summary>
+        /// Executes the configured query.
+        /// </summary>
+        /// <returns>The list of entities which satisfy the query.</returns>
         public IList<TEntity> Execute(IQuery<TEntity> query)
         {
             if(query == null)
@@ -74,6 +89,10 @@ namespace DocaLabs.EntityFrameworkStorage
             return query.Execute(this);
         }
 
+        /// <summary>
+        /// Executes the configured scalar query which gives a list of entities as a result.
+        /// </summary>
+        /// <returns>The result of the query.</returns>
         public TResult Execute<TResult>(IScalarQuery<TEntity, TResult> query)
         {
             if (query == null)

@@ -3,7 +3,7 @@
 namespace DocaLabs.EntityFrameworkStorage
 {
     /// <summary>
-    /// Defines methods for DbContext factory which is used by RepositorySession
+    /// Defines methods for DbContext factory which is used by RepositorySession to create database contexts.
     /// </summary>
     public interface IDbContextFactory
     {

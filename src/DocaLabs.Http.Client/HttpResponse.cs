@@ -78,8 +78,8 @@ namespace DocaLabs.Http.Client
         /// </summary>
         public string AsString()
         {
-            using (var stream = GetDataStream())
-            using (var reader = new StreamReader(stream, TryGetEncoding()))
+            // stream is disposed by the reader
+            using (var reader = new StreamReader(GetDataStream(), TryGetEncoding()))
             {
                 return reader.ReadToEnd();
             }
@@ -105,8 +105,8 @@ namespace DocaLabs.Http.Client
         /// </summary>
         public T AsXmlObject<T>()
         {
-            using (var stream = GetDataStream())
-            using (var reader = XmlReader.Create(stream, new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore }))
+            // stream is disposed by the reader
+            using (var reader = XmlReader.Create(GetDataStream(), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore }))
             {
                 return (T)new XmlSerializer(typeof(T)).Deserialize(reader);
             }

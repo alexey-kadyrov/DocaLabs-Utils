@@ -66,8 +66,8 @@ namespace DocaLabs.Http.Client.Serialization
         {
             request.ContentType = "text/xml";
 
-            using (var stream = request.GetRequestStream())
-            using (var writer = XmlWriter.Create(stream, GetSettings(obj)))
+            // stream is disposed by the reader
+            using (var writer = XmlWriter.Create(request.GetRequestStream(), GetSettings(obj)))
             {
                 Save(obj, writer);
             }

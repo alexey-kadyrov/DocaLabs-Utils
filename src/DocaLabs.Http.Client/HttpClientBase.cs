@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using DocaLabs.Http.Client.Configuration;
 using NLog;
 

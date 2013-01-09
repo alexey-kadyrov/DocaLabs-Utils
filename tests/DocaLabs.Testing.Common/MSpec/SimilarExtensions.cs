@@ -34,7 +34,7 @@ namespace DocaLabs.Testing.Common.MSpec
                 {
                     message
                         .Append("Should contain element: ")
-                        .Append(actual.ToString())
+                        .Append(actual)
                         .Append("\n");
                 }
 
@@ -67,7 +67,7 @@ namespace DocaLabs.Testing.Common.MSpec
                 {
                     message
                         .Append("Should contain element: ")
-                        .Append(actual.ToString())
+                        .Append(actual)
                         .Append("\n");
                 }
 
@@ -100,7 +100,7 @@ namespace DocaLabs.Testing.Common.MSpec
                 {
                     message
                         .Append("Should contain element: ")
-                        .Append(enumerator.Current.ToString())
+                        .Append(enumerator.Current)
                         .Append("\n");
                 }
 
@@ -133,7 +133,7 @@ namespace DocaLabs.Testing.Common.MSpec
                 {
                     message
                         .Append("Should contain element: ")
-                        .Append(enumerator.Current.ToString())
+                        .Append(enumerator.Current)
                         .Append("\n");
                 }
 
