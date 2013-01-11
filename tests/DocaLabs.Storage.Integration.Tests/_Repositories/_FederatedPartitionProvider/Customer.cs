@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DocaLabs.Storage.Core;
 
-namespace DocaLabs.Storage.SqlAzure.Integration.Tests.Entities
+namespace DocaLabs.Storage.Integration.Tests._Repositories._FederatedPartitionProvider
 {
-    public class Customer : IEntity
+    public class Customer
     {
         [Key]
         public virtual long CustomerId { get; set; }
-
         public virtual string Title { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string MiddleName { get; set; }

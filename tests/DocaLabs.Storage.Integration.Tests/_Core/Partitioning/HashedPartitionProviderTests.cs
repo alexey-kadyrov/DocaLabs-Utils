@@ -4,7 +4,7 @@ using System.Transactions;
 using DocaLabs.Storage.Core;
 using DocaLabs.Storage.Core.Partitioning;
 using DocaLabs.Storage.Integration.Tests._Core.Partitioning._Utils;
-using DocaLabs.Storage.Integration.Tests._Utils;
+using DocaLabs.Testing.Common;
 using DocaLabs.Testing.Common.MSpec;
 using DocaLabs.Testing.Common.Mathematics;
 using Machine.Specifications;

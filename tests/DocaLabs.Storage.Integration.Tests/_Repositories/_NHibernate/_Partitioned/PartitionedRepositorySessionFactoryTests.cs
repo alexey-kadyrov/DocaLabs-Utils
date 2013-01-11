@@ -6,7 +6,7 @@ using DocaLabs.Storage.Core;
 using DocaLabs.Storage.Core.Partitioning;
 using DocaLabs.Storage.Integration.Tests._Repositories._NHibernate._Utils;
 using DocaLabs.Storage.Integration.Tests._Repositories._Scenarios;
-using DocaLabs.Storage.Integration.Tests._Utils;
+using DocaLabs.Testing.Common;
 using Machine.Specifications;
 using Moq;
 using NHibernate;

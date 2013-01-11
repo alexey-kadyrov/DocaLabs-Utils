@@ -1,7 +1,7 @@
 ﻿using System;
 using DocaLabs.Storage.Core;
 using DocaLabs.Storage.Core.Partitioning;
-using DocaLabs.Storage.Integration.Tests._Utils;
+using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
 namespace DocaLabs.Storage.Integration.Tests._Core.Partitioning

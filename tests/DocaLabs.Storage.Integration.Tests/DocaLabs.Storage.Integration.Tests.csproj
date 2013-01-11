@@ -129,9 +129,11 @@
     <Compile Include="_Repositories\_EntityFramework\_Utils\OrdinaryScenarioProvider.cs" />
     <Compile Include="_Repositories\_EntityFramework\_Utils\PartitionedScenarioProvider.cs" />
     <Compile Include="_Repositories\_EntityFramework\_Utils\ScenarioProviderBase.cs" />
+    <Compile Include="_Repositories\_FederatedPartitionProvider\Customer.cs" />
+    <Compile Include="_Repositories\_FederatedPartitionProvider\EntityFrameworkRepositoryFederationTests.cs" />
+    <Compile Include="_Repositories\_FederatedPartitionProvider\NHibernateRepositoryFederationTests.cs" />
     <Compile Include="_Repositories\_NHibernate\ScalarQueryTests.cs" />
     <Compile Include="_Repositories\_Scenarios\ScalarExecuting.cs" />
-    <Compile Include="_Utils\MsSqlHelper.cs" />
     <Compile Include="_Core\Partitioning\HashedPartitionProviderTests.cs" />
     <Compile Include="_Core\Partitioning\KeyMapPartitionProviderTests.cs" />
     <Compile Include="_Core\Partitioning\_Utils\PartitionValidator.cs" />
@@ -229,6 +231,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="_Repositories\_FederatedPartitionProvider\create-federation.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\src\docalabs.storage.core\partitioning\1-base-partitioning-create-tables-and-sprocs.sql">
       <Link>_Core\Partitioning\_Utils\1-base-partitioning-create-tables-and-sprocs.sql</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

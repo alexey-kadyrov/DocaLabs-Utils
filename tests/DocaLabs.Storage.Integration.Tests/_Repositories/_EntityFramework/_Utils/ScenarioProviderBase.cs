@@ -5,7 +5,7 @@ using System.Transactions;
 using DocaLabs.EntityFrameworkStorage;
 using DocaLabs.Storage.Core.Repositories;
 using DocaLabs.Storage.Integration.Tests._Repositories._Scenarios;
-using DocaLabs.Storage.Integration.Tests._Utils;
+using DocaLabs.Testing.Common;
 
 namespace DocaLabs.Storage.Integration.Tests._Repositories._EntityFramework._Utils
 {

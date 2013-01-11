@@ -36,6 +36,9 @@
     <NoWarn>0169</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Machine.Specifications, Version=0.5.10.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Machine.Specifications.0.5.10\lib\net40\Machine.Specifications.dll</HintPath>
@@ -67,6 +70,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Transactions" />
@@ -90,12 +94,12 @@
     <Compile Include="Mathematics\DistributionStore.cs" />
     <Compile Include="Mathematics\DistributionStoreResult.cs" />
     <Compile Include="Mathematics\UniformDistributionQuality.cs" />
-    <Compile Include="MSpec\CommonTestTags.cs" />
     <Compile Include="MSpec\CollectionExtensions.cs" />
     <Compile Include="MSpec\DistributionExtensions.cs" />
     <Compile Include="MSpec\ExceptionStandardBehaviours.cs" />
     <Compile Include="MSpec\SerializationExtensions.cs" />
     <Compile Include="MSpec\SimilarExtensions.cs" />
+    <Compile Include="MsSqlHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HttpServer\SimpleHttpServer.cs" />
     <Compile Include="HttpServer\TestHttpServer.cs" />

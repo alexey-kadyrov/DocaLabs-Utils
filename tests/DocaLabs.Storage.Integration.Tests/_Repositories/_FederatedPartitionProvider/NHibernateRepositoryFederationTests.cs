@@ -2,8 +2,7 @@
 using DocaLabs.Storage.Core;
 using DocaLabs.Storage.Core.Partitioning;
 using DocaLabs.Storage.Core.Repositories;
-using DocaLabs.Storage.SqlAzure.Integration.Tests.Entities;
-using DocaLabs.Testing.Common.Database;
+using DocaLabs.Testing.Common;
 using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;
 using Moq;
@@ -14,14 +13,13 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using It = Machine.Specifications.It;
 
-namespace DocaLabs.Storage.SqlAzure.Integration.Tests
+namespace DocaLabs.Storage.Integration.Tests._Repositories._FederatedPartitionProvider
 {
     [Subject("Federation tests for NHibernate Repository")]
     class when_nhibernate_repository_is_used_with_federated_database
     {
         const string ConnectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=DocaLabsFederatedRepositoryTests;Integrated Security=SSPI;";
 
-        static Mock<IPartitionKeyProvider> partition_key_provider;
         static ISessionFactory session_factory;
         static INHibernateRepositorySession session_manager;
         static IRepository<Customer> customers;
@@ -31,15 +29,14 @@ namespace DocaLabs.Storage.SqlAzure.Integration.Tests
 
         Cleanup after_each = () =>
         {
-            CurrentPartitionProxy.Current = null;
             FederationCommand.FederationStatement = original_federtaion_statemnet;
             session_manager.Dispose();
-            MsSqlDatabaseBuilder.Drop(ConnectionString);
+            MsSqlHelper.DropDatabase(ConnectionString);
         };
 
         Establish context = () =>
         {
-            MsSqlDatabaseBuilder.Build(ConnectionString, @"create-federation.sql");
+            MsSqlHelper.BuildDatabase(ConnectionString, @"_Repositories\_FederatedPartitionProvider\create-federation.sql");
 
             customer_id = 29660;
 
@@ -51,16 +48,16 @@ namespace DocaLabs.Storage.SqlAzure.Integration.Tests
             original_federtaion_statemnet = FederationCommand.FederationStatement;
             FederationCommand.FederationStatement = "UPDATE [dbo].[Customers] SET [FirstName] = '{0}', [LastName]= '{1}' WHERE [CustomerId] = {2}";
 
-            partition_key_provider = new Mock<IPartitionKeyProvider>();
-            partition_key_provider.Setup(x => x.GetPartitionKey()).Returns(customer_id);
+            var partitionKeyProvider = new Mock<IPartitionKeyProvider>();
+            partitionKeyProvider.Setup(x => x.GetPartitionKey()).Returns(customer_id);
 
-            CurrentPartitionProxy.Current = new PartitionProxy(
-                partition_key_provider.Object,
+            var partitionProxy = new PartitionProxy(
+                partitionKeyProvider.Object,
                 new FederatedPartitionProvider(new DatabaseConnectionString(ConnectionString), "CustomerFederation", "cid"));
 
             session_factory = SetupSessionFactory();
 
-            session_manager = new PartitionedRepositorySession(session_factory);
+            session_manager = new PartitionedRepositorySession(session_factory, partitionProxy);
 
             customers = new Repository<Customer>(session_manager);
         };
@@ -72,9 +69,9 @@ namespace DocaLabs.Storage.SqlAzure.Integration.Tests
         {
             CustomerId = customer_id,
             Title = "Mr.",
-            FirstName = "CustomerFederation", //"Anthony",
+            FirstName = "CustomerFederation",
             MiddleName = null,
-            LastName = "cid", // "Chor",
+            LastName = "cid",
             Suffix = null,
             CompanyName = "Extreme Riding Supplies",
             SalesPerson = @"adventure-works\linda3",
