@@ -3,7 +3,7 @@
     /// <summary>
     /// Deserializes json serialized object from the web response.
     /// </summary>
-    public class InResponseAsJsonAttribute : InResponseAttribute
+    public class DeserializeFromJsonAttribute : ResponseDeserializationAttribute
     {
         /// <summary>
         /// Deserializes json serialized object from the web response.

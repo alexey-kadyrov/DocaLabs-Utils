@@ -97,7 +97,7 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The method must be overridden or the TServiceResult must have a class level attribute derived from InResponseAttribute for {0}..
+        ///   Looks up a localized string similar to The method must be overridden or the TServiceResult must have a class level attribute derived from ResponseDeserializationAttribute for {0}..
         /// </summary>
         internal static string method_must_be_overidden {
             get {

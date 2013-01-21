@@ -3,7 +3,7 @@
     /// <summary>
     /// Deserializes xml serialized object from the web response.
     /// </summary>
-    public class InResponseAsXmlAttribute : InResponseAttribute
+    public class DeserializeFromXmlAttribute : ResponseDeserializationAttribute
     {
         /// <summary>
         /// Deserializes xml serialized object from the web response.

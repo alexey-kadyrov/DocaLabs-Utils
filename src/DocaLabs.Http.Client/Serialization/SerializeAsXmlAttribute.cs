@@ -9,7 +9,7 @@ namespace DocaLabs.Http.Client.Serialization
     /// Serializes a given object into the web request in xml format.
     /// The class uses XmlSerializer for serialization.
     /// </summary>
-    public class InRequestAsXmlAttribute : InRequestAttribute
+    public class SerializeAsXmlAttribute : RequestSerializationAttribute
     {
         /// <summary>
         /// Gets or sets the type of text encoding to be used for Xml serialization.
@@ -50,9 +50,9 @@ namespace DocaLabs.Http.Client.Serialization
         public string Subset { get; set; }
 
         /// <summary>
-        /// Instantiates an instance of the InRequestAsXmlAttribute class.
+        /// Instantiates an instance of the SerializeAsXmlAttribute class.
         /// </summary>
-        public InRequestAsXmlAttribute()
+        public SerializeAsXmlAttribute()
         {
             Encoding = CharEncoding.Utf8;
             Indent = true;

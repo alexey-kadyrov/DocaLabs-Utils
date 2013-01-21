@@ -130,7 +130,7 @@
     <value>Failed to execute request to {0} ({1})</value>
   </data>
   <data name="method_must_be_overidden" xml:space="preserve">
-    <value>The method must be overridden or the TServiceResult must have a class level attribute derived from InResponseAttribute for {0}.</value>
+    <value>The method must be overridden or the TServiceResult must have a class level attribute derived from ResponseDeserializationAttribute for {0}.</value>
   </data>
   <data name="method_must_have_only_one_argument" xml:space="preserve">
     <value>Method {0} must have only one argument.</value>

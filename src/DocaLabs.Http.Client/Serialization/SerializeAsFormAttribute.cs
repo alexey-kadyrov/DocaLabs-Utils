@@ -8,7 +8,7 @@ namespace DocaLabs.Http.Client.Serialization
     /// Serializes a given object into the web request as Url encoded form (the content type is: application/x-www-form-urlencoded).
     /// The class uses QueryMapper.ToQueryString for serialization, the string is encoded as UTF8.
     /// </summary>
-    public class InRequestAsFormAttribute : InRequestAttribute
+    public class SerializeAsFormAttribute : RequestSerializationAttribute
     {
         /// <summary>
         /// Serializes a given object into the web request as Url encoded form (the content type is: application/x-www-form-urlencoded).

@@ -6,13 +6,13 @@ using It = Machine.Specifications.It;
 
 namespace DocaLabs.Http.Client.Tests.Serialization
 {
-    [Subject(typeof(InRequestAsJsonAttribute))]
-    class when_in_request_as_json_attribute_is_used_for_serialization : RequestAttributeTestContext
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    class when_serialize_as_json_attribute_is_used : request_serialization_test_context
     {
-        static InRequestAsJsonAttribute attribute;
+        static SerializeAsJsonAttribute attribute;
 
         Establish context = 
-            () => attribute = new InRequestAsJsonAttribute();
+            () => attribute = new SerializeAsJsonAttribute();
 
         Because of =
             () => attribute.Serialize(original_object, mock_web_request.Object);

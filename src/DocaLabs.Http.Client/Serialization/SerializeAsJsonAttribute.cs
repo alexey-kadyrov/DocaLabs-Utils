@@ -7,7 +7,7 @@ namespace DocaLabs.Http.Client.Serialization
     /// <summary>
     /// Serializes a given object into the web request in json format, the string is encoded as UTF8.
     /// </summary>
-    public class InRequestAsJsonAttribute : InRequestAttribute
+    public class SerializeAsJsonAttribute : RequestSerializationAttribute
     {
         /// <summary>
         /// Serializes a given object into the web request in json format

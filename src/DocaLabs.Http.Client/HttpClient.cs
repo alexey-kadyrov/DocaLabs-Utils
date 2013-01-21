@@ -69,11 +69,11 @@ namespace DocaLabs.Http.Client
         /// Executes a http request. By default all properties with public getters are serialized into the http query part.
         /// The input data serialization behaviour can be altered by:
         ///   * Using QueryIgnoreAttribute (on class or property level),
-        ///   * Using one of the InRequestAttribute derived classes (on the class or property level) 
+        ///   * Using one of the RequestSerializationAttribute derived classes (on the class or property level) 
         ///   * Implementing ICustomQueryMapper interface for custom mapping to query string
         ///   * Overriding TryMakeQueryString and/or TryWriteRequestData
         /// The output data deserialization behaviour can be altered by:
-        ///   * Using one of the InResponseAttribute derived classes (on the class level)
+        ///   * Using one of the ResponseDeserializationAttribute derived classes (on the class level)
         ///   * Overriding OnResultTransforming
         /// </summary>
         /// <param name="query">Input parameters.</param>
@@ -159,9 +159,9 @@ namespace DocaLabs.Http.Client
 
             var type = typeof(TQuery);
 
-            return type.GetCustomAttributes(typeof(InRequestAttribute), true).Length > 0
-                || GetType().GetCustomAttributes(typeof(InRequestAttribute), true).Length > 0
-                || type.GetProperties().Any(property => property.GetCustomAttributes(typeof(InRequestAttribute), true).Length > 0)
+            return type.GetCustomAttributes(typeof(RequestSerializationAttribute), true).Length > 0
+                || GetType().GetCustomAttributes(typeof(RequestSerializationAttribute), true).Length > 0
+                || type.GetProperties().Any(property => property.GetCustomAttributes(typeof(RequestSerializationAttribute), true).Length > 0)
                 ? WebRequestMethods.Http.Post
                 : WebRequestMethods.Http.Get;
         }
@@ -220,11 +220,11 @@ namespace DocaLabs.Http.Client
 
         protected virtual bool TryQueryClassLevel(TQuery query, WebRequest request)
         {
-            var attrs = typeof(TQuery).GetCustomAttributes(typeof(InRequestAttribute), true);
+            var attrs = typeof(TQuery).GetCustomAttributes(typeof(RequestSerializationAttribute), true);
             if (attrs.Length == 0)
                 return false;
 
-            ((InRequestAttribute) attrs[0]).Serialize(query, request);
+            ((RequestSerializationAttribute) attrs[0]).Serialize(query, request);
 
             return true;
         }
@@ -233,10 +233,10 @@ namespace DocaLabs.Http.Client
         {
             foreach (var property in typeof(TQuery).GetProperties())
             {
-                var attrs = property.GetCustomAttributes(typeof(InRequestAttribute), true);
+                var attrs = property.GetCustomAttributes(typeof(RequestSerializationAttribute), true);
                 if (attrs.Length > 0)
                 {
-                    ((InRequestAttribute)attrs[0]).Serialize(property.GetValue(query, null), request);
+                    ((RequestSerializationAttribute)attrs[0]).Serialize(property.GetValue(query, null), request);
                     return true;
                 }
             }
@@ -246,11 +246,11 @@ namespace DocaLabs.Http.Client
 
         protected virtual bool TryHttpClientClassLevel(TQuery query, WebRequest request)
         {
-            var attrs = GetType().GetCustomAttributes(typeof(InRequestAttribute), true);
+            var attrs = GetType().GetCustomAttributes(typeof(RequestSerializationAttribute), true);
             if (attrs.Length == 0)
                 return false;
 
-            ((InRequestAttribute)attrs[0]).Serialize(query, request);
+            ((RequestSerializationAttribute)attrs[0]).Serialize(query, request);
 
             return true;
         }
@@ -270,9 +270,9 @@ namespace DocaLabs.Http.Client
 
         protected virtual TResult OnResultTransforming(TQuery query, HttpResponse response)
         {
-            var attrs = typeof(TResult).GetCustomAttributes(typeof(InResponseAttribute), true);
+            var attrs = typeof(TResult).GetCustomAttributes(typeof(ResponseDeserializationAttribute), true);
             if (attrs.Length > 0)
-                return ((InResponseAttribute)attrs[0]).Deserialize<TResult>(response);
+                return ((ResponseDeserializationAttribute)attrs[0]).Deserialize<TResult>(response);
 
             if (response.IsJson())
                 return response.AsJsonObject<TResult>();

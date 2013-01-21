@@ -9,13 +9,13 @@ using It = Machine.Specifications.It;
 
 namespace DocaLabs.Http.Client.Tests.Serialization
 {
-    [Subject(typeof(InRequestAsXmlAttribute))]
-    public class when_in_request_as_xml_attribute_is_used_for_serialization_in_default_configuration : RequestAttributeTestContext
+    [Subject(typeof(SerializeAsXmlAttribute))]
+    public class when_serialize_as_xml_attribute_is_used_in_default_configuration : request_serialization_test_context
     {
-        static InRequestAsXmlAttribute attribute;
+        static SerializeAsXmlAttribute attribute;
 
         Establish context = 
-            () => attribute = new InRequestAsXmlAttribute();
+            () => attribute = new SerializeAsXmlAttribute();
 
         Because of = 
             () => attribute.Serialize(original_object, mock_web_request.Object);
@@ -36,13 +36,13 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
     }
 
-    [Subject(typeof(InRequestAsXmlAttribute))]
-    public class when_in_request_as_xml_attribute_is_used_for_serialization_with_doc_type : RequestAttributeTestContext
+    [Subject(typeof(SerializeAsXmlAttribute))]
+    public class when_serialize_as_xml_attribute_is_used_with_doc_type : request_serialization_test_context
     {
         // ReSharper disable PossibleNullReferenceException
-        static InRequestAsXmlAttribute attribute;
+        static SerializeAsXmlAttribute attribute;
 
-        Establish context = () => attribute = new InRequestAsXmlAttribute
+        Establish context = () => attribute = new SerializeAsXmlAttribute
         {
             DocTypeName = "testService",
             Pubid = "-//Test//DTDTest testService v2//EN",
@@ -78,12 +78,12 @@ namespace DocaLabs.Http.Client.Tests.Serialization
         // ReSharper restore PossibleNullReferenceException
     }
 
-    [Subject(typeof(InRequestAsXmlAttribute))]
-    public class when_in_request_as_xml_attribute_is_used_for_serialization_with_utf16_encoding : RequestAttributeTestContext
+    [Subject(typeof(SerializeAsXmlAttribute))]
+    public class when_serialize_as_xml_attribute_is_used_with_utf16_encoding : request_serialization_test_context
     {
-        static InRequestAsXmlAttribute attribute;
+        static SerializeAsXmlAttribute attribute;
 
-        Establish context = () => attribute = new InRequestAsXmlAttribute
+        Establish context = () => attribute = new SerializeAsXmlAttribute
         {
             Encoding = CharEncoding.Utf16
         };
@@ -107,12 +107,12 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-16");
     }
 
-    [Subject(typeof(InRequestAsXmlAttribute))]
-    public class when_in_request_as_xml_attribute_is_used_for_serialization_with_utf32_encoding : RequestAttributeTestContext
+    [Subject(typeof(SerializeAsXmlAttribute))]
+    public class when_serialize_as_xml_attribute_is_used_with_utf32_encoding : request_serialization_test_context
     {
-        static InRequestAsXmlAttribute attribute;
+        static SerializeAsXmlAttribute attribute;
 
-        Establish context = () => attribute = new InRequestAsXmlAttribute
+        Establish context = () => attribute = new SerializeAsXmlAttribute
         {
             Encoding = CharEncoding.Utf32
         };
@@ -136,12 +136,12 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-32");
     }
 
-    [Subject(typeof(InRequestAsXmlAttribute))]
-    public class when_in_request_as_xml_attribute_is_used_for_serialization_with_ascii_encoding : RequestAttributeTestContext
+    [Subject(typeof(SerializeAsXmlAttribute))]
+    public class when_serialize_as_xml_attribute_is_used_with_ascii_encoding : request_serialization_test_context
     {
-        static InRequestAsXmlAttribute attribute;
+        static SerializeAsXmlAttribute attribute;
 
-        Establish context = () => attribute = new InRequestAsXmlAttribute
+        Establish context = () => attribute = new SerializeAsXmlAttribute
         {
             Encoding = CharEncoding.Ascii
         };
@@ -165,13 +165,13 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("us-ascii");
     }
 
-    [Subject(typeof(InRequestAsXmlAttribute))]
-    public class when_in_request_as_xml_attribute_is_used_for_serialization_without_identation : RequestAttributeTestContext
+    [Subject(typeof(SerializeAsXmlAttribute))]
+    public class when_serialize_as_xml_attribute_is_used_without_identation : request_serialization_test_context
     {
-        static InRequestAsXmlAttribute attribute;
+        static SerializeAsXmlAttribute attribute;
 
         Establish context =
-            () => attribute = new InRequestAsXmlAttribute { Indent = false };
+            () => attribute = new SerializeAsXmlAttribute { Indent = false };
 
         Because of =
             () => attribute.Serialize(original_object, mock_web_request.Object);
@@ -192,13 +192,13 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
     }
 
-    [Subject(typeof(InRequestAsXmlAttribute))]
-    public class when_in_request_as_xml_attribute_is_used_for_serialization_with_redefined_ident_chars : RequestAttributeTestContext
+    [Subject(typeof(SerializeAsXmlAttribute))]
+    public class when_serialize_as_xml_attribute_is_used_with_redefined_ident_chars : request_serialization_test_context
     {
-        static InRequestAsXmlAttribute attribute;
+        static SerializeAsXmlAttribute attribute;
 
         Establish context =
-            () => attribute = new InRequestAsXmlAttribute { IndentChars = "\r\r\r\r\r" };
+            () => attribute = new SerializeAsXmlAttribute { IndentChars = "\r\r\r\r\r" };
 
         Because of =
             () => attribute.Serialize(original_object, mock_web_request.Object);
@@ -219,13 +219,13 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
     }
 
-    [Subject(typeof(InRequestAsXmlAttribute))]
-    public class when_in_request_as_xml_attribute_is_newed
+    [Subject(typeof(SerializeAsXmlAttribute))]
+    public class when_serialize_as_xml_attribute_is_newed
     {
-        static InRequestAsXmlAttribute attribute;
+        static SerializeAsXmlAttribute attribute;
 
         Because of = 
-            () => attribute = new InRequestAsXmlAttribute();
+            () => attribute = new SerializeAsXmlAttribute();
 
         It should_set_encoding_to_utf8 =
             () => attribute.Encoding.ShouldEqual(CharEncoding.Utf8);

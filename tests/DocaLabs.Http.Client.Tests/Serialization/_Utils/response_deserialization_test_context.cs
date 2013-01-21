@@ -4,8 +4,7 @@ using Moq;
 
 namespace DocaLabs.Http.Client.Tests.Serialization._Utils
 {
-    // ReSharper disable InconsistentNaming
-    public class ResponseAttributeTestContext
+    public class response_deserialization_test_context
     {
         public class TestTarget
         {
@@ -27,5 +26,4 @@ namespace DocaLabs.Http.Client.Tests.Serialization._Utils
             http_response = new HttpResponse(mock_web_response.Object);
         }
     }
-    // ReSharper restore InconsistentNaming
 }

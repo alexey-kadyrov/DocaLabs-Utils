@@ -9,13 +9,13 @@ using It = Machine.Specifications.It;
 
 namespace DocaLabs.Http.Client.Tests.Serialization
 {
-    [Subject(typeof(InRequestAsFormAttribute))]
-    class when_in_request_as_form_attribute_is_used_for_serialization : RequestAttributeTestContext
+    [Subject(typeof(SerializeAsFormAttribute))]
+    class when_serialize_as_form_attribute_is_used : request_serialization_test_context
     {
-        static InRequestAsFormAttribute attribute;
+        static SerializeAsFormAttribute attribute;
 
         Establish context = 
-            () => attribute = new InRequestAsFormAttribute();
+            () => attribute = new SerializeAsFormAttribute();
 
         Because of =
             () => attribute.Serialize(original_object, mock_web_request.Object);

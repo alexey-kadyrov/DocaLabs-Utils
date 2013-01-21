@@ -8,16 +8,16 @@ using It = Machine.Specifications.It;
 
 namespace DocaLabs.Http.Client.Tests.Serialization
 {
-    [Subject(typeof(InResponseAsXmlAttribute))]
-    class when_in_response_as_xml_attribute_is_used_to_deserialize : ResponseAttributeTestContext
+    [Subject(typeof(DeserializeFromXmlAttribute))]
+    class when_deserialize_from_xml_attribute_is_used : response_deserialization_test_context
     {
         const string data = "<TestTarget><Value1>2012</Value1><Value2>Hello World!</Value2></TestTarget>";
-        static InResponseAsXmlAttribute attribute;
+        static DeserializeFromXmlAttribute attribute;
         static TestTarget target;
 
         Establish context = () =>
         {
-            attribute = new InResponseAsXmlAttribute();
+            attribute = new DeserializeFromXmlAttribute();
             Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 

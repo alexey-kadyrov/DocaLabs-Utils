@@ -1,13 +1,11 @@
 ﻿using System.IO;
 using System.Net;
 using Machine.Specifications;
-using Machine.Specifications.Annotations;
 using Moq;
 
 namespace DocaLabs.Http.Client.Tests.Serialization._Utils
 {
-    // ReSharper disable InconsistentNaming
-    public class RequestAttributeTestContext
+    public class request_serialization_test_context
     {
         public class TestTarget
         {
@@ -19,7 +17,7 @@ namespace DocaLabs.Http.Client.Tests.Serialization._Utils
         protected static MemoryStream request_data;
         protected static Mock<WebRequest> mock_web_request;
 
-        [UsedImplicitly] Establish context = () =>
+        Establish context = () =>
         {
             request_data = new MemoryStream();
 
@@ -34,8 +32,7 @@ namespace DocaLabs.Http.Client.Tests.Serialization._Utils
             };
         };
 
-        [UsedImplicitly] Cleanup after_each =
+        Cleanup after_each =
             () => request_data.Dispose();
     }
-    // ReSharper restore InconsistentNaming
 }
