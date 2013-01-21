@@ -36,7 +36,7 @@ namespace DocaLabs.Utils.Configuration
         public ExternalConfiguration(string fileName)
         {
             if(!File.Exists(fileName))
-                throw new FileNotFoundException(String.Format(Text.configuration_file_0_not_found, fileName), fileName);
+                throw new FileNotFoundException(string.Format(Text.configuration_file_0_not_found, fileName), fileName);
 
             CurrentConfiguration = ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap
             {

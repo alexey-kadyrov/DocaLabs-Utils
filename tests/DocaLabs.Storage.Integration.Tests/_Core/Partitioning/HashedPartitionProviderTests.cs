@@ -23,7 +23,7 @@ namespace DocaLabs.Storage.Integration.Tests._Core.Partitioning
 
             for (var i = 0; i < PartitionValidator.PartitionConnectionStrings.Length; i++)
             {
-                MsSqlHelper.ExecuteNonQuery(MsSqlHelper.ConnectionStringSettings.ConnectionString, String.Format("EXEC [AddConnectionString] {0}, '{1}', '{2}'", 
+                MsSqlHelper.ExecuteNonQuery(MsSqlHelper.ConnectionStringSettings.ConnectionString, string.Format("EXEC [AddConnectionString] {0}, '{1}', '{2}'", 
                                                           i,
                                                           PartitionValidator.PartitionConnectionStrings[i].ProviderName,
                                                           PartitionValidator.PartitionConnectionStrings[i].ConnectionString));

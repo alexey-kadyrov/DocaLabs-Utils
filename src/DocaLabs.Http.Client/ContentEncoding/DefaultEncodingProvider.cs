@@ -14,7 +14,7 @@ namespace DocaLabs.Http.Client.ContentEncoding
         /// </summary>
         public virtual IEncode GetEncoder(string encoding)
         {
-            if (String.IsNullOrWhiteSpace(encoding))
+            if (string.IsNullOrWhiteSpace(encoding))
                 throw new ArgumentNullException("encoding");
 
             if (IsGZip(encoding))
@@ -23,16 +23,16 @@ namespace DocaLabs.Http.Client.ContentEncoding
             if (IsDeflate(encoding))
                 return new DefaultInfatingEncoder();
 
-            throw new NotSupportedException(String.Format(Text.compression_format_is_not_suppoerted, encoding));
+            throw new NotSupportedException(string.Format(Text.compression_format_is_not_suppoerted, encoding));
         }
 
         /// <summary>
-        /// Gets a decoder (decompressor) for a specified content encoding.
+        /// Gets a decoder for a specified content encoding.
         /// It supports only gzip/x-gzip/deflate encodings, for other it will throw NotSupportedException.
         /// </summary>
         public virtual IDecode GetDecoder(string encoding)
         {
-            if(String.IsNullOrWhiteSpace(encoding))
+            if (string.IsNullOrWhiteSpace(encoding))
                 throw new ArgumentNullException("encoding");
 
             if (IsGZip(encoding))
@@ -41,7 +41,7 @@ namespace DocaLabs.Http.Client.ContentEncoding
             if (IsDeflate(encoding))
                 return new DefaultInfatingDecoder();
 
-            throw new NotSupportedException(String.Format(Text.compression_format_is_not_suppoerted, encoding));
+            throw new NotSupportedException(string.Format(Text.compression_format_is_not_suppoerted, encoding));
         }
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace DocaLabs.Http.Client.ContentEncoding
         /// </summary>
         public bool IsGZip(string encoding)
         {
-            return String.Compare(encoding, "gzip", StringComparison.OrdinalIgnoreCase) == 0 ||
-                String.Compare(encoding, "x-gzip", StringComparison.OrdinalIgnoreCase) == 0;
+            return string.Compare(encoding, "gzip", StringComparison.OrdinalIgnoreCase) == 0 ||
+                string.Compare(encoding, "x-gzip", StringComparison.OrdinalIgnoreCase) == 0;
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace DocaLabs.Http.Client.ContentEncoding
         /// </summary>
         public static bool IsDeflate(string encoding)
         {
-            return String.Compare(encoding, "deflate", StringComparison.OrdinalIgnoreCase) == 0;
+            return string.Compare(encoding, "deflate", StringComparison.OrdinalIgnoreCase) == 0;
         }
     }
 }

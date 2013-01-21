@@ -19,7 +19,7 @@ namespace DocaLabs.Testing.Common.MSpec
             if (probability > uniformDistributionQuality)
             {
                 throw new SpecificationException(
-                    String.Format("The distribution is not considered uniform because the actual probability of deviation {0} is higher than the specified limit of {1}.", probability, uniformDistributionQuality));
+                    string.Format("The distribution is not considered uniform because the actual probability of deviation {0} is higher than the specified limit of {1}.", probability, uniformDistributionQuality));
             }
         }
 
