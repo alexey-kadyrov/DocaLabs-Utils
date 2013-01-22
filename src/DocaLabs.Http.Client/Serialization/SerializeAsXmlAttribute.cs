@@ -23,7 +23,7 @@ namespace DocaLabs.Http.Client.Serialization
         /// Gets or sets the type of text encoding to be used for Xml serialization.
         /// The default value is UTF-8.
         /// </summary>
-        public CharEncoding Encoding { get; set; }
+        public Encoding Encoding { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to indent elements.
@@ -62,7 +62,7 @@ namespace DocaLabs.Http.Client.Serialization
         /// </summary>
         public SerializeAsXmlAttribute()
         {
-            Encoding = CharEncoding.Utf8;
+            Encoding = Encoding.UTF8;
             Indent = true;
             IndentChars = "\t";
         }
@@ -84,25 +84,10 @@ namespace DocaLabs.Http.Client.Serialization
         {
             return new XmlWriterSettings
             {
-                Encoding = GetEncoding(),
+                Encoding = Encoding,
                 Indent = Indent,
                 IndentChars = IndentChars
             };
-        }
-
-        Encoding GetEncoding()
-        {
-            switch (Encoding)
-            {
-                case CharEncoding.Ascii:
-                    return System.Text.Encoding.ASCII;
-                case CharEncoding.Utf16:
-                    return System.Text.Encoding.Unicode;
-                case CharEncoding.Utf32:
-                    return System.Text.Encoding.UTF32;
-                default:
-                    return System.Text.Encoding.UTF8;
-            }
         }
 
         void Write(object obj, WebRequest request)

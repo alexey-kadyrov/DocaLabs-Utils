@@ -85,7 +85,7 @@ namespace DocaLabs.Http.Client.Tests.Serialization
 
         Establish context = () => attribute = new SerializeAsXmlAttribute
         {
-            Encoding = CharEncoding.Utf16
+            Encoding = Encoding.Unicode
         };
 
         Because of =
@@ -114,7 +114,7 @@ namespace DocaLabs.Http.Client.Tests.Serialization
 
         Establish context = () => attribute = new SerializeAsXmlAttribute
         {
-            Encoding = CharEncoding.Utf32
+            Encoding = Encoding.UTF32
         };
 
         Because of =
@@ -143,7 +143,7 @@ namespace DocaLabs.Http.Client.Tests.Serialization
 
         Establish context = () => attribute = new SerializeAsXmlAttribute
         {
-            Encoding = CharEncoding.Ascii
+            Encoding = Encoding.ASCII
         };
 
         Because of =
@@ -228,7 +228,7 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => attribute = new SerializeAsXmlAttribute();
 
         It should_set_encoding_to_utf8 =
-            () => attribute.Encoding.ShouldEqual(CharEncoding.Utf8);
+            () => attribute.Encoding.ShouldEqual(Encoding.UTF8);
 
         It should_set_ident_to_true =
             () => attribute.Indent.ShouldBeTrue();
