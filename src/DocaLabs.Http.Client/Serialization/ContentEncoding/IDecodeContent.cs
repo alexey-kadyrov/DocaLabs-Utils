@@ -1,15 +1,15 @@
 using System.IO;
 
-namespace DocaLabs.Http.Client.ContentEncoding
+namespace DocaLabs.Http.Client.Serialization.ContentEncoding
 {
     /// <summary>
     /// Defines decoder for the http content.
     /// </summary>
-    public interface IDecode
+    public interface IDecodeContent
     {
         /// <summary>
         /// Decodes a stream and returns stream with already decoded data or stream that can decode them.
         /// </summary>
-        Stream Decode(Stream stream);
+        Stream GetDecompressionStream(Stream stream);
     }
 }

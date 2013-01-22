@@ -1,17 +1,17 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace DocaLabs.Http.Client.ContentEncoding
+namespace DocaLabs.Http.Client.Serialization.ContentEncoding
 {
     /// <summary>
     /// Defines gzip encoder for the http content.
     /// </summary>
-    public class DefaultGZipEncoder : IEncode
+    public class GZipContentEncoder : IEncodeContent
     {
         /// <summary>
         /// Returns GZipStream in compress mode.
         /// </summary>
-        public Stream Encode(Stream stream)
+        public Stream GetCompressionStream(Stream stream)
         {
             return new GZipStream(stream, CompressionMode.Compress);
         }

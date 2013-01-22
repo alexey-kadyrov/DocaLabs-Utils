@@ -57,15 +57,15 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ContentEncoding\CurrentEncodingProvider.cs" />
-    <Compile Include="ContentEncoding\DefaultEncodingProvider.cs" />
-    <Compile Include="ContentEncoding\DefaultGZipDecoder.cs" />
-    <Compile Include="ContentEncoding\DefaultGZipEncoder.cs" />
-    <Compile Include="ContentEncoding\DefaultInfatingDecoder.cs" />
-    <Compile Include="ContentEncoding\DefaultInfatingEncoder.cs" />
-    <Compile Include="ContentEncoding\IDecode.cs" />
-    <Compile Include="ContentEncoding\IEncode.cs" />
-    <Compile Include="ContentEncoding\IEncodingProvider.cs" />
+    <Compile Include="Serialization\ContentEncoding\ContentDecoderFactory.cs" />
+    <Compile Include="Serialization\ContentEncoding\ContentEncoderFactory.cs" />
+    <Compile Include="Serialization\ContentEncoding\KnownContentEncodings.cs" />
+    <Compile Include="Serialization\ContentEncoding\GZipContentDecoder.cs" />
+    <Compile Include="Serialization\ContentEncoding\GZipContentEncoder.cs" />
+    <Compile Include="Serialization\ContentEncoding\InflatingContentDecoder.cs" />
+    <Compile Include="Serialization\ContentEncoding\InflatingContentEncoder.cs" />
+    <Compile Include="Serialization\ContentEncoding\IDecodeContent.cs" />
+    <Compile Include="Serialization\ContentEncoding\IEncodeContent.cs" />
     <Compile Include="Configuration\HttpClientCertificateCollection.cs" />
     <Compile Include="Configuration\HttpClientCertificateReferenceElement.cs" />
     <Compile Include="Configuration\HttpClientEndpointCollection.cs" />

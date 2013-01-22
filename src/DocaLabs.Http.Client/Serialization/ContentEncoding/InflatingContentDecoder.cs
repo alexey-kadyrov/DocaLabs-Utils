@@ -1,17 +1,17 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace DocaLabs.Http.Client.ContentEncoding
+namespace DocaLabs.Http.Client.Serialization.ContentEncoding
 {
     /// <summary>
     /// Defines deflate decoder for the http content.
     /// </summary>
-    public class DefaultInfatingDecoder : IDecode
+    public class InflatingContentDecoder : IDecodeContent
     {
         /// <summary>
         /// Returns DeflateStream in decompress mode.
         /// </summary>
-        public Stream Decode(Stream stream)
+        public Stream GetDecompressionStream(Stream stream)
         {
             return new DeflateStream(stream, CompressionMode.Decompress);
         }

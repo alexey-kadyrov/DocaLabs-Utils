@@ -1,7 +1,9 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using DocaLabs.Http.Client.Serialization.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Serialization
 {
@@ -11,6 +13,12 @@ namespace DocaLabs.Http.Client.Serialization
     /// </summary>
     public class SerializeAsXmlAttribute : RequestSerializationAttribute
     {
+        /// <summary>
+        /// Gets or sets the content encoding, if RequestContentEncoding blank or null no encoding is done.
+        /// The encoder is supplied by ContentEncoderFactory.
+        /// </summary>
+        public string RequestContentEncoding { get; set; }
+
         /// <summary>
         /// Gets or sets the type of text encoding to be used for Xml serialization.
         /// The default value is UTF-8.
@@ -66,30 +74,23 @@ namespace DocaLabs.Http.Client.Serialization
         {
             request.ContentType = "text/xml";
 
-            // stream is disposed by the reader
-            using (var writer = XmlWriter.Create(request.GetRequestStream(), GetSettings(obj)))
-            {
-                Save(obj, writer);
-            }
+            if (string.IsNullOrWhiteSpace(RequestContentEncoding))
+                Write(obj, request);
+            else
+                EncodeAndWrite(obj, request);
         }
 
-        /// <summary>
-        /// Gets setting for the XmlWriter.
-        /// </summary>
-        protected virtual XmlWriterSettings GetSettings(object obj)
+        XmlWriterSettings GetSettings()
         {
             return new XmlWriterSettings
             {
-                Encoding = GetEncoding(obj),
+                Encoding = GetEncoding(),
                 Indent = Indent,
                 IndentChars = IndentChars
             };
         }
 
-        /// <summary>
-        /// Gets character encoding for XmlWriter settings.
-        /// </summary>
-        protected virtual Encoding GetEncoding(object obj)
+        Encoding GetEncoding()
         {
             switch (Encoding)
             {
@@ -104,21 +105,41 @@ namespace DocaLabs.Http.Client.Serialization
             }
         }
 
-        /// <summary>
-        /// Serializes the object using the specified XmlWriter.
-        /// If DOCTYPE definition is configured it will be written as well.
-        /// </summary>
-        protected virtual void Save(object obj, XmlWriter writer)
+        void Write(object obj, WebRequest request)
         {
-            TryWriteDocType(obj, writer);
+            // stream is disposed by the reader
+            using (var writer = XmlWriter.Create(request.GetRequestStream(), GetSettings()))
+            {
+                TryWriteDocType(writer);
 
-            new XmlSerializer(obj.GetType()).Serialize(writer, obj, GetNamespaces(obj));
+                new XmlSerializer(obj.GetType()).Serialize(writer, obj, GetNamespaces());
+            }
         }
 
-        /// <summary>
-        /// Writes the DOCTYPE definition if it's configured.
-        /// </summary>
-        protected virtual void TryWriteDocType(object obj, XmlWriter writer)
+        void EncodeAndWrite(object obj, WebRequest request)
+        {
+            request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
+
+            // stream is disposed by the reader
+            var dataStream = new MemoryStream();
+
+            using (var writer = XmlWriter.Create(dataStream, GetSettings()))
+            {
+                TryWriteDocType(writer);
+
+                new XmlSerializer(obj.GetType()).Serialize(writer, obj, GetNamespaces());
+
+                dataStream.Seek(0, SeekOrigin.Begin);
+
+                using (var requestStream = request.GetRequestStream())
+                using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(dataStream))
+                {
+                    compressionStream.CopyTo(requestStream);
+                }
+            }
+        }
+
+        void TryWriteDocType(XmlWriter writer)
         {
             if (string.IsNullOrWhiteSpace(DocTypeName) && string.IsNullOrWhiteSpace(DocTypeName)
                 && string.IsNullOrWhiteSpace(DocTypeName) && string.IsNullOrWhiteSpace(DocTypeName))
@@ -129,12 +150,7 @@ namespace DocaLabs.Http.Client.Serialization
             writer.WriteDocType(DocTypeName, Pubid, Sysid, Subset);
         }
 
-        /// <summary>
-        /// Gets namespace definitions for the XmlSerializer.
-        /// The default behaviour prevents definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        /// to be written.
-        /// </summary>
-        protected virtual XmlSerializerNamespaces GetNamespaces(object obj)
+        static XmlSerializerNamespaces GetNamespaces()
         {
             var ns = new XmlSerializerNamespaces();
             

@@ -4,7 +4,7 @@ using System.Net;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using DocaLabs.Http.Client.ContentEncoding;
+using DocaLabs.Http.Client.Serialization.ContentEncoding;
 using Newtonsoft.Json;
 
 namespace DocaLabs.Http.Client
@@ -142,7 +142,7 @@ namespace DocaLabs.Http.Client
             if (httpResponse == null || string.IsNullOrWhiteSpace(httpResponse.ContentEncoding))
                 return RawResponseStream;
 
-            return CurrentEncodingProvider.Current.GetDecoder(httpResponse.ContentEncoding).Decode(RawResponseStream);
+            return ContentDecoderFactory.Get(httpResponse.ContentEncoding).GetDecompressionStream(RawResponseStream);
         }
 
         /// <summary>
