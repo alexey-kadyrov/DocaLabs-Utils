@@ -1,7 +1,6 @@
-﻿using System.IO;
-using System.Text;
-using System.Xml.Linq;
+﻿using System.Text;
 using DocaLabs.Http.Client.Serialization;
+using DocaLabs.Http.Client.Serialization.ContentEncoding;
 using DocaLabs.Http.Client.Tests.Serialization._Utils;
 using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;
@@ -12,10 +11,19 @@ namespace DocaLabs.Http.Client.Tests.Serialization
     [Subject(typeof(SerializeAsXmlAttribute))]
     public class when_serialize_as_xml_attribute_is_used_in_default_configuration : request_serialization_test_context
     {
+        static TestTarget original_object;
         static SerializeAsXmlAttribute attribute;
 
-        Establish context = 
-            () => attribute = new SerializeAsXmlAttribute();
+        Establish context = () =>
+        {
+            original_object = new TestTarget
+            {
+                Value1 = 2012,
+                Value2 = "Hello World!"
+            };
+
+            attribute = new SerializeAsXmlAttribute();
+        };
 
         Because of = 
             () => attribute.Serialize(original_object, mock_web_request.Object);
@@ -24,29 +32,81 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml");
 
         It should_serialize_object =
-            () => request_data.ToArray().ParseXml<TestTarget>().ShouldBeSimilar(original_object);
+            () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
 
         It should_not_serialize_doctype_definition =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).DocumentType.ShouldBeNull();
+            () => GetRequestDataAsXDocument().DocumentType.ShouldBeNull();
 
         It should_use_tab_identation =
-            () => Encoding.UTF8.GetString(request_data.ToArray()).ShouldContain("\t");
+            () => GetRequestData().ShouldContain("\t");
 
         It should_use_utf8_encoding =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
+            () => GetRequestDataAsXDocument().Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
+    }
+
+    [Subject(typeof(SerializeAsXmlAttribute))]
+    public class when_serialize_as_xml_attribute_is_used_with_gzip_content_encoding : request_serialization_test_context
+    {
+        static TestTarget original_object;
+        static SerializeAsXmlAttribute attribute;
+
+        Establish context = () =>
+        {
+            original_object = new TestTarget
+            {
+                Value1 = 2012,
+                Value2 = "Hello World!"
+            };
+
+            attribute = new SerializeAsXmlAttribute { RequestContentEncoding = KnownContentEncodings.Gzip };
+        };
+
+        Because of =
+            () => attribute.Serialize(original_object, mock_web_request.Object);
+
+        It should_set_request_content_type_as_xml =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml");
+
+        It should_add_content_encoding_request_header =
+            () => mock_web_request.Object.Headers.ShouldContain("content-encoding");
+
+        It should_add_gzip_content_encoding =
+            () => mock_web_request.Object.Headers["content-encoding"].ShouldEqual(KnownContentEncodings.Gzip);
+
+        It should_serialize_object =
+            () => ParseDecodedRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
+
+        It should_not_serialize_doctype_definition =
+            () => GetDecodedRequestDataAsXDocument().DocumentType.ShouldBeNull();
+
+        It should_use_tab_identation =
+            () => GetDecodedRequestData().ShouldContain("\t");
+
+        It should_use_utf8_encoding =
+            () => GetDecodedRequestDataAsXDocument().Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
     }
 
     [Subject(typeof(SerializeAsXmlAttribute))]
     public class when_serialize_as_xml_attribute_is_used_with_doc_type : request_serialization_test_context
     {
         // ReSharper disable PossibleNullReferenceException
+        static TestTarget original_object;
         static SerializeAsXmlAttribute attribute;
 
-        Establish context = () => attribute = new SerializeAsXmlAttribute
+        Establish context = () =>
         {
-            DocTypeName = "testService",
-            Pubid = "-//Test//DTDTest testService v2//EN",
-            Sysid = "http://dtd.foo.com/testService_v2.dtd"
+            original_object = new TestTarget
+            {
+                Value1 = 2012,
+                Value2 = "Hello World!"
+            };
+
+            attribute = new SerializeAsXmlAttribute
+            {
+                DocTypeName = "testService",
+                Pubid = "-//Test//DTDTest testService v2//EN",
+                Sysid = "http://dtd.foo.com/testService_v2.dtd"
+            };
         };
 
         Because of =
@@ -56,36 +116,46 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml");
 
         It should_serialize_object =
-            () => request_data.ToArray().ParseXml<TestTarget>().ShouldBeSimilar(original_object);
+            () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
 
         It should_serialize_doctype_definition =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).DocumentType.ShouldNotBeNull();
+            () => GetRequestDataAsXDocument().DocumentType.ShouldNotBeNull();
 
         It should_serialize_specified_doctype_name =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).DocumentType.Name.ShouldEqual("testService");
+            () => GetRequestDataAsXDocument().DocumentType.Name.ShouldEqual("testService");
 
         It should_serialize_specified_doctype_pubid =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).DocumentType.PublicId.ShouldEqual("-//Test//DTDTest testService v2//EN");
+            () => GetRequestDataAsXDocument().DocumentType.PublicId.ShouldEqual("-//Test//DTDTest testService v2//EN");
 
         It should_serialize_specified_doctype_sysid =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).DocumentType.SystemId.ShouldEqual("http://dtd.foo.com/testService_v2.dtd");
+            () => GetRequestDataAsXDocument().DocumentType.SystemId.ShouldEqual("http://dtd.foo.com/testService_v2.dtd");
 
         It should_use_tab_identation =
-            () => Encoding.UTF8.GetString(request_data.ToArray()).ShouldContain("\t");
+            () => GetRequestData().ShouldContain("\t");
 
         It should_use_utf8_encoding =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
+            () => GetRequestDataAsXDocument().Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
         // ReSharper restore PossibleNullReferenceException
     }
 
     [Subject(typeof(SerializeAsXmlAttribute))]
     public class when_serialize_as_xml_attribute_is_used_with_utf16_encoding : request_serialization_test_context
     {
+        static TestTarget original_object;
         static SerializeAsXmlAttribute attribute;
 
-        Establish context = () => attribute = new SerializeAsXmlAttribute
+        Establish context = () =>
         {
-            Encoding = Encoding.Unicode
+            original_object = new TestTarget
+            {
+                Value1 = 2012,
+                Value2 = "Hello World!"
+            };
+
+            attribute = new SerializeAsXmlAttribute
+            {
+                Encoding = Encoding.Unicode
+            };
         };
 
         Because of =
@@ -95,26 +165,36 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml");
 
         It should_serialize_object =
-            () => request_data.ToArray().ParseXml<TestTarget>().ShouldBeSimilar(original_object);
+            () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
 
         It should_not_serialize_doctype_definition =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).DocumentType.ShouldBeNull();
+            () => GetRequestDataAsXDocument().DocumentType.ShouldBeNull();
 
         It should_use_tab_identation =
-            () => Encoding.Unicode.GetString(request_data.ToArray()).ShouldContain("\t");
+            () => GetRequestData(Encoding.Unicode).ShouldContain("\t");
 
         It should_use_utf16_encoding =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-16");
+            () => GetRequestDataAsXDocument().Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-16");
     }
 
     [Subject(typeof(SerializeAsXmlAttribute))]
     public class when_serialize_as_xml_attribute_is_used_with_utf32_encoding : request_serialization_test_context
     {
+        static TestTarget original_object;
         static SerializeAsXmlAttribute attribute;
 
-        Establish context = () => attribute = new SerializeAsXmlAttribute
+        Establish context = () =>
         {
-            Encoding = Encoding.UTF32
+            original_object = new TestTarget
+            {
+                Value1 = 2012,
+                Value2 = "Hello World!"
+            };
+
+            attribute = new SerializeAsXmlAttribute
+            {
+                Encoding = Encoding.UTF32
+            };
         };
 
         Because of =
@@ -124,26 +204,36 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml");
 
         It should_serialize_object =
-            () => request_data.ToArray().ParseXml<TestTarget>().ShouldBeSimilar(original_object);
+            () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
 
         It should_not_serialize_doctype_definition =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).DocumentType.ShouldBeNull();
+            () => GetRequestDataAsXDocument().DocumentType.ShouldBeNull();
 
         It should_use_tab_identation =
-            () => Encoding.UTF32.GetString(request_data.ToArray()).ShouldContain("\t");
+            () => GetRequestData(Encoding.UTF32).ShouldContain("\t");
 
         It should_use_utf32_encoding =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-32");
+            () => GetRequestDataAsXDocument().Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-32");
     }
 
     [Subject(typeof(SerializeAsXmlAttribute))]
     public class when_serialize_as_xml_attribute_is_used_with_ascii_encoding : request_serialization_test_context
     {
+        static TestTarget original_object;
         static SerializeAsXmlAttribute attribute;
 
-        Establish context = () => attribute = new SerializeAsXmlAttribute
+        Establish context = () =>
         {
-            Encoding = Encoding.ASCII
+            original_object = new TestTarget
+            {
+                Value1 = 2012,
+                Value2 = "Hello World!"
+            };
+
+            attribute = new SerializeAsXmlAttribute
+            {
+                Encoding = Encoding.ASCII
+            };
         };
 
         Because of =
@@ -153,25 +243,37 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml");
 
         It should_serialize_object =
-            () => request_data.ToArray().ParseXml<TestTarget>().ShouldBeSimilar(original_object);
+            () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
 
         It should_not_serialize_doctype_definition =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).DocumentType.ShouldBeNull();
+            () => GetRequestDataAsXDocument().DocumentType.ShouldBeNull();
 
         It should_use_tab_identation =
-            () => Encoding.ASCII.GetString(request_data.ToArray()).ShouldContain("\t");
+            () => GetRequestData(Encoding.ASCII).ShouldContain("\t");
 
         It should_use_ascii_encoding =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("us-ascii");
+            () => GetRequestDataAsXDocument().Declaration.Encoding.ShouldBeEqualIgnoringCase("us-ascii");
     }
 
     [Subject(typeof(SerializeAsXmlAttribute))]
     public class when_serialize_as_xml_attribute_is_used_without_identation : request_serialization_test_context
     {
+        static TestTarget original_object;
         static SerializeAsXmlAttribute attribute;
 
-        Establish context =
-            () => attribute = new SerializeAsXmlAttribute { Indent = false };
+        Establish context = () =>
+        {
+            original_object = new TestTarget
+            {
+                Value1 = 2012,
+                Value2 = "Hello World!"
+            };
+
+            attribute = new SerializeAsXmlAttribute
+            {
+                Indent = false
+            };
+        };
 
         Because of =
             () => attribute.Serialize(original_object, mock_web_request.Object);
@@ -180,25 +282,37 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml");
 
         It should_serialize_object =
-            () => request_data.ToArray().ParseXml<TestTarget>().ShouldBeSimilar(original_object);
+            () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
 
         It should_not_serialize_doctype_definition =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).DocumentType.ShouldBeNull();
+            () => GetRequestDataAsXDocument().DocumentType.ShouldBeNull();
 
         It should_not_use_tab_identation =
-            () => Encoding.UTF8.GetString(request_data.ToArray()).ShouldNotContain("\t");
+            () => GetRequestData().ShouldNotContain("\t");
 
         It should_use_utf8_encoding =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
+            () => GetRequestDataAsXDocument().Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
     }
 
     [Subject(typeof(SerializeAsXmlAttribute))]
     public class when_serialize_as_xml_attribute_is_used_with_redefined_ident_chars : request_serialization_test_context
     {
+        static TestTarget original_object;
         static SerializeAsXmlAttribute attribute;
 
-        Establish context =
-            () => attribute = new SerializeAsXmlAttribute { IndentChars = "\r\r\r\r\r" };
+        Establish context = () =>
+        {
+            original_object = new TestTarget
+            {
+                Value1 = 2012,
+                Value2 = "Hello World!"
+            };
+
+            attribute = new SerializeAsXmlAttribute
+            {
+                IndentChars = "\r\r\r\r\r"
+            };
+        };
 
         Because of =
             () => attribute.Serialize(original_object, mock_web_request.Object);
@@ -207,16 +321,16 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml");
 
         It should_serialize_object =
-            () => request_data.ToArray().ParseXml<TestTarget>().ShouldBeSimilar(original_object);
+            () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
 
         It should_not_serialize_doctype_definition =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).DocumentType.ShouldBeNull();
+            () => GetRequestDataAsXDocument().DocumentType.ShouldBeNull();
 
         It should_use_specified_chars_for_identation =
-            () => Encoding.UTF8.GetString(request_data.ToArray()).ShouldContain("\r\r\r\r\r");
+            () => GetRequestData().ShouldContain("\r\r\r\r\r");
 
         It should_use_utf8_encoding =
-            () => XDocument.Load(new MemoryStream(request_data.ToArray())).Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
+            () => GetRequestDataAsXDocument().Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
     }
 
     [Subject(typeof(SerializeAsXmlAttribute))]

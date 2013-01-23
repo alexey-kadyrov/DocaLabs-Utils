@@ -97,7 +97,6 @@
     <Compile Include="MSpec\CollectionExtensions.cs" />
     <Compile Include="MSpec\DistributionExtensions.cs" />
     <Compile Include="MSpec\ExceptionStandardBehaviours.cs" />
-    <Compile Include="MSpec\SerializationExtensions.cs" />
     <Compile Include="MSpec\SimilarExtensions.cs" />
     <Compile Include="MsSqlHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

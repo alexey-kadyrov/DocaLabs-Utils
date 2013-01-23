@@ -48,10 +48,10 @@ namespace DocaLabs.Http.Client.Serialization
             request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
 
             using (var requestStream = request.GetRequestStream())
+            using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
             using (var dataStream = new MemoryStream(data))
-            using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(dataStream))
             {
-                compressionStream.CopyTo(requestStream);
+                dataStream.CopyTo(compressionStream);
             }
         }
     }

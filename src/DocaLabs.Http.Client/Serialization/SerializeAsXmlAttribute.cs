@@ -117,9 +117,9 @@ namespace DocaLabs.Http.Client.Serialization
                 dataStream.Seek(0, SeekOrigin.Begin);
 
                 using (var requestStream = request.GetRequestStream())
-                using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(dataStream))
+                using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
                 {
-                    compressionStream.CopyTo(requestStream);
+                    dataStream.CopyTo(compressionStream);
                 }
             }
         }
