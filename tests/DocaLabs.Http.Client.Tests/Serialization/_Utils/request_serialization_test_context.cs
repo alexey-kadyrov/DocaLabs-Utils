@@ -73,9 +73,9 @@ namespace DocaLabs.Http.Client.Tests.Serialization._Utils
             }
         }
 
-        protected static T ParseRequestDataAsJson<T>()
+        protected static T ParseRequestDataAsJson<T>(Encoding encoding = null)
         {
-            return JsonConvert.DeserializeObject<T>(GetRequestData());
+            return JsonConvert.DeserializeObject<T>(GetRequestData(encoding));
         }
 
         protected static T ParseDecodedRequestDataAsJson<T>()

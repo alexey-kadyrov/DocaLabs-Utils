@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using DocaLabs.Http.Client.Resources;
 
 namespace DocaLabs.Http.Client.Serialization.ContentEncoding
@@ -34,6 +35,14 @@ namespace DocaLabs.Http.Client.Serialization.ContentEncoding
                 return decoder;
 
             throw new NotSupportedException(string.Format(Text.compression_format_is_not_suppoerted, encoding));
+        }
+
+        /// <summary>
+        /// Returns list of supported encodings.
+        /// </summary>
+        static public ICollection<string> GetSupportedEncodings()
+        {
+            return Decoders.Keys;
         }
 
         /// <summary>

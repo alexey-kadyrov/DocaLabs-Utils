@@ -7,6 +7,7 @@ using System.Threading;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.Mapping;
 using DocaLabs.Http.Client.Serialization;
+using DocaLabs.Http.Client.Serialization.ContentEncoding;
 
 namespace DocaLabs.Http.Client
 {
@@ -168,13 +169,17 @@ namespace DocaLabs.Http.Client
 
         protected virtual NameValueCollection GetHeaders(TQuery query, Uri url)
         {
-            if(Configuration == null)
-                return null;
-
             var collection = new NameValueCollection();
 
-            foreach(var name in Configuration.Headers.AllKeys)
-                collection.Add(name, Configuration.Headers[name].Value);
+            var supportedDecoders = ContentDecoderFactory.GetSupportedEncodings();
+            if (supportedDecoders.Count > 0)
+                collection.Add("Accept-Encoding", string.Join(", ", supportedDecoders));    
+
+            if (Configuration != null)
+            {
+                foreach (var name in Configuration.Headers.AllKeys)
+                    collection.Add(name, Configuration.Headers[name].Value);
+            }
 
             return collection;
         }

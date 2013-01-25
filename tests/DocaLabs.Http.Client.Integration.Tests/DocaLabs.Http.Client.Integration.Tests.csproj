@@ -85,9 +85,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DocaLabs.Http.Client.Integration.Tests.dll.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

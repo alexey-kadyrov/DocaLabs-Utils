@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using System.Web;
 using DocaLabs.Http.Client.Serialization;
 using DocaLabs.Http.Client.Serialization.ContentEncoding;
@@ -29,8 +30,8 @@ namespace DocaLabs.Http.Client.Tests.Serialization
         Because of =
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
-        It should_set_request_content_type_as_url_encoded_form =
-            () => mock_web_request.Object.ContentType.ShouldEqual("application/x-www-form-urlencoded");
+        It should_set_request_content_type_as_url_encoded_form_with_utf_8_charset =
+            () => mock_web_request.Object.ContentType.ShouldEqual("application/x-www-form-urlencoded; charset=utf-8");
 
         It should_serialize_all_properties =
             () => HttpUtility.ParseQueryString(GetRequestData()).ShouldContainOnly(
@@ -61,8 +62,8 @@ namespace DocaLabs.Http.Client.Tests.Serialization
         Because of =
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
-        It should_set_request_content_type_as_url_encoded_form =
-            () => mock_web_request.Object.ContentType.ShouldEqual("application/x-www-form-urlencoded");
+        It should_set_request_content_type_as_url_encoded_form_with_utf_8_charset =
+            () => mock_web_request.Object.ContentType.ShouldEqual("application/x-www-form-urlencoded; charset=utf-8");
 
         It should_add_content_encoding_request_header =
             () => mock_web_request.Object.Headers.ShouldContain("content-encoding");
@@ -77,5 +78,52 @@ namespace DocaLabs.Http.Client.Tests.Serialization
 
         It should_properly_url_encode_values =
             () => GetDecodedRequestData().ShouldContain("Hello+World!");
+    }
+
+    [Subject(typeof(SerializeAsFormAttribute))]
+    class when_serialize_as_form_attribute_is_used_with_utf_32_charset : request_serialization_test_context
+    {
+        static TestTarget original_object;
+        static SerializeAsFormAttribute attribute;
+
+        Establish context = () =>
+        {
+            original_object = new TestTarget
+            {
+                Value1 = 2012,
+                Value2 = "Hello World!"
+            };
+
+            attribute = new SerializeAsFormAttribute { CharSet = Encoding.UTF32.WebName };
+        };
+
+        Because of =
+            () => attribute.Serialize(original_object, mock_web_request.Object);
+
+        It should_set_request_content_type_as_url_encoded_form_with_utf_8_charset =
+            () => mock_web_request.Object.ContentType.ShouldEqual("application/x-www-form-urlencoded; charset=utf-32");
+
+        It should_serialize_all_properties =
+            () => HttpUtility.ParseQueryString(GetRequestData(Encoding.UTF32)).ShouldContainOnly(
+                new KeyValuePair<string, string>("Value1", "2012"),
+                new KeyValuePair<string, string>("Value2", "Hello World!"));
+
+        It should_properly_url_encode_values =
+            () => GetRequestData(Encoding.UTF32).ShouldContain("Hello+World!");
+    }
+
+    [Subject(typeof(SerializeAsFormAttribute))]
+    public class when_serialize_as_form_attribute_is_newed
+    {
+        static SerializeAsFormAttribute attribute;
+
+        Because of =
+            () => attribute = new SerializeAsFormAttribute();
+
+        It should_set_charset_to_utf8 =
+            () => attribute.CharSet.ShouldEqual(Encoding.UTF8.WebName);
+
+        It should_set_request_content_encoding_to_null =
+            () => attribute.RequestContentEncoding.ShouldBeNull();
     }
 }

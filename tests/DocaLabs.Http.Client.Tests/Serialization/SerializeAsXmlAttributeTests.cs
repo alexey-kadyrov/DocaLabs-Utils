@@ -154,7 +154,7 @@ namespace DocaLabs.Http.Client.Tests.Serialization
 
             attribute = new SerializeAsXmlAttribute
             {
-                Encoding = Encoding.Unicode
+                Encoding = Encoding.Unicode.WebName
             };
         };
 
@@ -193,7 +193,7 @@ namespace DocaLabs.Http.Client.Tests.Serialization
 
             attribute = new SerializeAsXmlAttribute
             {
-                Encoding = Encoding.UTF32
+                Encoding = Encoding.UTF32.WebName
             };
         };
 
@@ -232,7 +232,7 @@ namespace DocaLabs.Http.Client.Tests.Serialization
 
             attribute = new SerializeAsXmlAttribute
             {
-                Encoding = Encoding.ASCII
+                Encoding = Encoding.ASCII.WebName
             };
         };
 
@@ -342,7 +342,7 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             () => attribute = new SerializeAsXmlAttribute();
 
         It should_set_encoding_to_utf8 =
-            () => attribute.Encoding.ShouldEqual(Encoding.UTF8);
+            () => attribute.Encoding.ShouldEqual(Encoding.UTF8.WebName);
 
         It should_set_ident_to_true =
             () => attribute.Indent.ShouldBeTrue();
@@ -361,5 +361,8 @@ namespace DocaLabs.Http.Client.Tests.Serialization
 
         It should_set_subset_to_null =
             () => attribute.Subset.ShouldBeNull();
+
+        It should_set_request_content_encoding_to_null =
+            () => attribute.RequestContentEncoding.ShouldBeNull();
     }
 }
