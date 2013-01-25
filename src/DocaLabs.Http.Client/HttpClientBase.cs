@@ -1,6 +1,5 @@
 using System;
 using DocaLabs.Http.Client.Configuration;
-using NLog;
 
 namespace DocaLabs.Http.Client
 {
@@ -9,10 +8,8 @@ namespace DocaLabs.Http.Client
     /// </summary>
     public abstract class HttpClientBase
     {
-        protected static readonly Logger Log = LogManager.GetCurrentClassLogger();
-
         /// <summary>
-        /// Gets a service Url, must be overridden in derived classes.
+        /// Gets a service Url
         /// </summary>
         public Uri ServiceUrl { get; private set; }
 
@@ -32,35 +29,18 @@ namespace DocaLabs.Http.Client
         protected HttpClientEndpointElement Configuration { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the HttpClientBase class.
-        /// </summary>
-        protected HttpClientBase()
-        {
-            ReadConfiguration(GetDefaultEndPointName());
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the HttpClientBase class using the specified service Url.
-        /// </summary>
-        protected HttpClientBase(Uri serviceUrl)
-        {
-            ServiceUrl = serviceUrl;
-            ReadConfiguration(GetDefaultEndPointName());
-        }
-
-        /// <summary>
         /// Initializes a new instance of the HttpClientBase class using the specified service Url and the endpoint name.
         /// The endpoint name is used to get the endpoint configuration from the config file.
         /// </summary>
-        protected HttpClientBase(Uri serviceUrl, string endpointName)
+        protected HttpClientBase(Uri serviceUrl = null, string configurationName = null)
         {
             ServiceUrl = serviceUrl;
-            ReadConfiguration(endpointName);
+            ReadConfiguration(configurationName ?? GetDefaultConfigurationName());
         }
 
-        void ReadConfiguration(string endpointName)
+        void ReadConfiguration(string configurationName)
         {
-            Configuration = GetConfigurationElement(endpointName);
+            Configuration = GetConfigurationElement(configurationName);
 
             if (Configuration == null)
             {
@@ -74,18 +54,18 @@ namespace DocaLabs.Http.Client
             RequestTimeout = Configuration.Timeout;
         }
 
-        static HttpClientEndpointElement GetConfigurationElement(string endpointName)
+        static HttpClientEndpointElement GetConfigurationElement(string configurationName)
         {
-            if (string.IsNullOrWhiteSpace(endpointName))
+            if (string.IsNullOrWhiteSpace(configurationName))
                 return null;
 
             var section = HttpClientEndpointSection.GetDefaultSection();
             return section != null 
-                ? section.Endpoints[endpointName] 
+                ? section.Endpoints[configurationName] 
                 : null;
         }
 
-        string GetDefaultEndPointName()
+        string GetDefaultConfigurationName()
         {
             return GetType().FullName;
         }

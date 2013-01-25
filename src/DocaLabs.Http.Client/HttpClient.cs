@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -38,32 +39,10 @@ namespace DocaLabs.Http.Client
     {
         protected Func<Func<TResult>, TResult> RetryStrategy { get; private set; }
 
-        protected HttpClient() 
+        protected HttpClient(Uri serviceUrl = null, Func<Func<TResult>, TResult> retryStrategy = null, string configurationName = null)
+            : base(serviceUrl, configurationName)
         {
-            RetryStrategy = GetDefaultRetryStrategy();
-        }
-
-        protected HttpClient(Uri serviceUrl)
-            : base(serviceUrl)
-        {
-            RetryStrategy = GetDefaultRetryStrategy();
-        }
-
-        protected HttpClient(Func<Func<TResult>, TResult> retryStrategy)
-        {
-            RetryStrategy = retryStrategy;
-        }
-
-        protected HttpClient(Uri serviceUrl, Func<Func<TResult>, TResult> retryStrategy)
-            : base(serviceUrl)
-        {
-            RetryStrategy = retryStrategy;
-        }
-
-        protected HttpClient(Uri serviceUrl, Func<Func<TResult>, TResult> retryStrategy, string endpointName)
-            : base(serviceUrl, endpointName)
-        {
-            RetryStrategy = retryStrategy;
+            RetryStrategy = retryStrategy ?? GetDefaultRetryStrategy();
         }
 
         /// <summary>
@@ -89,7 +68,7 @@ namespace DocaLabs.Http.Client
             {
                 var message = string.Format(Resources.Text.failed_execute_request, ServiceUrl, GetType().FullName);
 
-                Log.ErrorException(message, e);
+                LogException(message, e);
 
                 if (e is HttpClientException)
                     throw;
@@ -291,7 +270,7 @@ namespace DocaLabs.Http.Client
             };
         }
 
-        protected static TResult DefaultRetryStrategy(Func<TResult> action, int times, int initialTimeout, int stepbackIncrease)
+        protected TResult DefaultRetryStrategy(Func<TResult> action, int times, int initialTimeout, int stepbackIncrease)
         {
             var timeout = initialTimeout;
 
@@ -313,7 +292,7 @@ namespace DocaLabs.Http.Client
                     if (e is HttpClientException && ((HttpClientException)e).DoNotRetry)
                         throw;
 
-                    Log.Warn(string.Format(Resources.Text.will_try_again, attempt, times), e);
+                    LogWarning(string.Format(Resources.Text.will_try_again, attempt, times), e);
 
                     Thread.Sleep(timeout);
 
@@ -322,9 +301,22 @@ namespace DocaLabs.Http.Client
             }
         }
 
-        protected static Func<Func<TResult>, TResult> GetDefaultRetryStrategy()
+        protected Func<Func<TResult>, TResult> GetDefaultRetryStrategy()
         {
             return action => DefaultRetryStrategy(action, 4, 1000, 1000);
+        }
+    
+        protected virtual void LogWarning(string message, Exception e)
+        {
+            if(e == null)
+                Debug.Write(message);
+            else
+                Debug.WriteLine("{0} : {1}", message, e);
+        }
+
+        protected virtual void LogException(string message, Exception e)
+        {
+            Debug.WriteLine("{0} : {1}", message, e);
         }
     }
 }
