@@ -69,7 +69,6 @@
     <Compile Include="Configuration\HttpClientEndpointElement.cs" />
     <Compile Include="Configuration\HttpClientEndpointSection.cs" />
     <Compile Include="Configuration\HttpClientProxyElement.cs" />
-    <Compile Include="HttpClientBase.cs" />
     <Compile Include="Serialization\SerializeAsFormAttribute.cs" />
     <Compile Include="Mapping\QueryPropertyParserAttribute.cs" />
     <Compile Include="Mapping\ICustomQueryMapper.cs" />

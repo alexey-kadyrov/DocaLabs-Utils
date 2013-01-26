@@ -35,14 +35,59 @@ namespace DocaLabs.Http.Client
     /// </summary>
     /// <typeparam name="TQuery">Type which will be used as input parameters that can be serialized into query string or the request stream.</typeparam>
     /// <typeparam name="TResult">Type which will be used as output data that will be deserialized from the response stream.</typeparam>
-    public abstract class HttpClient<TQuery, TResult> : HttpClientBase
+    public abstract class HttpClient<TQuery, TResult>
     {
+        /// <summary>
+        /// Gets a service Url
+        /// </summary>
+        public Uri ServiceUrl { get; private set; }
+
+        /// <summary>
+        /// Gets a protocol method used in the request.
+        /// If the method is not defined explicitly (returns non null value) then if there is RequestSerializationAttribute 
+        /// defined either on the TQuery class or one of its properties or on the HttpVlient's subclass then the method will be POST
+        /// otherwise it's GET.
+        /// </summary>
+        public virtual string RequestMethod { get { return null; } }
+
+        /// <summary>
+        /// Gets or sets the request timeout, the default value is -1.
+        /// </summary>
+        public int RequestTimeout { get; set; }
+
+        /// <summary>
+        /// Get or sets whenever to add 'Accept-Encoding' header automatically depending on what content decoders are defined in ContentDecoderFactory.
+        /// The default value is true.
+        /// </summary>
+        public bool AutoSetAcceptEncoding { get; set; }
+
+        /// <summary>
+        /// Gets the service configuration if it's defined in the config file, otherwise null.
+        /// </summary>
+        protected HttpClientEndpointElement Configuration { get; private set; }
+
+        /// <summary>
+        /// Retry strategy for calling the remote endpoint.
+        /// </summary>
         protected Func<Func<TResult>, TResult> RetryStrategy { get; private set; }
 
-        protected HttpClient(Uri serviceUrl = null, Func<Func<TResult>, TResult> retryStrategy = null, string configurationName = null)
-            : base(serviceUrl, configurationName)
+        /// <summary>
+        /// Initializes a new instance of the HttpClient.
+        /// 
+        /// </summary>
+        /// <param name="serviceUrl"></param>
+        /// <param name="configurationName">If the configuration name is not null it'll be used to get the endpoint configuration from the config file.</param>
+        /// <param name="retryStrategy">If the parameter null then the default retry strategy will be used.</param>
+        protected HttpClient(Uri serviceUrl = null, string configurationName = null, Func<Func<TResult>, TResult> retryStrategy = null)
         {
+            ServiceUrl = serviceUrl;
             RetryStrategy = retryStrategy ?? GetDefaultRetryStrategy();
+            AutoSetAcceptEncoding = true;
+
+            ReadConfiguration(configurationName ?? GetDefaultConfigurationName());
+
+            if(ServiceUrl == null)
+                throw new ArgumentException(Resources.Text.service_url_is_not_defined, "serviceUrl");
         }
 
         /// <summary>
@@ -120,7 +165,7 @@ namespace DocaLabs.Http.Client
             var httpRequest = request as HttpWebRequest;
             if (httpRequest != null)
             {
-                var certificates = GetClientCertificates(query, url);
+                var certificates = GetConfiguredClientCertificates(query, url);
                 if(certificates != null)
                     httpRequest.ClientCertificates.AddRange(certificates);
             }
@@ -150,9 +195,11 @@ namespace DocaLabs.Http.Client
         {
             var collection = new NameValueCollection();
 
-            var supportedDecoders = ContentDecoderFactory.GetSupportedEncodings();
-            if (supportedDecoders.Count > 0)
-                collection.Add("Accept-Encoding", string.Join(", ", supportedDecoders));    
+            if (AutoSetAcceptEncoding)
+            {
+                foreach (var decoder in ContentDecoderFactory.GetSupportedEncodings())
+                    collection.Add("Accept-Encoding", decoder);
+            }
 
             if (Configuration != null)
             {
@@ -163,7 +210,7 @@ namespace DocaLabs.Http.Client
             return collection;
         }
 
-        protected virtual X509CertificateCollection GetClientCertificates(TQuery query, Uri url)
+        protected virtual X509CertificateCollection GetConfiguredClientCertificates(TQuery query, Uri url)
         {
             if (Configuration == null)
                 return null;
@@ -218,11 +265,11 @@ namespace DocaLabs.Http.Client
             foreach (var property in typeof(TQuery).GetProperties())
             {
                 var attrs = property.GetCustomAttributes(typeof(RequestSerializationAttribute), true);
-                if (attrs.Length > 0)
-                {
-                    ((RequestSerializationAttribute)attrs[0]).Serialize(property.GetValue(query, null), request);
-                    return true;
-                }
+                if (attrs.Length <= 0) 
+                    continue;
+
+                ((RequestSerializationAttribute)attrs[0]).Serialize(property.GetValue(query, null), request);
+                return true;
             }
 
             return false;
@@ -300,11 +347,6 @@ namespace DocaLabs.Http.Client
                 }
             }
         }
-
-        protected Func<Func<TResult>, TResult> GetDefaultRetryStrategy()
-        {
-            return action => DefaultRetryStrategy(action, 4, 1000, 1000);
-        }
     
         protected virtual void LogWarning(string message, Exception e)
         {
@@ -317,6 +359,43 @@ namespace DocaLabs.Http.Client
         protected virtual void LogException(string message, Exception e)
         {
             Debug.WriteLine("{0} : {1}", message, e);
+        }
+
+        protected Func<Func<TResult>, TResult> GetDefaultRetryStrategy()
+        {
+            return action => DefaultRetryStrategy(action, 4, 1000, 1000);
+        }
+       
+        void ReadConfiguration(string configurationName)
+        {
+            Configuration = GetConfigurationElement(configurationName);
+
+            if (Configuration == null)
+            {
+                RequestTimeout = -1;
+                return;
+            }
+
+            if (ServiceUrl == null)
+                ServiceUrl = Configuration.ServiceUrl;
+
+            RequestTimeout = Configuration.Timeout;
+        }
+
+        static HttpClientEndpointElement GetConfigurationElement(string configurationName)
+        {
+            if (string.IsNullOrWhiteSpace(configurationName))
+                return null;
+
+            var section = HttpClientEndpointSection.GetDefaultSection();
+            return section != null
+                ? section.Endpoints[configurationName]
+                : null;
+        }
+
+        string GetDefaultConfigurationName()
+        {
+            return GetType().FullName;
         }
     }
 }
