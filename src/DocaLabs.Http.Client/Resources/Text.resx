@@ -129,14 +129,32 @@
   <data name="failed_execute_request" xml:space="preserve">
     <value>Failed to execute request to {0} ({1})</value>
   </data>
+  <data name="maust_have_only_one_method" xml:space="preserve">
+    <value>The type {0} must have only one method.</value>
+  </data>
   <data name="method_must_be_overidden" xml:space="preserve">
     <value>The method must be overridden or the TServiceResult must have a class level attribute derived from ResponseDeserializationAttribute for {0}.</value>
   </data>
   <data name="method_must_have_only_one_argument" xml:space="preserve">
-    <value>Method {0} must have only one argument.</value>
+    <value>The method {0} in {1} must have only one parameter.</value>
   </data>
   <data name="method_must_have_return_value" xml:space="preserve">
     <value>Method {0} must have the return value.</value>
+  </data>
+  <data name="must_be_interface" xml:space="preserve">
+    <value>The type {0} must be interface.</value>
+  </data>
+  <data name="must_have_execute_method" xml:space="preserve">
+    <value>The base type {0} must have method: {1} Execute({2} query).</value>
+  </data>
+  <data name="must_have_non_void_retun_parameter" xml:space="preserve">
+    <value>The return type of {0} method in {1} must not be void.</value>
+  </data>
+  <data name="must_have_only_one_method" xml:space="preserve">
+    <value>The type {0} must have only one method.</value>
+  </data>
+  <data name="must_implement_constructor" xml:space="preserve">
+    <value>The base type {0} must have constructor with parameters: (Uri serviceUrl, string configurationName, {1} retryStrategy) or (Uri serviceUrl, string configurationName).</value>
   </data>
   <data name="null_response_stream" xml:space="preserve">
     <value>Response stream is null.</value>

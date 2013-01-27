@@ -28,16 +28,53 @@ namespace DocaLabs.Http.Client
             Locker = new object();
         }
 
+        /// <summary>
+        /// Creates an instance of a concrete class implementing the TInterface, the class is derived from HttpClient.
+        /// </summary>
+        /// <typeparam name="TInterface">
+        /// Interface which should be implemented, the interface must implement only one method with one parameter and non void return parameter.
+        /// The method's parameter type will be used as the TQuery generic parameter and the return type as the TResult.
+        /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
+        /// </typeparam>
+        /// <param name="serviceUrl">The URL of the service.</param>
+        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
         public static TInterface CreateInstance<TInterface>(Uri serviceUrl = null, string configurationName = null)
         {
             return (TInterface)CreateInstance(typeof(TInterface), serviceUrl, configurationName);
         }
 
+        /// <summary>
+        /// Creates an instance of a concrete class implementing the interfaceType, the class is derived from HttpClient.
+        /// </summary>
+        /// <param name="interfaceType">
+        /// Interface which should be implemented, the interface must implement only one method with one parameter and non void return parameter.
+        /// The method's parameter type will be used as the TQuery generic parameter and the return type as the TResult.
+        /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
+        /// </param>
+        /// <param name="serviceUrl">The URL of the service.</param>
+        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
         public static object CreateInstance(Type interfaceType, Uri serviceUrl = null, string configurationName = null)
         {
             return CreateInstance(null, interfaceType, serviceUrl, configurationName);
         }
 
+        /// <summary>
+        /// Creates an instance of a concrete class implementing the interfaceType, the class is derived from baseType.
+        /// </summary>
+        /// <param name="baseType">
+        /// The base class which will be used to generate the concrete type implementing the interface.
+        /// The class must have non default constructor:
+        ///     (Uri serviceUrl, string configurationName, Func&lt;Func&lt;TResult>, TResult> retryStrategy) 
+        ///     or
+        ///     (Uri serviceUrl, string configurationName)
+        /// </param>
+        /// <param name="interfaceType">
+        /// Interface which should be implemented, the interface must implement only one method with one parameter and non void return parameter.
+        /// The method's parameter type will be used as the TQuery generic parameter and the return type as the TResult.
+        /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the baseType.
+        /// </param>
+        /// <param name="serviceUrl">The URL of the service.</param>
+        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
         public static object CreateInstance(Type baseType, Type interfaceType, Uri serviceUrl = null, string configurationName = null)
         {
             var constructor = GetMappedConstructor(baseType, interfaceType);
@@ -90,13 +127,20 @@ namespace DocaLabs.Http.Client
 
         static void DefineConstructor(Type baseType, ClientInterfaceInfo interfaceInfo, TypeBuilder typeBuilder)
         {
+            var threeParamCtor = true;
+
             var baseCtor = baseType.GetConstructor(
                 new[] {typeof (Uri), typeof (string), interfaceInfo.RetryStragtegyType});
 
             if (baseCtor == null)
-                throw new InvalidOperationException(string.Format(
-                        "The base type {0} must have constructor with parameters: (Uri serviceUrl, string configurationName, {1} retryStrategy)",
-                        baseType.FullName, interfaceInfo.RetryStragtegyType.FullName));
+            {
+                threeParamCtor = false;
+
+                baseCtor = baseType.GetConstructor(new[] { typeof(Uri), typeof(string)});
+
+                if(baseCtor == null)
+                    throw new InvalidOperationException(string.Format(Resources.Text.must_implement_constructor, baseType.FullName, interfaceInfo.RetryStragtegyType.FullName));
+            }
 
             var ctor = typeBuilder.DefineConstructor(
                 MethodAttributes.Public, CallingConventions.Standard | CallingConventions.HasThis,
@@ -107,7 +151,10 @@ namespace DocaLabs.Http.Client
             ctorGenerator.Emit(OpCodes.Ldarg_0);
             ctorGenerator.Emit(OpCodes.Ldarg_1);
             ctorGenerator.Emit(OpCodes.Ldarg_2);
-            ctorGenerator.Emit(OpCodes.Ldnull);
+
+            if (threeParamCtor)
+                ctorGenerator.Emit(OpCodes.Ldnull);
+
             ctorGenerator.Emit(OpCodes.Call, baseCtor);
             ctorGenerator.Emit(OpCodes.Ret);
         }
@@ -116,9 +163,8 @@ namespace DocaLabs.Http.Client
         {
             var baseExecute = baseType.GetMethod("Execute", new[] { interfaceInfo.QueryType });
             if (baseExecute == null)
-                throw new InvalidOperationException(string.Format("The base type {0} must have method: {1} Execute({2} query)",
-                                                                  baseType.FullName, interfaceInfo.ResultType.FullName,
-                                                                  interfaceInfo.QueryType.FullName));
+                throw new InvalidOperationException(
+                    string.Format(Resources.Text.must_have_execute_method, baseType.FullName, interfaceInfo.ResultType.FullName, interfaceInfo.QueryType.FullName));
 
             var newExecute = typeBuilder.DefineMethod(interfaceInfo.ServiceExecuteMethod.Name,
                                 MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
@@ -148,21 +194,21 @@ namespace DocaLabs.Http.Client
                     throw new ArgumentNullException("interfaceType");
 
                 if (!interfaceType.IsInterface)
-                    throw new ArgumentException(string.Format("The type {0} must be interface.", interfaceType.FullName), "interfaceType");
+                    throw new ArgumentException(string.Format(Resources.Text.must_be_interface, interfaceType.FullName), "interfaceType");
 
                 var methods = interfaceType.GetMethods();
                 if (methods.Length != 1)
-                    throw new ArgumentException(string.Format("The type {0} must have only one method.", interfaceType.FullName), "interfaceType");
+                    throw new ArgumentException(string.Format(Resources.Text.must_have_only_one_method, interfaceType.FullName), "interfaceType");
 
                 ServiceExecuteMethod = methods[0];
                 ResultType = ServiceExecuteMethod.ReturnType;
 
                 if (ResultType == typeof(void))
-                    throw new ArgumentException(string.Format("The return type of {0} method in {1} must not be void.", ServiceExecuteMethod.Name, interfaceType.FullName), "interfaceType");
+                    throw new ArgumentException(string.Format(Resources.Text.must_have_non_void_retun_parameter, ServiceExecuteMethod.Name, interfaceType.FullName), "interfaceType");
 
                 var parameters = ServiceExecuteMethod.GetParameters();
                 if (parameters.Length != 1)
-                    throw new ArgumentException(string.Format("The method {0} in {1} must have only one parameter.", ServiceExecuteMethod.Name, interfaceType.FullName), "interfaceType");
+                    throw new ArgumentException(string.Format(Resources.Text.method_must_have_only_one_argument, ServiceExecuteMethod.Name, interfaceType.FullName), "interfaceType");
 
                 QueryType = parameters[0].ParameterType;
 

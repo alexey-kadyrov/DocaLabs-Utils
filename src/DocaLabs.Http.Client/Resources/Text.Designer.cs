@@ -97,6 +97,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The type {0} must have only one method..
+        /// </summary>
+        internal static string maust_have_only_one_method {
+            get {
+                return ResourceManager.GetString("maust_have_only_one_method", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The method must be overridden or the TServiceResult must have a class level attribute derived from ResponseDeserializationAttribute for {0}..
         /// </summary>
         internal static string method_must_be_overidden {
@@ -106,7 +115,7 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method {0} must have only one argument..
+        ///   Looks up a localized string similar to The method {0} in {1} must have only one parameter..
         /// </summary>
         internal static string method_must_have_only_one_argument {
             get {
@@ -120,6 +129,51 @@ namespace DocaLabs.Http.Client.Resources {
         internal static string method_must_have_return_value {
             get {
                 return ResourceManager.GetString("method_must_have_return_value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The type {0} must be interface..
+        /// </summary>
+        internal static string must_be_interface {
+            get {
+                return ResourceManager.GetString("must_be_interface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The base type {0} must have method: {1} Execute({2} query)..
+        /// </summary>
+        internal static string must_have_execute_method {
+            get {
+                return ResourceManager.GetString("must_have_execute_method", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The return type of {0} method in {1} must not be void..
+        /// </summary>
+        internal static string must_have_non_void_retun_parameter {
+            get {
+                return ResourceManager.GetString("must_have_non_void_retun_parameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The type {0} must have only one method..
+        /// </summary>
+        internal static string must_have_only_one_method {
+            get {
+                return ResourceManager.GetString("must_have_only_one_method", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The base type {0} must have constructor with parameters: (Uri serviceUrl, string configurationName, {1} retryStrategy) or (Uri serviceUrl, string configurationName)..
+        /// </summary>
+        internal static string must_implement_constructor {
+            get {
+                return ResourceManager.GetString("must_implement_constructor", resourceCulture);
             }
         }
         

@@ -73,7 +73,7 @@ namespace DocaLabs.Http.Client
         /// Initializes a new instance of the HttpClient.
         /// 
         /// </summary>
-        /// <param name="serviceUrl"></param>
+        /// <param name="serviceUrl">The URL of the service.</param>
         /// <param name="configurationName">If the configuration name is not null it'll be used to get the endpoint configuration from the config file.</param>
         /// <param name="retryStrategy">If the parameter null then the default retry strategy will be used.</param>
         public HttpClient(Uri serviceUrl = null, string configurationName = null, Func<Func<TResult>, TResult> retryStrategy = null)
@@ -103,12 +103,6 @@ namespace DocaLabs.Http.Client
         /// <returns>Output data.</returns>
         public TResult Execute(TQuery query)
         {
-            //for (var i = 0; i < 1000; i++)
-            //{
-                Thread.Sleep(30);
-            //}
-            return Activator.CreateInstance<TResult>();
-
             try
             {
                 return RetryStrategy(() => DoExecute(query));

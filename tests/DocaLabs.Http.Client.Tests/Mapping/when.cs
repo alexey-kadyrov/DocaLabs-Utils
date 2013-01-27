@@ -11,19 +11,18 @@ namespace DocaLabs.Http.Client.Tests.Mapping
     [Subject(typeof(HttpClient<,>))]
     public class when
     {
-        static IService1 service;
-        static object o;
-        //static Result r;
+        static bool b;
 
         Because of = () =>
         {
             var testInterfaces = new List<Type>();
-            for (var i = 0; i < 100000; i++)
+            for (var i = 0; i < 1000; i++)
                 testInterfaces.Add(InterfaceBuilder.CreateInterface(i, typeof(Query), typeof(Result)));
 
-            int c = 0;
-            int maxC = 0;
-            int k = 0;
+            var baseClass = typeof (TestHttpClient);
+            var c = 0;
+            var maxC = 0;
+            var k = 0;
             Parallel.ForEach(testInterfaces, x =>
             {
                 var cc = Interlocked.Increment(ref c);
@@ -35,7 +34,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
                     Console.WriteLine(ii);
 
                 //Console.WriteLine(cc);
-                var s = HttpClientFactory.CreateInstance(x, new Uri("http://www.contoso.foo/"));
+                var s = HttpClientFactory.CreateInstance(baseClass, x, new Uri("http://www.contoso.foo/"));
                 var r = s.GetType().GetMethod("CallService").Invoke(s, new object[] { new Query { Name = "name" } });
                 Interlocked.Decrement(ref c);
                 //Console.WriteLine(s.GetType().FullName);
@@ -43,6 +42,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
 
             Console.WriteLine("Max concurrency {0}", maxC);
 
+            b = true;
             //var s0 = HttpClientFactory.CreateInstance(testInterfaces[0], new Uri("http://www.contoso.foo/"));
             //var s1 = HttpClientFactory.CreateInstance<IService1>(new Uri("http://www.contoso.foo/"));
 
@@ -50,8 +50,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             //r = service.Execute(new Query {Name = "name"});
         };
 
-        It should_be_not_null =
-            () => service.ShouldBeNull();
+        It should = () => b.ShouldBeTrue();
     }
 
     public class Query
@@ -64,16 +63,16 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         public string Data { get; set; }
     }
 
-    public interface IService1
+    public class TestHttpClient : HttpClient<Query, Result>
     {
-        Result Execute(Query query);
-    }
-
-    public class Service : HttpClient<Query, Result>, IService1
-    {
-        public Service(Uri serviceUrl, string configurationName)
+        public TestHttpClient(Uri serviceUrl, string configurationName)
             : base(serviceUrl, configurationName)
         {
+        }
+        protected override Result DoExecute(Query query)
+        {
+            Thread.Sleep(30);
+            return new Result {Data = "Hello!"};
         }
     }
 
