@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.Mapping;
@@ -35,7 +33,7 @@ namespace DocaLabs.Http.Client
     /// </summary>
     /// <typeparam name="TQuery">Type which will be used as input parameters that can be serialized into query string or the request stream.</typeparam>
     /// <typeparam name="TResult">Type which will be used as output data that will be deserialized from the response stream.</typeparam>
-    public abstract class HttpClient<TQuery, TResult>
+    public class HttpClient<TQuery, TResult>
     {
         /// <summary>
         /// Gets a service Url
@@ -78,13 +76,13 @@ namespace DocaLabs.Http.Client
         /// <param name="serviceUrl"></param>
         /// <param name="configurationName">If the configuration name is not null it'll be used to get the endpoint configuration from the config file.</param>
         /// <param name="retryStrategy">If the parameter null then the default retry strategy will be used.</param>
-        protected HttpClient(Uri serviceUrl = null, string configurationName = null, Func<Func<TResult>, TResult> retryStrategy = null)
+        public HttpClient(Uri serviceUrl = null, string configurationName = null, Func<Func<TResult>, TResult> retryStrategy = null)
         {
             ServiceUrl = serviceUrl;
             RetryStrategy = retryStrategy ?? GetDefaultRetryStrategy();
             AutoSetAcceptEncoding = true;
 
-            ReadConfiguration(configurationName ?? GetDefaultConfigurationName());
+            ReadConfiguration(configurationName);
 
             if(ServiceUrl == null)
                 throw new ArgumentException(Resources.Text.service_url_is_not_defined, "serviceUrl");
@@ -105,6 +103,12 @@ namespace DocaLabs.Http.Client
         /// <returns>Output data.</returns>
         public TResult Execute(TQuery query)
         {
+            //for (var i = 0; i < 1000; i++)
+            //{
+                Thread.Sleep(30);
+            //}
+            return Activator.CreateInstance<TResult>();
+
             try
             {
                 return RetryStrategy(() => DoExecute(query));
@@ -124,55 +128,31 @@ namespace DocaLabs.Http.Client
 
         protected virtual TResult DoExecute(TQuery query)
         {
-            var url = CreateUrl(query);
-
-            var request = CreateRequest(query, url);
+            var request = CreateRequest(UrlBuilder.CreateUrl(ServiceUrl, query));
 
             TryWriteRequestData(query, request);
 
             return ParseResponse(query, request);
         }
 
-        protected virtual Uri CreateUrl(TQuery query)
-        {
-            try
-            {
-                return new UriBuilder(ServiceUrl)
-                {
-                    Query = TryMakeQueryString(query)
-                }.Uri;
-            }
-            catch (Exception e)
-            {
-                throw new HttpClientException(string.Format(Resources.Text.failed_create_url, ServiceUrl), e)
-                {
-                    DoNotRetry = true
-                };
-            }
-        }
-
-        protected virtual WebRequest CreateRequest(TQuery query, Uri url)
+        protected virtual WebRequest CreateRequest(Uri url)
         {
             var request = WebRequest.Create(url);
 
             request.Timeout = RequestTimeout;
             request.Method = GetRequestMethod();
 
-            var headers = GetHeaders(query, url);
-            if(headers != null && headers.Count > 0)
-                request.Headers.Add(headers);
-
-            var httpRequest = request as HttpWebRequest;
-            if (httpRequest != null)
+            if (AutoSetAcceptEncoding)
             {
-                var certificates = GetConfiguredClientCertificates(query, url);
-                if(certificates != null)
-                    httpRequest.ClientCertificates.AddRange(certificates);
+                foreach (var decoder in ContentDecoderFactory.GetSupportedEncodings())
+                    request.Headers.Add("Accept-Encoding", decoder);
             }
 
-            var proxy = GetWebProxy(query, url);
-            if (proxy != null)
-                request.Proxy = proxy;
+            Configuration.AddHeaders(request);
+
+            Configuration.AddClientCertificates(request as HttpWebRequest);
+
+            Configuration.SetWebProxy(request);
 
             return request;
         }
@@ -189,53 +169,6 @@ namespace DocaLabs.Http.Client
                 || type.GetProperties().Any(property => property.GetCustomAttributes(typeof(RequestSerializationAttribute), true).Length > 0)
                 ? WebRequestMethods.Http.Post
                 : WebRequestMethods.Http.Get;
-        }
-
-        protected virtual NameValueCollection GetHeaders(TQuery query, Uri url)
-        {
-            var collection = new NameValueCollection();
-
-            if (AutoSetAcceptEncoding)
-            {
-                foreach (var decoder in ContentDecoderFactory.GetSupportedEncodings())
-                    collection.Add("Accept-Encoding", decoder);
-            }
-
-            if (Configuration != null)
-            {
-                foreach (var name in Configuration.Headers.AllKeys)
-                    collection.Add(name, Configuration.Headers[name].Value);
-            }
-
-            return collection;
-        }
-
-        protected virtual X509CertificateCollection GetConfiguredClientCertificates(TQuery query, Uri url)
-        {
-            if (Configuration == null)
-                return null;
-
-            var collection = new X509CertificateCollection();
-
-            foreach (HttpClientCertificateReferenceElement certRef in Configuration.ClientCertificates)
-                collection.AddRange(certRef.Find());
-
-            return collection;
-        }
-
-        protected virtual IWebProxy GetWebProxy(TQuery query, Uri url)
-        {
-            if (Configuration == null || Configuration.Proxy.Address == null)
-                return null;
-
-            return new WebProxy(Configuration.Proxy.Address);
-        }
-
-        protected virtual string TryMakeQueryString(TQuery query)
-        {
-            return typeof(TQuery).GetCustomAttributes(typeof(QueryIgnoreAttribute), true).Length == 0
-                ? QueryMapper.ToQueryString(query)
-                : "";
         }
 
         protected virtual void TryWriteRequestData(TQuery query, WebRequest request)
@@ -370,27 +303,21 @@ namespace DocaLabs.Http.Client
         {
             Configuration = GetConfigurationElement(configurationName);
 
-            if (Configuration == null)
-            {
-                RequestTimeout = -1;
-                return;
-            }
-
             if (ServiceUrl == null)
                 ServiceUrl = Configuration.ServiceUrl;
 
             RequestTimeout = Configuration.Timeout;
         }
 
-        static HttpClientEndpointElement GetConfigurationElement(string configurationName)
+        HttpClientEndpointElement GetConfigurationElement(string configurationName)
         {
             if (string.IsNullOrWhiteSpace(configurationName))
-                return null;
+                configurationName = GetDefaultConfigurationName();
 
             var section = HttpClientEndpointSection.GetDefaultSection();
             return section != null
-                ? section.Endpoints[configurationName]
-                : null;
+                ? section.Endpoints[configurationName] ?? new HttpClientEndpointElement()
+                : new HttpClientEndpointElement();
         }
 
         string GetDefaultConfigurationName()

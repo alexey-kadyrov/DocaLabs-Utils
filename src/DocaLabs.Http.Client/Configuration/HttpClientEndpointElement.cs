@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
+using System.Net;
+using DocaLabs.Http.Client.Serialization.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Configuration
 {
@@ -80,6 +83,30 @@ namespace DocaLabs.Http.Client.Configuration
         public HttpClientProxyElement Proxy
         {
             get { return ((HttpClientProxyElement)base[ProxyProperty]); }
+        }
+
+        public void AddHeaders(WebRequest request)
+        {
+            if (request == null)
+                return;
+
+            foreach (var name in Headers.AllKeys)
+                request.Headers.Add(name, Headers[name].Value);
+        }
+
+        public void AddClientCertificates(HttpWebRequest request)
+        {
+            if (request == null)
+                return;
+
+            foreach (HttpClientCertificateReferenceElement certRef in ClientCertificates)
+                request.ClientCertificates.AddRange(certRef.Find());
+        }
+
+        public void SetWebProxy(WebRequest request)
+        {
+            if (request != null && Proxy.Address != null)
+                request.Proxy = new WebProxy(Proxy.Address);
         }
     }
 }
