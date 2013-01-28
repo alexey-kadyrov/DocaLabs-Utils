@@ -49,9 +49,9 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the request timeout.
+        /// Gets or sets the request timeout. Default value is 90 seconds.
         /// </summary>
-        [ConfigurationProperty(TimeoutProperty, IsRequired = false, DefaultValue = -1)]
+        [ConfigurationProperty(TimeoutProperty, IsRequired = false, DefaultValue = 90000)]
         public int Timeout
         {
             get { return ((int)base[TimeoutProperty]); }

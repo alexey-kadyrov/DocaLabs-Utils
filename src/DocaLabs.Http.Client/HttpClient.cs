@@ -49,7 +49,7 @@ namespace DocaLabs.Http.Client
         public virtual string RequestMethod { get { return null; } }
 
         /// <summary>
-        /// Gets or sets the request timeout, the default value is -1.
+        /// Gets or sets the request timeout, the default value is 90 seconds.
         /// </summary>
         public int RequestTimeout { get; set; }
 
@@ -137,10 +137,7 @@ namespace DocaLabs.Http.Client
             request.Method = GetRequestMethod();
 
             if (AutoSetAcceptEncoding)
-            {
-                foreach (var decoder in ContentDecoderFactory.GetSupportedEncodings())
-                    request.Headers.Add("Accept-Encoding", decoder);
-            }
+                ContentDecoderFactory.AddAcceptEncodings(request);
 
             Configuration.AddHeaders(request);
 
@@ -167,63 +164,17 @@ namespace DocaLabs.Http.Client
 
         protected virtual void TryWriteRequestData(TQuery query, WebRequest request)
         {
-            if (TryQueryClassLevel(query, request)) 
-                return;
-
-            if (TryQueryPropertyLevel(query, request))
-                return;
-
-            TryHttpClientClassLevel(query, request);
+            var serializer = RequestSerializationFactory.GetSerializer(this, query);
+            if(serializer != null)
+                serializer.Serialize(query, request);
         }
 
-        protected virtual bool TryQueryClassLevel(TQuery query, WebRequest request)
+        TResult ParseResponse(TQuery query, WebRequest request)
         {
-            var attrs = typeof(TQuery).GetCustomAttributes(typeof(RequestSerializationAttribute), true);
-            if (attrs.Length == 0)
-                return false;
-
-            ((RequestSerializationAttribute) attrs[0]).Serialize(query, request);
-
-            return true;
-        }
-
-        protected virtual bool TryQueryPropertyLevel(TQuery query, WebRequest request)
-        {
-            foreach (var property in typeof(TQuery).GetProperties())
-            {
-                var attrs = property.GetCustomAttributes(typeof(RequestSerializationAttribute), true);
-                if (attrs.Length <= 0) 
-                    continue;
-
-                ((RequestSerializationAttribute)attrs[0]).Serialize(property.GetValue(query, null), request);
-                return true;
-            }
-
-            return false;
-        }
-
-        protected virtual bool TryHttpClientClassLevel(TQuery query, WebRequest request)
-        {
-            var attrs = GetType().GetCustomAttributes(typeof(RequestSerializationAttribute), true);
-            if (attrs.Length == 0)
-                return false;
-
-            ((RequestSerializationAttribute)attrs[0]).Serialize(query, request);
-
-            return true;
-        }
-
-        protected virtual TResult ParseResponse(TQuery query, WebRequest request)
-        {
-            using (var response = GetResponse(request))
+            using (var response = new HttpResponse(request.GetResponse()))
             {
                 return OnResultTransforming(query, response);
             }
-        }
-
-        protected virtual HttpResponse GetResponse(WebRequest request)
-        {
-            return new HttpResponse(request.GetResponse());
         }
 
         protected virtual TResult OnResultTransforming(TQuery query, HttpResponse response)
@@ -297,7 +248,7 @@ namespace DocaLabs.Http.Client
         {
             Configuration = GetConfigurationElement(configurationName);
 
-            if (ServiceUrl == null)
+            if (Configuration.ServiceUrl != null)
                 ServiceUrl = Configuration.ServiceUrl;
 
             RequestTimeout = Configuration.Timeout;

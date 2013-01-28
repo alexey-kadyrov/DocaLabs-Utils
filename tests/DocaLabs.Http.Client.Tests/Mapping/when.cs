@@ -69,6 +69,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             : base(serviceUrl, configurationName)
         {
         }
+
         protected override Result DoExecute(Query query)
         {
             Thread.Sleep(30);

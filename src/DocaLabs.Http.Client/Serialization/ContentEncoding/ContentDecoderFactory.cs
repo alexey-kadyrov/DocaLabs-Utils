@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Net;
 using DocaLabs.Http.Client.Resources;
 
 namespace DocaLabs.Http.Client.Serialization.ContentEncoding
@@ -60,6 +61,15 @@ namespace DocaLabs.Http.Client.Serialization.ContentEncoding
         {
             IDecodeContent existingDecoder;
             Decoders.TryRemove(encoding, out existingDecoder);
+        }
+
+        /// <summary>
+        /// Adds supported decoders into accept-encoding header
+        /// </summary>
+        static public void AddAcceptEncodings(WebRequest request)
+        {
+            foreach (var decoder in GetSupportedEncodings())
+                request.Headers.Add("Accept-Encoding", decoder);
         }
     }
 }
