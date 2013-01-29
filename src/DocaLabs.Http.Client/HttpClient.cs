@@ -97,11 +97,11 @@ namespace DocaLabs.Http.Client
         ///   * Overriding TryMakeQueryString and/or TryWriteRequestData
         /// The output data deserialization behaviour can be altered by:
         ///   * Using one of the ResponseDeserializationAttribute derived classes (on the class level)
-        ///   * Overriding OnResultTransforming
+        ///   * Overriding ParseResponse
         /// </summary>
         /// <param name="query">Input parameters.</param>
         /// <returns>Output data.</returns>
-        public TResult Execute(TQuery query)
+        public virtual TResult Execute(TQuery query)
         {
             try
             {
@@ -169,30 +169,9 @@ namespace DocaLabs.Http.Client
                 serializer.Serialize(query, request);
         }
 
-        TResult ParseResponse(TQuery query, WebRequest request)
+        protected virtual TResult ParseResponse(TQuery query, WebRequest request)
         {
-            using (var response = new HttpResponse(request.GetResponse()))
-            {
-                return OnResultTransforming(query, response);
-            }
-        }
-
-        protected virtual TResult OnResultTransforming(TQuery query, HttpResponse response)
-        {
-            var attrs = typeof(TResult).GetCustomAttributes(typeof(ResponseDeserializationAttribute), true);
-            if (attrs.Length > 0)
-                return ((ResponseDeserializationAttribute)attrs[0]).Deserialize<TResult>(response);
-
-            if (response.IsJson())
-                return response.AsJsonObject<TResult>();
-
-            if (response.IsXml())
-                return response.AsXmlObject<TResult>();
-
-            throw new HttpClientException(string.Format(Resources.Text.method_must_be_overidden, GetType().FullName))
-            {
-                DoNotRetry = true
-            };
+            return request.Parse<TResult>();
         }
 
         protected TResult DefaultRetryStrategy(Func<TResult> action, int times, int initialTimeout, int stepbackIncrease)

@@ -61,6 +61,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot figure out how to deserialize web response..
+        /// </summary>
+        internal static string cannot_figure_out_how_to_deserialize {
+            get {
+                return ResourceManager.GetString("cannot_figure_out_how_to_deserialize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compression format {0} is not supported..
         /// </summary>
         internal static string compression_format_is_not_suppoerted {
@@ -102,15 +111,6 @@ namespace DocaLabs.Http.Client.Resources {
         internal static string maust_have_only_one_method {
             get {
                 return ResourceManager.GetString("maust_have_only_one_method", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The method must be overridden or the TServiceResult must have a class level attribute derived from ResponseDeserializationAttribute for {0}..
-        /// </summary>
-        internal static string method_must_be_overidden {
-            get {
-                return ResourceManager.GetString("method_must_be_overidden", resourceCulture);
             }
         }
         
