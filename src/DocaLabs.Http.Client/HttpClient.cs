@@ -101,7 +101,7 @@ namespace DocaLabs.Http.Client
         /// </summary>
         /// <param name="query">Input parameters.</param>
         /// <returns>Output data.</returns>
-        public virtual TResult Execute(TQuery query)
+        public TResult Execute(TQuery query)
         {
             try
             {
@@ -109,14 +109,10 @@ namespace DocaLabs.Http.Client
             }
             catch(Exception e)
             {
-                var message = string.Format(Resources.Text.failed_execute_request, ServiceUrl, GetType().FullName);
-
-                LogException(message, e);
-
                 if (e is HttpClientException)
                     throw;
 
-                throw new HttpClientException(message, e);
+                throw new HttpClientException(string.Format(Resources.Text.failed_execute_request, ServiceUrl, GetType().FullName), e);
             }
         }
 
@@ -196,7 +192,7 @@ namespace DocaLabs.Http.Client
                     if (e is HttpClientException && ((HttpClientException)e).DoNotRetry)
                         throw;
 
-                    LogWarning(string.Format(Resources.Text.will_try_again, attempt, times), e);
+                    OnLogRetry(attempt, times, e);
 
                     Thread.Sleep(timeout);
 
@@ -205,17 +201,12 @@ namespace DocaLabs.Http.Client
             }
         }
     
-        protected virtual void LogWarning(string message, Exception e)
+        protected virtual void OnLogRetry(int attempt, int times, Exception e)
         {
             if(e == null)
-                Debug.Write(message);
+                Debug.Write(string.Format(Resources.Text.will_try_again, attempt, times));
             else
-                Debug.WriteLine("{0} : {1}", message, e);
-        }
-
-        protected virtual void LogException(string message, Exception e)
-        {
-            Debug.WriteLine("{0} : {1}", message, e);
+                Debug.WriteLine("{0} : {1}", string.Format(Resources.Text.will_try_again, attempt, times), e);
         }
 
         protected Func<Func<TResult>, TResult> GetDefaultRetryStrategy()
@@ -236,17 +227,13 @@ namespace DocaLabs.Http.Client
         HttpClientEndpointElement GetConfigurationElement(string configurationName)
         {
             if (string.IsNullOrWhiteSpace(configurationName))
-                configurationName = GetDefaultConfigurationName();
+                configurationName = GetType().FullName;
 
             var section = HttpClientEndpointSection.GetDefaultSection();
+
             return section != null
                 ? section.Endpoints[configurationName] ?? new HttpClientEndpointElement()
                 : new HttpClientEndpointElement();
-        }
-
-        string GetDefaultConfigurationName()
-        {
-            return GetType().FullName;
         }
     }
 }
