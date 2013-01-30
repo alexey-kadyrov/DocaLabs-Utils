@@ -205,7 +205,7 @@ namespace DocaLabs.Http.Client
 
             executeGenerator.Emit(OpCodes.Ldarg_0);
 
-            executeGenerator.Emit(interfaceInfo.QueryType != typeof(VoidValue)
+            executeGenerator.Emit(interfaceInfo.QueryType != typeof(VoidType)
                 ? OpCodes.Ldarg_1
                 : OpCodes.Ldnull);
 
@@ -221,10 +221,10 @@ namespace DocaLabs.Http.Client
                 interfaceInfo.ServiceExecuteMethod.Name,
                 MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
                 CallingConventions.Standard | CallingConventions.HasThis,
-                interfaceInfo.ResultType != typeof (VoidValue)
+                interfaceInfo.ResultType != typeof (VoidType)
                     ? interfaceInfo.ResultType
                     : typeof (void),
-                interfaceInfo.QueryType != typeof(VoidValue)
+                interfaceInfo.QueryType != typeof(VoidType)
                     ? new[] { interfaceInfo.QueryType }
                     : null
             );
@@ -253,14 +253,14 @@ namespace DocaLabs.Http.Client
                 ResultType = ServiceExecuteMethod.ReturnType;
 
                 if (ResultType == typeof (void))
-                    ResultType = typeof (VoidValue);
+                    ResultType = typeof (VoidType);
 
                 var parameters = ServiceExecuteMethod.GetParameters();
                 if (parameters.Length > 1)
                     throw new ArgumentException(string.Format(Resources.Text.method_must_have_no_more_than_one_argument, ServiceExecuteMethod.Name, interfaceType.FullName), "interfaceType");
 
                 QueryType = parameters.Length == 0 
-                    ? typeof(VoidValue)
+                    ? typeof(VoidType)
                     : parameters[0].ParameterType;
 
                 //typeof(Func<Func<Result>, Result>)

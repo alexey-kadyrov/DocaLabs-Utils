@@ -27,7 +27,7 @@ namespace DocaLabs.Http.Client.Serialization
             if (attrs.Length > 0)
                 return ((ResponseDeserializationAttribute)attrs[0]).Deserialize<TResult>(response);
 
-            if (typeof (TResult) == typeof (VoidValue))
+            if (typeof (TResult) == typeof (VoidType))
                 return default(TResult);
 
             if (response.IsJson())

@@ -3,11 +3,11 @@
     /// <summary>
     /// Defines empty type which can be used as a generic parameter for HttpClient in place of void.
     /// </summary>
-    public struct VoidValue
+    public struct VoidType
     {
         /// <summary>
         /// Default value.
         /// </summary>
-        public static readonly VoidValue Value = default (VoidValue);
+        public static readonly VoidType Value = default (VoidType);
     }
 }
