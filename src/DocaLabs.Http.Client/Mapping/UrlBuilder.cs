@@ -15,10 +15,7 @@ namespace DocaLabs.Http.Client.Mapping
             }
             catch (Exception e)
             {
-                throw new HttpClientException(string.Format(Resources.Text.failed_create_url, serviceUrl), e)
-                {
-                    DoNotRetry = true
-                };
+                throw new UnrecoverableHttpClientException(string.Format(Resources.Text.failed_create_url, serviceUrl), e);
             }
         }
 

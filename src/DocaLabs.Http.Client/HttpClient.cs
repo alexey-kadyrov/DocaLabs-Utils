@@ -182,14 +182,15 @@ namespace DocaLabs.Http.Client
                 {
                     return action();
                 }
+                catch (UnrecoverableHttpClientException)
+                {
+                    throw;
+                }
                 catch (Exception e)
                 {
                     attempt++;
 
                     if (attempt >= times)
-                        throw;
-
-                    if (e is HttpClientException && ((HttpClientException)e).DoNotRetry)
                         throw;
 
                     OnLogRetry(attempt, times, e);

@@ -33,10 +33,7 @@ namespace DocaLabs.Http.Client.Serialization
             if (response.IsXml())
                 return response.AsXmlObject<TResult>();
 
-            throw new HttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize)
-            {
-                DoNotRetry = true
-            };
+            throw new UnrecoverableHttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
         }
 
     }
