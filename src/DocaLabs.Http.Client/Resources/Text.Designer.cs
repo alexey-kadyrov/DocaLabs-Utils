@@ -106,6 +106,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If the base class {0} is generic it must have two generic arguments..
+        /// </summary>
+        internal static string if_base_class_generic_it_must_have_two_parameters {
+            get {
+                return ResourceManager.GetString("if_base_class_generic_it_must_have_two_parameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The type {0} must have only one method..
         /// </summary>
         internal static string maust_have_only_one_method {
@@ -115,11 +124,11 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The method {0} in {1} must have only one parameter..
+        ///   Looks up a localized string similar to The method {0} in {1} must have no more than one parameter..
         /// </summary>
-        internal static string method_must_have_only_one_argument {
+        internal static string method_must_have_no_more_than_one_argument {
             get {
-                return ResourceManager.GetString("method_must_have_only_one_argument", resourceCulture);
+                return ResourceManager.GetString("method_must_have_no_more_than_one_argument", resourceCulture);
             }
         }
         
@@ -147,15 +156,6 @@ namespace DocaLabs.Http.Client.Resources {
         internal static string must_have_execute_method {
             get {
                 return ResourceManager.GetString("must_have_execute_method", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The return type of {0} method in {1} must not be void..
-        /// </summary>
-        internal static string must_have_non_void_retun_parameter {
-            get {
-                return ResourceManager.GetString("must_have_non_void_retun_parameter", resourceCulture);
             }
         }
         

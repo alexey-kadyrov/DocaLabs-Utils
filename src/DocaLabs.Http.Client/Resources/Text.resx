@@ -132,11 +132,14 @@
   <data name="failed_execute_request" xml:space="preserve">
     <value>Failed to execute request to {0} ({1})</value>
   </data>
+  <data name="if_base_class_generic_it_must_have_two_parameters" xml:space="preserve">
+    <value>If the base class {0} is generic it must have two generic arguments.</value>
+  </data>
   <data name="maust_have_only_one_method" xml:space="preserve">
     <value>The type {0} must have only one method.</value>
   </data>
-  <data name="method_must_have_only_one_argument" xml:space="preserve">
-    <value>The method {0} in {1} must have only one parameter.</value>
+  <data name="method_must_have_no_more_than_one_argument" xml:space="preserve">
+    <value>The method {0} in {1} must have no more than one parameter.</value>
   </data>
   <data name="method_must_have_return_value" xml:space="preserve">
     <value>Method {0} must have the return value.</value>
@@ -146,9 +149,6 @@
   </data>
   <data name="must_have_execute_method" xml:space="preserve">
     <value>The base type {0} must have method: {1} Execute({2} query).</value>
-  </data>
-  <data name="must_have_non_void_retun_parameter" xml:space="preserve">
-    <value>The return type of {0} method in {1} must not be void.</value>
   </data>
   <data name="must_have_only_one_method" xml:space="preserve">
     <value>The type {0} must have only one method.</value>
