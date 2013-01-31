@@ -126,6 +126,9 @@
   <data name="declaring_is_unknown" xml:space="preserve">
     <value>Declaring type for {0} is unknown.</value>
   </data>
+  <data name="expected_retsult_to_be_image_or_bitmap_classes" xml:space="preserve">
+    <value>Expected that {0} will be Image or Bitmap classes.</value>
+  </data>
   <data name="failed_create_url" xml:space="preserve">
     <value>Failed to create Url {0}.</value>
   </data>

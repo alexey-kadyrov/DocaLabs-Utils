@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Text;
-using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;
 using Moq;
 using It = Machine.Specifications.It;
@@ -120,12 +119,6 @@ namespace DocaLabs.Http.Client.Tests
         Because of =
             () => response = new HttpResponse(test_context.MockWebResponse.Object);
 
-        It should_not_report_that_it_contains_object_serialized_as_xml =
-            () => response.IsXml().ShouldBeFalse();
-
-        It should_not_report_that_it_contains_object_serialized_as_json =
-            () => response.IsJson().ShouldBeFalse();
-
         It should_return_all_byte_array_data =
             () => Encoding.UTF8.GetString(response.AsByteArray()).ShouldEqual("Hello World!");
     }
@@ -146,71 +139,7 @@ namespace DocaLabs.Http.Client.Tests
         Because of =
             () => response = new HttpResponse(test_context.MockWebResponse.Object);
 
-        It should_not_report_that_it_contains_object_serialized_as_xml =
-            () => response.IsXml().ShouldBeFalse();
-
-        It should_not_report_that_it_contains_object_serialized_as_json =
-            () => response.IsJson().ShouldBeFalse();
-
         It should_deserialize_string_data =
             () => response.AsString().ShouldEqual("Hello World!");
-    }
-
-    [Subject(typeof(HttpResponse))]
-    class when_http_response_is_used_with_object_encoded_as_json
-    {
-        static HttpResponseTestContext test_context;
-        static HttpResponse response;
-        static Stream response_stream;
-
-        Establish context = () =>
-        {
-            response_stream = new MemoryStream(Encoding.UTF8.GetBytes("{Value1:2012, Value2: \"Hello World!\"}"));
-            test_context = new HttpResponseTestContext("application/json", response_stream);
-        };
-
-        Because of =
-            () => response = new HttpResponse(test_context.MockWebResponse.Object);
-
-        It should_not_report_that_it_contains_object_serialized_as_xml =
-            () => response.IsXml().ShouldBeFalse();
-
-        It should_report_that_it_contains_object_serialized_as_json =
-            () => response.IsJson().ShouldBeTrue();
-
-        It should_deserialize_json_object = () => response.AsJsonObject<HttpResponseInBodyTestClass>().ShouldBeSimilar(new HttpResponseInBodyTestClass
-        {
-            Value1 = 2012,
-            Value2 = "Hello World!"
-        });
-    }
-
-    [Subject(typeof(HttpResponse))]
-    class when_http_response_is_used_with_object_encoded_as_xml
-    {
-        static HttpResponseTestContext test_context;
-        static HttpResponse response;
-        static Stream response_stream;
-
-        Establish context = () =>
-        {
-            response_stream = new MemoryStream(Encoding.UTF8.GetBytes("<HttpResponseInBodyTestClass><Value1>2012</Value1><Value2>Hello World!</Value2></HttpResponseInBodyTestClass>"));
-            test_context = new HttpResponseTestContext("text/xml", response_stream);
-        };
-
-        Because of =
-            () => response = new HttpResponse(test_context.MockWebResponse.Object);
-
-        It should_report_that_it_contains_object_serialized_as_xml =
-            () => response.IsXml().ShouldBeTrue();
-
-        It should_not_report_that_it_contains_object_serialized_as_json =
-            () => response.IsJson().ShouldBeFalse();
-
-        It should_deserialize_json_object = () => response.AsXmlObject<HttpResponseInBodyTestClass>().ShouldBeSimilar(new HttpResponseInBodyTestClass
-        {
-            Value1 = 2012,
-            Value2 = "Hello World!"
-        });
     }
 }

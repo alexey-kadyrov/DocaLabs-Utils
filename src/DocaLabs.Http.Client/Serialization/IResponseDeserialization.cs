@@ -8,9 +8,9 @@
         /// <summary>
         /// When is overridden in derived class it deserializes an object from the web response.
         /// </summary>
-        /// <typeparam name="T">Type of the object to deserialize.</typeparam>
+        /// <typeparam name="TResult">Type of the object to deserialize.</typeparam>
         /// <param name="response">Web response to deserialize from.</param>
         /// <returns>Deserialized object.</returns>
-        T Deserialize<T>(HttpResponse response);
+        TResult Deserialize<TResult>(HttpResponse response);
     }
 }

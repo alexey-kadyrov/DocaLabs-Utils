@@ -88,6 +88,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expected that {0} will be Image or Bitmap classes..
+        /// </summary>
+        internal static string expected_retsult_to_be_image_or_bitmap_classes {
+            get {
+                return ResourceManager.GetString("expected_retsult_to_be_image_or_bitmap_classes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to create Url {0}..
         /// </summary>
         internal static string failed_create_url {

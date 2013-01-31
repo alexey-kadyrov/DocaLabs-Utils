@@ -137,7 +137,7 @@ namespace DocaLabs.Http.Client
         static TypeBuilder DefineType(Type baseType, Type interfaceType)
         {
             return ModuleBuilder.DefineType(
-                interfaceType.FullName + Suffix,
+                string.Format("{0}{1}{2}", interfaceType.FullName, Constructors.Count, Suffix),
                 TypeAttributes.Class | TypeAttributes.Public,
                 baseType,
                 new[] { interfaceType });

@@ -2,10 +2,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 using DocaLabs.Http.Client.Serialization.ContentEncoding;
-using Newtonsoft.Json;
 
 namespace DocaLabs.Http.Client
 {
@@ -14,15 +11,39 @@ namespace DocaLabs.Http.Client
     /// </summary>
     public class HttpResponse : IDisposable
     {
-        /// <summary>
-        /// Gets the underlying response object.
-        /// </summary>
-        public WebResponse Response { get; private set; }
+        WebResponse Response { get; set; }
+
+        Stream RawResponseStream { get; set; }
 
         /// <summary>
-        /// Gets a response stream.
+        /// Gets a <see cref="T:System.Boolean"/> value that indicates whether mutual authentication occurred.
         /// </summary>
-        public Stream RawResponseStream { get; private set; }
+        public bool IsMutuallyAuthenticated { get { return Response.IsMutuallyAuthenticated; } }
+
+        /// <summary>
+        /// Gets the content length of data being received.
+        /// </summary>
+        public long ContentLength { get { return Response.ContentLength; } }
+
+        /// <summary>
+        /// Gets the content type of the data being received.
+        /// </summary>
+        public string ContentType { get { return Response.ContentType; } }
+
+        /// <summary>
+        /// Gets the URI of the Internet resource that actually responded to the request.
+        /// </summary>
+        public Uri ResponseUri { get { return Response.ResponseUri; } }
+
+        /// <summary>
+        /// Gets a collection of header name-value pairs associated with this request.
+        /// </summary>
+        public WebHeaderCollection Headers { get { return Response.Headers; } }
+
+        /// <returns>
+        /// Returns <see cref="T:System.Boolean"/>.
+        /// </returns>
+        public bool SupportsHeaders { get { return Response.SupportsHeaders; } }
 
         /// <summary>
         /// Initializes an instance of the HttpResponse class with provided WebRequest instance.
@@ -37,24 +58,6 @@ namespace DocaLabs.Http.Client
             RawResponseStream = Response.GetResponseStream();
             if (RawResponseStream == null)
                 throw new HttpClientException(Resources.Text.null_response_stream);
-        }
-
-        /// <summary>
-        /// Returns true if the content type is 'application/json'.
-        /// </summary>
-        public bool IsJson()
-        {
-            return (!string.IsNullOrWhiteSpace(Response.ContentType)) &&
-                string.Compare(Response.ContentType, "application/json", StringComparison.OrdinalIgnoreCase) == 0;
-        }
-
-        /// <summary>
-        /// Returns true if the content type is 'text/xml'.
-        /// </summary>
-        public bool IsXml()
-        {
-            return (!string.IsNullOrWhiteSpace(Response.ContentType)) &&
-                string.Compare(Response.ContentType, "text/xml", StringComparison.OrdinalIgnoreCase) == 0;
         }
 
         /// <summary>
@@ -82,33 +85,6 @@ namespace DocaLabs.Http.Client
             using (var reader = new StreamReader(GetDataStream(), TryGetEncoding()))
             {
                 return reader.ReadToEnd();
-            }
-        }
-
-        /// <summary>
-        /// Deserializes the response stream content using JSON format.
-        /// The method is using Newtonsoft deserializer with default settings.
-        /// If the response stream content is empty then the default(T) is returned.
-        /// </summary>
-        public T AsJsonObject<T>()
-        {
-            var s = AsString();
-
-            return string.IsNullOrWhiteSpace(s) 
-                ? default(T) 
-                : JsonConvert.DeserializeObject<T>(s);
-        }
-
-        /// <summary>
-        /// Deserializes the response stream content using JSON format.
-        /// The method is using XmlSerializer with default settings except the DTD processing is set to ignore.
-        /// </summary>
-        public T AsXmlObject<T>()
-        {
-            // stream is disposed by the reader
-            using (var reader = XmlReader.Create(GetDataStream(), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore }))
-            {
-                return (T)new XmlSerializer(typeof(T)).Deserialize(reader);
             }
         }
 

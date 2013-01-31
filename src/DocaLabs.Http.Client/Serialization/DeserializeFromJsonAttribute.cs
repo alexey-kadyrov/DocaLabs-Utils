@@ -1,4 +1,6 @@
-﻿namespace DocaLabs.Http.Client.Serialization
+﻿using Newtonsoft.Json;
+
+namespace DocaLabs.Http.Client.Serialization
 {
     /// <summary>
     /// Deserializes json serialized object from the web response.
@@ -10,7 +12,11 @@
         /// </summary>
         public override T Deserialize<T>(HttpResponse response)
         {
-            return response.AsJsonObject<T>();
+            var s = response.AsString();
+
+            return string.IsNullOrWhiteSpace(s)
+                ? default(T)
+                : JsonConvert.DeserializeObject<T>(s);
         }
     }
 }

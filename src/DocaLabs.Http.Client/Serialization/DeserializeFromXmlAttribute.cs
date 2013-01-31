@@ -1,4 +1,7 @@
-﻿namespace DocaLabs.Http.Client.Serialization
+﻿using System.Xml;
+using System.Xml.Serialization;
+
+namespace DocaLabs.Http.Client.Serialization
 {
     /// <summary>
     /// Deserializes xml serialized object from the web response.
@@ -10,7 +13,11 @@
         /// </summary>
         public override T Deserialize<T>(HttpResponse response)
         {
-            return response.AsXmlObject<T>();
+            // stream is disposed by the reader
+            using (var reader = XmlReader.Create(response.GetDataStream(), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore }))
+            {
+                return (T)new XmlSerializer(typeof(T)).Deserialize(reader);
+            }
         }
     }
 }

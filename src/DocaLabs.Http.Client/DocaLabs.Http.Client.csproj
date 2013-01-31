@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -56,6 +57,11 @@
     </Compile>
     <Compile Include="HttpClientFactory.cs" />
     <Compile Include="Mapping\UrlBuilder.cs" />
+    <Compile Include="Serialization\ImageResponseDeserializer.cs" />
+    <Compile Include="Serialization\PlainTextResponseDeserializer.cs" />
+    <Compile Include="Serialization\XmlResponseDeserializer.cs" />
+    <Compile Include="Serialization\IResponseDeserializationProvider.cs" />
+    <Compile Include="Serialization\JsonResponseDeserializer.cs" />
     <Compile Include="VoidType.cs" />
     <Compile Include="Serialization\ContentEncoding\ContentDecoderFactory.cs" />
     <Compile Include="Serialization\ContentEncoding\ContentEncoderFactory.cs" />
