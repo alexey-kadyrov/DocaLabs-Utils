@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using DocaLabs.Http.Client.Deserialization;
-using DocaLabs.Http.Client.Serialization;
 using DocaLabs.Http.Client.Tests.Serialization._Utils;
 using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;
@@ -22,8 +21,8 @@ namespace DocaLabs.Http.Client.Tests.Serialization
             Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
-        Because of = 
-            () => target = attribute.Deserialize<TestTarget>(http_response);
+        Because of =
+            () => target = (TestTarget)attribute.Deserialize(http_response, typeof(TestTarget));
 
         It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
         {

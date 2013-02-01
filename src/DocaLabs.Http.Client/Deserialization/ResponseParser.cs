@@ -60,31 +60,37 @@ namespace DocaLabs.Http.Client.Deserialization
         ///     1. To get ResponseDeserializationAttribute if defined on TResult class.
         ///     2. Tries to find deserialization provider among the registered.
         /// </summary>
-        public static TResult Parse<TResult>(this WebRequest request)
+        public static object Parse(this WebRequest request, Type resultType)
         {
+            if(request == null)
+                throw new ArgumentNullException("request");
+
             using (var response = new HttpResponse(request.GetResponse()))
             {
-                return TransformResult<TResult>(response);
+                return TransformResult(response, resultType);
             }
         }
 
-        static TResult TransformResult<TResult>(HttpResponse response)
+        static object TransformResult(HttpResponse response, Type resultType)
         {
-            var attrs = typeof(TResult).GetCustomAttributes(typeof(ResponseDeserializationAttribute), true);
+            if(resultType == null)
+                throw new ArgumentNullException("resultType");
+
+            var attrs = resultType.GetCustomAttributes(typeof(ResponseDeserializationAttribute), true);
             if (attrs.Length > 0)
-                return ((IResponseDeserialization)attrs[0]).Deserialize<TResult>(response);
+                return ((IResponseDeserialization)attrs[0]).Deserialize(response, resultType);
 
-            if (typeof (TResult) == typeof (VoidType))
-                return default(TResult);
+            if (resultType == typeof (VoidType))
+                return VoidType.Value;
 
-            var provider = FindProvider<TResult>(response);
+            var provider = FindProvider(response, resultType);
             if (provider != null)
-                return provider.Deserialize<TResult>(response);
+                return provider.Deserialize(response, resultType);
 
             throw new UnrecoverableHttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
         }
 
-        static IResponseDeserialization FindProvider<TResult>(HttpResponse response)
+        static IResponseDeserialization FindProvider(HttpResponse response, Type resultType)
         {
             List<IResponseDeserializationProvider> providers;
 
@@ -93,7 +99,7 @@ namespace DocaLabs.Http.Client.Deserialization
                 providers = _providers;
             }
 
-            return providers.FirstOrDefault(x => x.CheckIfSupports<TResult>(response));
+            return providers.FirstOrDefault(x => x.CheckIfSupports(response, resultType));
         }
 
         /// <summary>

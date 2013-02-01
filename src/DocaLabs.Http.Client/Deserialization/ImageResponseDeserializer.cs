@@ -13,8 +13,14 @@ namespace DocaLabs.Http.Client.Deserialization
         /// Deserializes an image from the response stream using intermediate MemoryStream as the Image/Bitmap classes 
         /// require that the stream was kept open for the lifetime of the image object.
         /// </summary>
-        public TResult Deserialize<TResult>(HttpResponse response)
+        public object Deserialize(HttpResponse response, Type resultType)
         {
+            if(response == null)
+                throw new ArgumentNullException("response");
+
+            if(resultType == null)
+                throw new ArgumentNullException("resultType");
+
             // the Image/Bitmap classes require that the stream was kept open for the lifetime of the image object.
             using (var sourceStream = response.GetDataStream())
             {
@@ -22,21 +28,27 @@ namespace DocaLabs.Http.Client.Deserialization
 
                 sourceStream.CopyTo(imageStream);
 
-                if(typeof(TResult) == typeof(Image))
-                    return (TResult)((object)(Image.FromStream(imageStream)));
+                if(resultType == typeof(Image))
+                    return Image.FromStream(imageStream);
 
-                if (typeof(TResult) == typeof(Bitmap))
-                    return (TResult)((object)(new Bitmap(imageStream)));
+                if (resultType == typeof(Bitmap))
+                    return new Bitmap(imageStream);
 
-                throw new UnrecoverableHttpClientException(string.Format(Resources.Text.expected_retsult_to_be_image_or_bitmap_classes, typeof(TResult)));
+                throw new UnrecoverableHttpClientException(string.Format(Resources.Text.expected_retsult_to_be_image_or_bitmap_classes, resultType));
             }
         }
 
         /// <summary>
         /// Returns true if the content type is 'image/gif'/'image/jpeg'/'image/tiff'/'image/png' and the TResult is not "simple type", like int, string, Guid, double, etc.
         /// </summary>
-        public bool CheckIfSupports<TResult>(HttpResponse response)
+        public bool CheckIfSupports(HttpResponse response, Type resultType)
         {
+            if (response == null)
+                throw new ArgumentNullException("response");
+
+            if (resultType == null)
+                throw new ArgumentNullException("resultType");
+
             return
                 (!string.IsNullOrWhiteSpace(response.ContentType)) &&
                     (
@@ -46,8 +58,8 @@ namespace DocaLabs.Http.Client.Deserialization
                         string.Compare(response.ContentType, "image/png", StringComparison.OrdinalIgnoreCase) == 0
                     ) &&
                     (
-                        typeof(TResult) == typeof(Image) ||
-                        typeof(TResult) == typeof(Bitmap)
+                        resultType == typeof(Image) ||
+                        resultType == typeof(Bitmap)
                     );
         }
     }

@@ -168,7 +168,7 @@ namespace DocaLabs.Http.Client
 
         protected virtual TResult ParseResponse(TQuery query, WebRequest request)
         {
-            return request.Parse<TResult>();
+            return (TResult)request.Parse(typeof(TResult));
         }
 
         protected TResult DefaultRetryStrategy(Func<TResult> action, int times, int initialTimeout, int stepbackIncrease)
