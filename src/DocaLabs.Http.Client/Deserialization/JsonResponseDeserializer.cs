@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace DocaLabs.Http.Client.Serialization
+namespace DocaLabs.Http.Client.Deserialization
 {
     /// <summary>
     /// Deserializes the response stream content using JSON format.

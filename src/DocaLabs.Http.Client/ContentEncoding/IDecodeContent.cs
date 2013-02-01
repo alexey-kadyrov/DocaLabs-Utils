@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace DocaLabs.Http.Client.Serialization.ContentEncoding
+namespace DocaLabs.Http.Client.ContentEncoding
 {
     /// <summary>
     /// Defines decoder for the http content.

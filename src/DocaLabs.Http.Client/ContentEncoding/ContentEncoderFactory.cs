@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using DocaLabs.Http.Client.Resources;
 
-namespace DocaLabs.Http.Client.Serialization.ContentEncoding
+namespace DocaLabs.Http.Client.ContentEncoding
 {
     /// <summary>
     /// Defines an encoder factory. By default the factory is populated by encoders that use standard .Net GZipStream and DeflateStream 

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using DocaLabs.Http.Client.Configuration;
+using DocaLabs.Http.Client.ContentEncoding;
+using DocaLabs.Http.Client.Deserialization;
 using DocaLabs.Http.Client.Mapping;
 using DocaLabs.Http.Client.Serialization;
-using DocaLabs.Http.Client.Serialization.ContentEncoding;
 
 namespace DocaLabs.Http.Client
 {

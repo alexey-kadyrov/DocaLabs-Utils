@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using DocaLabs.Http.Client.Serialization.ContentEncoding;
+using DocaLabs.Http.Client.ContentEncoding;
 
 namespace DocaLabs.Http.Client
 {

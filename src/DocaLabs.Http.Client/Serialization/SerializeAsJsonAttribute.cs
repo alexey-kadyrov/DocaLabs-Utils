@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Net;
 using System.Text;
-using DocaLabs.Http.Client.Serialization.ContentEncoding;
+using DocaLabs.Http.Client.ContentEncoding;
 using Newtonsoft.Json;
 
 namespace DocaLabs.Http.Client.Serialization

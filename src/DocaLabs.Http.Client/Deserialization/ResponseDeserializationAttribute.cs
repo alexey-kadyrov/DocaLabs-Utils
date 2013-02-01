@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocaLabs.Http.Client.Serialization
+namespace DocaLabs.Http.Client.Deserialization
 {
     /// <summary>
     /// Defines base class for attributes that are used to deserialize objects from a web response stream.

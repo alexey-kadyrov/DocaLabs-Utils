@@ -2,7 +2,7 @@
 using System.Net;
 using System.Xml;
 using System.Xml.Serialization;
-using DocaLabs.Http.Client.Serialization.ContentEncoding;
+using DocaLabs.Http.Client.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Serialization
 {

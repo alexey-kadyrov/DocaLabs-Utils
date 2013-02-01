@@ -3,7 +3,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.Net;
-using DocaLabs.Http.Client.Serialization.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Configuration
 {

@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace DocaLabs.Http.Client.Serialization.ContentEncoding
+namespace DocaLabs.Http.Client.ContentEncoding
 {
     /// <summary>
     /// Defines deflate encoder for the http content.

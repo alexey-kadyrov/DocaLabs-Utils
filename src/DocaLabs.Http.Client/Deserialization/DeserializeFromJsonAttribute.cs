@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace DocaLabs.Http.Client.Serialization
+namespace DocaLabs.Http.Client.Deserialization
 {
     /// <summary>
     /// Deserializes json serialized object from the web response.

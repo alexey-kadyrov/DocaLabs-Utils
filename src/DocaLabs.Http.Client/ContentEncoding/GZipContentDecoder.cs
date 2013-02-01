@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace DocaLabs.Http.Client.Serialization.ContentEncoding
+namespace DocaLabs.Http.Client.ContentEncoding
 {
     /// <summary>
     /// Defines gzip decoder for the http content.

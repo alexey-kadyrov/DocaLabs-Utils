@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.IO;
 
-namespace DocaLabs.Http.Client.Serialization
+namespace DocaLabs.Http.Client.Deserialization
 {
     /// <summary>
     /// Deserializes an image from the response stream.

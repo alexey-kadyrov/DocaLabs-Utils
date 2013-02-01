@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Web;
+using DocaLabs.Http.Client.ContentEncoding;
 using DocaLabs.Http.Client.Serialization;
-using DocaLabs.Http.Client.Serialization.ContentEncoding;
 using DocaLabs.Http.Client.Tests.Serialization._Utils;
 using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;

@@ -1,4 +1,4 @@
-﻿namespace DocaLabs.Http.Client.Serialization
+﻿namespace DocaLabs.Http.Client.Deserialization
 {
     /// <summary>
     /// Defines methods that are used to deserialize objects from a web response stream.
