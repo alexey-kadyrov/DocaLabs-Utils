@@ -7,17 +7,46 @@ namespace DocaLabs.Http.Client.Serialization
 {
     /// <summary>
     /// Defines helper methods to deserialize the web response.
+    /// All public methods are thread safe.
     /// </summary>
     public static class ResponseParser
     {
         static readonly object Locker;
-        static readonly List<IResponseDeserializationProvider> Providers;
+        static List<IResponseDeserializationProvider> _providers;
+
+        /// <summary>
+        /// Gets or sets the list of providers.
+        /// </summary>
+        public static List<IResponseDeserializationProvider> Providers
+        {
+            get
+            {
+                List<IResponseDeserializationProvider> providers;
+
+                lock (Locker)
+                {
+                    providers = _providers;
+                }
+
+                return providers.ToList();
+            }
+
+            set
+            {
+                var providers = value.ToList();
+
+                lock (Locker)
+                {
+                    _providers = providers;
+                }
+            }
+        }
 
         static ResponseParser()
         {
             Locker = new object();
 
-            Providers = new List<IResponseDeserializationProvider>
+            _providers = new List<IResponseDeserializationProvider>
             {
                 new JsonResponseDeserializer(),
                 new XmlResponseDeserializer(),
@@ -57,10 +86,14 @@ namespace DocaLabs.Http.Client.Serialization
 
         static IResponseDeserialization FindProvider<TResult>(HttpResponse response)
         {
+            List<IResponseDeserializationProvider> providers;
+
             lock (Locker)
             {
-                return Providers.FirstOrDefault(x => x.CheckIfSupports<TResult>(response));
+                providers = _providers;
             }
+
+            return providers.FirstOrDefault(x => x.CheckIfSupports<TResult>(response));
         }
 
         /// <summary>
