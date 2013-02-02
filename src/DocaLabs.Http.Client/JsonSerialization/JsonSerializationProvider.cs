@@ -6,6 +6,9 @@ namespace DocaLabs.Http.Client.JsonSerialization
 {
     /// <summary>
     /// Provides implementations for serialization objects in JSON notation. All public methods and properties are thread safe.
+    /// When the type is accessed for the first time it scans the base folder using MEF for exports of IJsonSerializer
+    /// and IJsonDeserializer in assemblies with prefix "DocaLabs.Extensions." if there is nothing found then it will use
+    /// DefaultJsonSerializer and DefaultJsonDeserializer.
     /// </summary>
     public static class JsonSerializationProvider
     {
@@ -67,11 +70,26 @@ namespace DocaLabs.Http.Client.JsonSerialization
         {
             Locker = new object();
 
-            var loader = new ExtensionLoader();
-            LibraryExtensionsComposer.ComposePartsFor(loader);
+            ReloadSerializationExtensions();
+        }
 
-            _serializer = loader.SerializerExtension ?? new DefaultJsonSerializer();
-            _deserializer = loader.DeserializerExtension ?? new DefaultJsonDeserializer();
+        /// <summary>
+        /// Scans the base folder using MEF for exports of IJsonSerializer and IJsonDeserializer in assemblies with 
+        /// prefix "DocaLabs.Extensions." if there is nothing found then it will use DefaultJsonSerializer and DefaultJsonDeserializer.
+        /// Normally there is no need to call the method, call it if you want to force the scan early as it can be quite
+        /// expensive operation if done during first serialization/deserialization.
+        /// </summary>
+        public static void ReloadSerializationExtensions()
+        {
+            lock (Locker)
+            {
+                var loader = new ExtensionLoader();
+
+                LibraryExtensionsComposer.ComposePartsFor(loader);
+
+                _serializer = loader.SerializerExtension ?? new DefaultJsonSerializer();
+                _deserializer = loader.DeserializerExtension ?? new DefaultJsonDeserializer();
+            }
         }
 
         class ExtensionLoader
