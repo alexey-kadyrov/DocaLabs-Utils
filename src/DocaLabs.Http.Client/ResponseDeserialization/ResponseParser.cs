@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
-namespace DocaLabs.Http.Client.Deserialization
+namespace DocaLabs.Http.Client.ResponseDeserialization
 {
     /// <summary>
     /// Defines helper methods to deserialize a web response. All public methods are thread safe.

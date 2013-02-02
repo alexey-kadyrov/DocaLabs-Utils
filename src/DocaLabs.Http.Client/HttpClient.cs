@@ -6,9 +6,9 @@ using System.Net;
 using System.Threading;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
-using DocaLabs.Http.Client.Deserialization;
 using DocaLabs.Http.Client.Mapping;
-using DocaLabs.Http.Client.Serialization;
+using DocaLabs.Http.Client.RequestSerialization;
+using DocaLabs.Http.Client.ResponseDeserialization;
 
 namespace DocaLabs.Http.Client
 {

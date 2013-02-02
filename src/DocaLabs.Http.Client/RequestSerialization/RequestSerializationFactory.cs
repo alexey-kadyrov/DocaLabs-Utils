@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocaLabs.Http.Client.Serialization
+namespace DocaLabs.Http.Client.RequestSerialization
 {
     /// <summary>
     /// Defines methods to get IRequestSerialization for an http client and query. All public methods are thread safe.

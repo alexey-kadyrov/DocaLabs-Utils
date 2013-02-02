@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Text;
-using DocaLabs.Http.Client.Deserialization;
+using DocaLabs.Http.Client.ResponseDeserialization;
 using DocaLabs.Http.Client.Tests.Serialization._Utils;
 using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace DocaLabs.Http.Client.Serialization
+namespace DocaLabs.Http.Client.RequestSerialization
 {
     /// <summary>
     /// Defines base class for attributes that are used to serialize objects into a web request stream.

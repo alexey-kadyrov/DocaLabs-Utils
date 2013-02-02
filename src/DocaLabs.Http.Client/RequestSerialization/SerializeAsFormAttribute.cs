@@ -4,7 +4,7 @@ using System.Text;
 using DocaLabs.Http.Client.ContentEncoding;
 using DocaLabs.Http.Client.Mapping;
 
-namespace DocaLabs.Http.Client.Serialization
+namespace DocaLabs.Http.Client.RequestSerialization
 {
     /// <summary>
     /// Serializes a given object into the web request as Url encoded form (the content type is: application/x-www-form-urlencoded).
