@@ -29,33 +29,33 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
-        /// Creates an instance of a concrete class implementing the TInterface, the class is derived from HttpClient.
+        /// Creates an instance of a concrete class implementing the TInterface, the class is expected to be derived from HttpClient.
         /// </summary>
         /// <typeparam name="TInterface">
-        /// Interface which should be implemented, the interface must implement only one method with one parameter and non void return parameter.
-        /// The method's parameter type will be used as the TQuery generic parameter and the return type as the TResult.
+        /// Interface which should be implemented, the interface must implement only one method.
+        /// The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
         /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
         /// </typeparam>
-        /// <param name="serviceUrl">The URL of the service.</param>
+        /// <param name="baseUrl">The base URL of the service.</param>
         /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
-        public static TInterface CreateInstance<TInterface>(Uri serviceUrl = null, string configurationName = null)
+        public static TInterface CreateInstance<TInterface>(Uri baseUrl = null, string configurationName = null)
         {
-            return (TInterface)CreateInstance(typeof(TInterface), serviceUrl, configurationName);
+            return (TInterface)CreateInstance(typeof(TInterface), baseUrl, configurationName);
         }
 
         /// <summary>
         /// Creates an instance of a concrete class implementing the interfaceType, the class is derived from HttpClient.
         /// </summary>
         /// <param name="interfaceType">
-        /// Interface which should be implemented, the interface must implement only one method with one parameter and non void return parameter.
-        /// The method's parameter type will be used as the TQuery generic parameter and the return type as the TResult.
+        /// Interface which should be implemented, the interface must implement only one method.
+        /// The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
         /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
         /// </param>
-        /// <param name="serviceUrl">The URL of the service.</param>
+        /// <param name="baseUrl">The base URL of the service.</param>
         /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
-        public static object CreateInstance(Type interfaceType, Uri serviceUrl = null, string configurationName = null)
+        public static object CreateInstance(Type interfaceType, Uri baseUrl = null, string configurationName = null)
         {
-            return CreateInstance(null, interfaceType, serviceUrl, configurationName);
+            return CreateInstance(null, interfaceType, baseUrl, configurationName);
         }
 
         /// <summary>
@@ -64,25 +64,25 @@ namespace DocaLabs.Http.Client
         /// <param name="baseType">
         /// The base class which will be used to generate the concrete type implementing the interface.
         /// The class must have non default constructor:
-        ///     (Uri serviceUrl, string configurationName, Func&lt;Func&lt;TResult>, TResult> retryStrategy) 
+        ///     (Uri baseUrl, string configurationName, Func&lt;Func&lt;TResult>, TResult> retryStrategy) 
         ///     or
-        ///     (Uri serviceUrl, string configurationName)
+        ///     (Uri baseUrl, string configurationName)
         /// </param>
         /// <param name="interfaceType">
-        /// Interface which should be implemented, the interface must implement only one method with one parameter and non void return parameter.
-        /// The method's parameter type will be used as the TQuery generic parameter and the return type as the TResult.
-        /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the baseType.
+        /// Interface which should be implemented, the interface must implement only one method.
+        /// The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
+        /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
         /// </param>
-        /// <param name="serviceUrl">The URL of the service.</param>
+        /// <param name="baseUrl">The base URL of the service.</param>
         /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
-        public static object CreateInstance(Type baseType, Type interfaceType, Uri serviceUrl = null, string configurationName = null)
+        public static object CreateInstance(Type baseType, Type interfaceType, Uri baseUrl = null, string configurationName = null)
         {
             var constructor = GetMappedConstructor(baseType, interfaceType);
 
             if (string.IsNullOrWhiteSpace(configurationName))
                 configurationName = interfaceType.FullName;
 
-            return constructor.Invoke(new object[] { serviceUrl, configurationName });
+            return constructor.Invoke(new object[] { baseUrl, configurationName });
         }
 
         static ConstructorInfo GetMappedConstructor(Type baseType, Type interfaceType)
@@ -263,7 +263,7 @@ namespace DocaLabs.Http.Client
                     ? typeof(VoidType)
                     : parameters[0].ParameterType;
 
-                //typeof(Func<Func<Result>, Result>)
+                // typeof(Func<Func<Result>, Result>)
                 RetryStragtegyType = typeof(Func<,>).MakeGenericType(typeof(Func<>).MakeGenericType(ResultType), ResultType);
             }
         }

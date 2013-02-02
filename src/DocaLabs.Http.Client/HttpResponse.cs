@@ -46,14 +46,14 @@ namespace DocaLabs.Http.Client
         public bool SupportsHeaders { get { return Response.SupportsHeaders; } }
 
         /// <summary>
-        /// Initializes an instance of the HttpResponse class with provided WebRequest instance.
+        /// Initializes an instance of the HttpResponse class for the provided WebRequest instance.
         /// </summary>
-        public HttpResponse(WebResponse response)
+        public HttpResponse(WebRequest request)
         {
-            if (response == null)
-                throw new ArgumentNullException("response");
+            if (request == null)
+                throw new ArgumentNullException("request");
 
-            Response = response;
+            Response = request.GetResponse();
 
             RawResponseStream = Response.GetResponseStream();
             if (RawResponseStream == null)
@@ -109,7 +109,7 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
-        /// Returns the response stream, if the content is encoded (compressed) then it will be decoded using decoder provided by CurrentEncodingProvider.Current.
+        /// Returns the response stream, if the content is encoded (compressed) then it will be decoded using decoder provided by ContentDecoderFactory.
         /// </summary>
         /// <returns>RawResponseStream or a stream containing decoded content.</returns>
         public Stream GetDataStream()

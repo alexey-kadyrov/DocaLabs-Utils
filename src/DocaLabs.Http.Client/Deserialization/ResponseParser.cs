@@ -65,7 +65,7 @@ namespace DocaLabs.Http.Client.Deserialization
             if(request == null)
                 throw new ArgumentNullException("request");
 
-            using (var response = new HttpResponse(request.GetResponse()))
+            using (var response = new HttpResponse(request))
             {
                 return TransformResult(response, resultType);
             }

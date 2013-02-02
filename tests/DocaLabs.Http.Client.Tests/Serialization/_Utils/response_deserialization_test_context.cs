@@ -23,7 +23,10 @@ namespace DocaLabs.Http.Client.Tests.Serialization._Utils
             mock_web_response.Object.ContentType = contentType;
             mock_web_response.Object.ContentLength = stream.Length;
 
-            http_response = new HttpResponse(mock_web_response.Object);
+            var request = new Mock<WebRequest>();
+            request.Setup(x => x.GetResponse()).Returns(mock_web_response.Object);
+
+            http_response = new HttpResponse(request.Object);
         }
     }
 }

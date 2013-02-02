@@ -16,6 +16,7 @@ namespace DocaLabs.Http.Client.Tests
 
     class HttpResponseTestContext
     {
+        public Mock<WebRequest> MockWebRequest { get; private set; }
         public Mock<WebResponse> MockWebResponse { get; private set; }
 
         public HttpResponseTestContext(string contentType, Stream stream)
@@ -27,6 +28,9 @@ namespace DocaLabs.Http.Client.Tests
             
             if (stream != null) 
                 MockWebResponse.Object.ContentLength = stream.Length;
+
+            MockWebRequest = new Mock<WebRequest>();
+            MockWebRequest.Setup(x => x.GetResponse()).Returns(MockWebResponse.Object);
         }
     }
 
@@ -41,7 +45,7 @@ namespace DocaLabs.Http.Client.Tests
         {
             response_stream = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!"));
             test_context = new HttpResponseTestContext("text/plain", response_stream);
-            response = new HttpResponse(test_context.MockWebResponse.Object);
+            response = new HttpResponse(test_context.MockWebRequest.Object);
         };
 
         Because of =
@@ -94,7 +98,7 @@ namespace DocaLabs.Http.Client.Tests
             () => test_context = new HttpResponseTestContext("text/plain", null);
 
         Because of =
-            () => exception = Catch.Exception(() => new HttpResponse(test_context.MockWebResponse.Object));
+            () => exception = Catch.Exception(() => new HttpResponse(test_context.MockWebRequest.Object));
 
         It should_throw_http_client_exception =
             () => exception.ShouldBeOfType<HttpClientException>();
@@ -117,7 +121,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => response = new HttpResponse(test_context.MockWebResponse.Object);
+            () => response = new HttpResponse(test_context.MockWebRequest.Object);
 
         It should_return_all_byte_array_data =
             () => Encoding.UTF8.GetString(response.AsByteArray()).ShouldEqual("Hello World!");
@@ -137,7 +141,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => response = new HttpResponse(test_context.MockWebResponse.Object);
+            () => response = new HttpResponse(test_context.MockWebRequest.Object);
 
         It should_deserialize_string_data =
             () => response.AsString().ShouldEqual("Hello World!");
