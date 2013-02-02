@@ -5,7 +5,7 @@ namespace DocaLabs.Http.Client.Deserialization
     /// <summary>
     /// Defines base class for attributes that are used to deserialize objects from a web response stream.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
     public abstract class ResponseDeserializationAttribute : Attribute, IResponseDeserialization
     {
         /// <summary>

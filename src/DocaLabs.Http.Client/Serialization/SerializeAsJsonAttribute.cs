@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace DocaLabs.Http.Client.Serialization
 {
     /// <summary>
-    /// Serializes a given object into the web request in json format, the string is encoded as UTF8.
+    /// Serializes a given object into the web request in json format.
     /// </summary>
     public class SerializeAsJsonAttribute : RequestSerializationAttribute
     {
@@ -18,8 +18,7 @@ namespace DocaLabs.Http.Client.Serialization
         public string RequestContentEncoding { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of text encoding to be used for Xml serialization.
-        /// The default value is UTF-8.
+        /// Gets or sets the type of text encoding to be used for Xml serialization. The default value is UTF-8.
         /// </summary>
         public string CharSet { get; set; }
 

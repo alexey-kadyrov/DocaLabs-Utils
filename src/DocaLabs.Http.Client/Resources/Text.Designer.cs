@@ -79,15 +79,6 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Declaring type for {0} is unknown..
-        /// </summary>
-        internal static string declaring_is_unknown {
-            get {
-                return ResourceManager.GetString("declaring_is_unknown", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Expected that {0} will be Image or Bitmap classes..
         /// </summary>
         internal static string expected_retsult_to_be_image_or_bitmap_classes {
@@ -120,15 +111,6 @@ namespace DocaLabs.Http.Client.Resources {
         internal static string if_base_class_generic_it_must_have_two_parameters {
             get {
                 return ResourceManager.GetString("if_base_class_generic_it_must_have_two_parameters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The type {0} must have only one method..
-        /// </summary>
-        internal static string maust_have_only_one_method {
-            get {
-                return ResourceManager.GetString("maust_have_only_one_method", resourceCulture);
             }
         }
         

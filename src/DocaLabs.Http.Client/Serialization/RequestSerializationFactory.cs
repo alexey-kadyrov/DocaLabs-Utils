@@ -14,9 +14,6 @@ namespace DocaLabs.Http.Client.Serialization
         ///     2. One of it's properties
         ///     3. HttpClient level
         /// </summary>
-        /// <param name="httpClient"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
         public static IRequestSerialization GetSerializer(object httpClient, object query)
         {
             if(httpClient == null)

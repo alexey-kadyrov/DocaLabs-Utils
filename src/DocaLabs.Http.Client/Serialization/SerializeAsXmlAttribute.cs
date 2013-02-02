@@ -19,14 +19,12 @@ namespace DocaLabs.Http.Client.Serialization
         public string RequestContentEncoding { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of text encoding to be used for Xml serialization.
-        /// The default value is UTF-8.
+        /// Gets or sets the type of text encoding to be used for Xml serialization. The default value is UTF-8.
         /// </summary>
         public string Encoding { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to indent elements.
-        /// The default values is true.
+        /// Gets or sets a value indicating whether to indent elements. The default values is true.
         /// </summary>
         public bool Indent { get; set; }
 
