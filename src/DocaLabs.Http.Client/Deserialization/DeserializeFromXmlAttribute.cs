@@ -5,12 +5,12 @@ using System.Xml.Serialization;
 namespace DocaLabs.Http.Client.Deserialization
 {
     /// <summary>
-    /// Deserializes xml serialized object from the web response.
+    /// Deserializes xml object from the web response.
     /// </summary>
     public class DeserializeFromXmlAttribute : ResponseDeserializationAttribute
     {
         /// <summary>
-        /// Deserializes xml serialized object from the web response.
+        /// Deserializes xml object from the web response.
         /// </summary>
         public override object Deserialize(HttpResponse response, Type resultType)
         {

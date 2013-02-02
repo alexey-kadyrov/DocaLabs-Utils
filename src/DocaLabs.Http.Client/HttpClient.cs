@@ -221,6 +221,14 @@ namespace DocaLabs.Http.Client
                 {
                     return action();
                 }
+                catch (ArgumentException)
+                {
+                    throw;
+                }
+                catch (NullReferenceException)
+                {
+                    throw;
+                }
                 catch (UnrecoverableHttpClientException)
                 {
                     throw;

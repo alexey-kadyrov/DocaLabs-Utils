@@ -6,8 +6,7 @@ using System.Net;
 namespace DocaLabs.Http.Client.Deserialization
 {
     /// <summary>
-    /// Defines helper methods to deserialize the web response.
-    /// All public methods are thread safe.
+    /// Defines helper methods to deserialize a web response. All public methods are thread safe.
     /// </summary>
     public static class ResponseParser
     {
@@ -15,7 +14,7 @@ namespace DocaLabs.Http.Client.Deserialization
         static List<IResponseDeserializationProvider> _providers;
 
         /// <summary>
-        /// Gets or sets the list of providers.
+        /// Gets or sets the list of deserialization providers.
         /// </summary>
         public static List<IResponseDeserializationProvider> Providers
         {
@@ -56,7 +55,7 @@ namespace DocaLabs.Http.Client.Deserialization
         }
 
         /// <summary>
-        /// Gets the web response and tries to deserialize the response. It tries to do:
+        /// Gets the web response and tries to deserialize the response.
         ///     1. To get ResponseDeserializationAttribute if defined on TResult class.
         ///     2. Tries to find deserialization provider among the registered.
         /// </summary>

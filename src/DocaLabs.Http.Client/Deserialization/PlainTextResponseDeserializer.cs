@@ -4,7 +4,7 @@ using DocaLabs.Utils.Conversion;
 namespace DocaLabs.Http.Client.Deserialization
 {
     /// <summary>
-    /// Deserializes the response stream as plain string and then converts to the resulting type.
+    /// Deserializes the response stream as plain string and then converts it to the resulting type.
     /// </summary>
     public class PlainTextResponseDeserializer : IResponseDeserializationProvider
     {

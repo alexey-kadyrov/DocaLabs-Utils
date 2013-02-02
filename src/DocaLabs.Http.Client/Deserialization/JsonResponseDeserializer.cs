@@ -23,9 +23,16 @@ namespace DocaLabs.Http.Client.Deserialization
 
             var s = response.AsString();
 
-            return string.IsNullOrWhiteSpace(s)
-                ? null
-                : JsonConvert.DeserializeObject(s, resultType);
+            try
+            {
+                return string.IsNullOrWhiteSpace(s)
+                    ? null
+                    : JsonConvert.DeserializeObject(s, resultType);
+            }
+            catch (Exception e)
+            {
+                throw new UnrecoverableHttpClientException(e.Message, e);
+            }
         }
 
         /// <summary>

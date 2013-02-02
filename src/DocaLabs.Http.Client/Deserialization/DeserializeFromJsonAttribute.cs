@@ -4,12 +4,12 @@ using Newtonsoft.Json;
 namespace DocaLabs.Http.Client.Deserialization
 {
     /// <summary>
-    /// Deserializes json serialized object from the web response.
+    /// Deserializes JSON object from the web response.
     /// </summary>
     public class DeserializeFromJsonAttribute : ResponseDeserializationAttribute
     {
         /// <summary>
-        /// Deserializes json serialized object from the web response.
+        /// Deserializes JSON object from the web response.
         /// </summary>
         public override object Deserialize(HttpResponse response, Type resultType)
         {
@@ -21,9 +21,16 @@ namespace DocaLabs.Http.Client.Deserialization
 
             var s = response.AsString();
 
-            return string.IsNullOrWhiteSpace(s)
-                ? null
-                : JsonConvert.DeserializeObject(s, resultType);
+            try
+            {
+                return string.IsNullOrWhiteSpace(s)
+                    ? null
+                    : JsonConvert.DeserializeObject(s, resultType);
+            }
+            catch (Exception e)
+            {
+                throw new UnrecoverableHttpClientException(e.Message, e);
+            }
         }
     }
 }
