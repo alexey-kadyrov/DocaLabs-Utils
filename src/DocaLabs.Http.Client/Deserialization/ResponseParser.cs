@@ -60,7 +60,7 @@ namespace DocaLabs.Http.Client.Deserialization
         ///     1. To get ResponseDeserializationAttribute if defined on TResult class.
         ///     2. Tries to find deserialization provider among the registered.
         /// </summary>
-        public static object Parse(this WebRequest request, Type resultType)
+        public static object Parse(WebRequest request, Type resultType)
         {
             if(request == null)
                 throw new ArgumentNullException("request");
@@ -100,23 +100,6 @@ namespace DocaLabs.Http.Client.Deserialization
             }
 
             return providers.FirstOrDefault(x => x.CheckIfSupports(response, resultType));
-        }
-
-        /// <summary>
-        /// Returns true if the type is primitive or string/decimal/Guid/dateTime/TimeSpan/DateTimeOffset.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static bool IsSimpleType(this Type type)
-        {
-            return (type == typeof(string) ||
-                    type.IsPrimitive ||
-                    type == typeof(decimal) ||
-                    type == typeof(Guid) ||
-                    type == typeof(DateTime) ||
-                    type == typeof(TimeSpan) ||
-                    type == typeof(DateTimeOffset) ||
-                    type.IsEnum);
         }
     }
 }

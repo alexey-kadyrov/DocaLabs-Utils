@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.Net;
@@ -12,7 +11,7 @@ namespace DocaLabs.Http.Client.Configuration
     public class HttpClientEndpointElement : ConfigurationElement
     {
         const string NameProperty = "name";
-        const string ServiceUrlProperty = "serviceUrl";
+        const string BaseUrlProperty = "baseUrl";
         const string TimeoutProperty = "timeout";
         const string HeadersProperty = "headers";
         const string ClientCertificatesProperty = "clientCertificates";
@@ -38,13 +37,13 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the ServiceUrl.
+        /// Gets or sets the BaseUrl.
         /// </summary>
-        [ConfigurationProperty(ServiceUrlProperty, IsRequired = false), TypeConverter(typeof(UriTypeConverter))]
-        public Uri ServiceUrl
+        [ConfigurationProperty(BaseUrlProperty, IsRequired = false), TypeConverter(typeof(UriTypeConverter))]
+        public Uri BaseUrl
         {
-            get { return ((Uri)base[ServiceUrlProperty]); }
-            set { base[ServiceUrlProperty] = value; }
+            get { return ((Uri)base[BaseUrlProperty]); }
+            set { base[BaseUrlProperty] = value; }
         }
 
         /// <summary>
@@ -84,6 +83,9 @@ namespace DocaLabs.Http.Client.Configuration
             get { return ((HttpClientProxyElement)base[ProxyProperty]); }
         }
 
+        /// <summary>
+        /// If headers are defined in the endpoint configuration then the methods adds them to the request.
+        /// </summary>
         public void AddHeaders(WebRequest request)
         {
             if (request == null)
@@ -93,6 +95,9 @@ namespace DocaLabs.Http.Client.Configuration
                 request.Headers.Add(name, Headers[name].Value);
         }
 
+        /// <summary>
+        /// If client certificates are defined in the endpoint configuration then the methods adds them to the request.
+        /// </summary>
         public void AddClientCertificates(HttpWebRequest request)
         {
             if (request == null)
@@ -102,6 +107,9 @@ namespace DocaLabs.Http.Client.Configuration
                 request.ClientCertificates.AddRange(certRef.Find());
         }
 
+        /// <summary>
+        /// If web proxy are defined in the endpoint configuration then the methods adds it to the request.
+        /// </summary>
         public void SetWebProxy(WebRequest request)
         {
             if (request != null && Proxy.Address != null)

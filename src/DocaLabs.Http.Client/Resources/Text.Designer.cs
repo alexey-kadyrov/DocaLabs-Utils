@@ -205,7 +205,7 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to execute the service query, will try again. Trying {0} out of {1}.
+        ///   Looks up a localized string similar to Failed to execute the service query, will try again. Attempt {0}..
         /// </summary>
         internal static string will_try_again {
             get {

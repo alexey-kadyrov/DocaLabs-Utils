@@ -94,7 +94,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         {
         }
 
-        protected override Result DoExecute(Query query)
+        protected override Result ExecutePipeline(Query query)
         {
             Thread.Sleep(30);
             return new Result {Data = "Hello!"};
@@ -108,7 +108,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         {
         }
 
-        protected override TResult DoExecute(TQuery query)
+        protected override TResult ExecutePipeline(TQuery query)
         {
             Thread.Sleep(30);
             return default(TResult);

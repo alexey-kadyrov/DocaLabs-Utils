@@ -55,6 +55,7 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="HttpClientFactory.cs" />
     <Compile Include="Mapping\UrlBuilder.cs" />
     <Compile Include="Deserialization\ImageResponseDeserializer.cs" />
