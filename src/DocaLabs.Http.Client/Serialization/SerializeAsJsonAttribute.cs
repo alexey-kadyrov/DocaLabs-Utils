@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text;
 using DocaLabs.Http.Client.ContentEncoding;
-using Newtonsoft.Json;
+using DocaLabs.Http.Client.JsonSerialization;
 
 namespace DocaLabs.Http.Client.Serialization
 {
@@ -37,7 +37,7 @@ namespace DocaLabs.Http.Client.Serialization
         /// <param name="request">Web request where to serialize to.</param>
         public override void Serialize(object obj, WebRequest request)
         {
-            var data = Encoding.GetEncoding(CharSet).GetBytes(JsonConvert.SerializeObject(obj));
+            var data = Encoding.GetEncoding(CharSet).GetBytes(JsonSerializationProvider.Serializer.Serialize(obj));
 
             request.ContentType = string.Format("application/json; charset={0}", CharSet);
             

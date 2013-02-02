@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using DocaLabs.Http.Client.JsonSerialization;
 
 namespace DocaLabs.Http.Client.Deserialization
 {
@@ -27,7 +27,7 @@ namespace DocaLabs.Http.Client.Deserialization
             {
                 return string.IsNullOrWhiteSpace(s)
                     ? null
-                    : JsonConvert.DeserializeObject(s, resultType);
+                    : JsonSerializationProvider.Deserializer.Deserialize(s, resultType);
             }
             catch (Exception e)
             {

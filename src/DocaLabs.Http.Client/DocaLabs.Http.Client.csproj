@@ -36,15 +36,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,6 +54,11 @@
     </Compile>
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="HttpClientFactory.cs" />
+    <Compile Include="JsonSerialization\DefaultJsonDeserializer.cs" />
+    <Compile Include="JsonSerialization\DefaultJsonSerializer.cs" />
+    <Compile Include="JsonSerialization\IJsonDeserializer.cs" />
+    <Compile Include="JsonSerialization\IJsonSerializer.cs" />
+    <Compile Include="JsonSerialization\JsonSerializationProvider.cs" />
     <Compile Include="Mapping\UrlBuilder.cs" />
     <Compile Include="Deserialization\ImageResponseDeserializer.cs" />
     <Compile Include="Deserialization\PlainTextResponseDeserializer.cs" />
@@ -114,9 +116,6 @@
       <DependentUpon>Text.resx</DependentUpon>
     </Compile>
     <Compile Include="UnrecoverableHttpClientException.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Text.resx">
