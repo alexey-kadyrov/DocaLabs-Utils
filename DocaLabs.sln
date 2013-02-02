@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Integr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "http client", "http client", "{4F283970-3D09-4C81-AE3A-F842E154D731}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Extensions.Http.Client.NewtonSoft", "src\DocaLabs.Extensions.Http.Client.NewtonSoft\DocaLabs.Extensions.Http.Client.NewtonSoft.csproj", "{BFC334E3-25E4-4973-89B8-6B25276859B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,12 @@ Global
 		{A10951A1-8B5D-4518-93D5-C43476A52B41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A10951A1-8B5D-4518-93D5-C43476A52B41}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A10951A1-8B5D-4518-93D5-C43476A52B41}.Release|x86.ActiveCfg = Release|Any CPU
+		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -165,5 +173,6 @@ Global
 		{DAA776B9-F2AE-41EE-AED7-9CE6EA13E0E8} = {83F73951-F20B-495D-AE9D-3BE9250766F2}
 		{9C54FC39-7A6D-4E02-9518-325D8732792E} = {83F73951-F20B-495D-AE9D-3BE9250766F2}
 		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {4F283970-3D09-4C81-AE3A-F842E154D731}
+		{BFC334E3-25E4-4973-89B8-6B25276859B2} = {4F283970-3D09-4C81-AE3A-F842E154D731}
 	EndGlobalSection
 EndGlobal

@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
+using DocaLabs.Http.Client.JsonSerialization;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Mapping
@@ -15,6 +16,8 @@ namespace DocaLabs.Http.Client.Tests.Mapping
 
         Because of = () =>
         {
+            var sss = JsonSerializationProvider.Serializer;
+
             var s1 = HttpClientFactory.CreateInstance(typeof(TestHttpClient2<,>), typeof(IService1), new Uri("http://www.contoso.foo/")) as IService1;
             s1.Put(new Query());
 

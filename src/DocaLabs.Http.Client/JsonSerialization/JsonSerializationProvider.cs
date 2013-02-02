@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.Composition;
+using DocaLabs.Utils;
 
 namespace DocaLabs.Http.Client.JsonSerialization
 {
@@ -64,8 +66,21 @@ namespace DocaLabs.Http.Client.JsonSerialization
         static JsonSerializationProvider()
         {
             Locker = new object();
-            _serializer = new DefaultJsonSerializer();
-            _deserializer = new DefaultJsonDeserializer();
+
+            var loader = new ExtensionLoader();
+            LibraryExtensionsComposer.ComposePartsFor(loader);
+
+            _serializer = loader.SerializerExtension ?? new DefaultJsonSerializer();
+            _deserializer = loader.DeserializerExtension ?? new DefaultJsonDeserializer();
+        }
+
+        class ExtensionLoader
+        {
+            [Import]
+            public IJsonSerializer SerializerExtension { get; set; }
+
+            [Import]
+            public IJsonDeserializer DeserializerExtension { get; set; }
         }
     }
 }
