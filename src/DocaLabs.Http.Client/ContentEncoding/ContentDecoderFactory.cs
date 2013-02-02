@@ -7,8 +7,8 @@ using DocaLabs.Http.Client.Resources;
 namespace DocaLabs.Http.Client.ContentEncoding
 {
     /// <summary>
-    /// Defines a decoder factory. By default the factory is populated by decoders that use standard .Net GZipStream and DeflateStream 
-    /// for gzip/x-gzip/deflate encodings, if you want to support other or replace the implementation you can use provided methods.
+    /// Defines a decoder factory. By default the factory is populated by decoders that use 
+    /// standard .Net GZipStream and DeflateStream for gzip/x-gzip/deflate encodings.
     /// </summary>
     public static class ContentDecoderFactory
     {
@@ -64,7 +64,7 @@ namespace DocaLabs.Http.Client.ContentEncoding
         }
 
         /// <summary>
-        /// Adds supported decoders into accept-encoding header
+        /// Adds supported decoders into accept-encoding header of the request.
         /// </summary>
         static public void AddAcceptEncodings(WebRequest request)
         {

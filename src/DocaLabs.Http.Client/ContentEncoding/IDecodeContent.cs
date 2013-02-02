@@ -3,12 +3,12 @@ using System.IO;
 namespace DocaLabs.Http.Client.ContentEncoding
 {
     /// <summary>
-    /// Defines decoder for the http content.
+    /// Defines methods to get a decoder stream for the http content.
     /// </summary>
     public interface IDecodeContent
     {
         /// <summary>
-        /// Decodes a stream and returns stream with already decoded data or stream that can decode them.
+        /// Returns stream that can be used to decompress data.
         /// </summary>
         Stream GetDecompressionStream(Stream stream);
     }
