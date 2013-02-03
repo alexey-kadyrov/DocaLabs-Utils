@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Text;
 using DocaLabs.Http.Client.ContentEncoding;
@@ -37,7 +38,10 @@ namespace DocaLabs.Http.Client.RequestSerialization
         /// <param name="request">Web request where to serialize to.</param>
         public override void Serialize(object obj, WebRequest request)
         {
-            var data = Encoding.GetEncoding(CharSet).GetBytes(JsonSerializationProvider.Serializer.Serialize(obj));
+            if(request == null)
+                throw new ArgumentNullException("request");
+
+            var data = Encoding.GetEncoding(CharSet).GetBytes(obj == null ? "" : JsonSerializationProvider.Serializer.Serialize(obj));
 
             request.ContentType = string.Format("application/json; charset={0}", CharSet);
             

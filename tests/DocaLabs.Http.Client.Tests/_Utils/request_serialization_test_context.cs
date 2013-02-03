@@ -9,7 +9,7 @@ using Machine.Specifications;
 using Moq;
 using Newtonsoft.Json;
 
-namespace DocaLabs.Http.Client.Tests.Serialization._Utils
+namespace DocaLabs.Http.Client.Tests._Utils
 {
     public class request_serialization_test_context
     {

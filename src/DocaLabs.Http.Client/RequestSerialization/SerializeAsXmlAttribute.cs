@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Xml;
 using System.Xml.Serialization;
@@ -69,6 +70,12 @@ namespace DocaLabs.Http.Client.RequestSerialization
         /// </summary>
         public override void Serialize(object obj, WebRequest request)
         {
+            if(request == null)
+                throw new ArgumentNullException("request");
+
+            if(obj == null)
+                throw new ArgumentNullException("obj");
+
             request.ContentType = "text/xml";
 
             if (string.IsNullOrWhiteSpace(RequestContentEncoding))

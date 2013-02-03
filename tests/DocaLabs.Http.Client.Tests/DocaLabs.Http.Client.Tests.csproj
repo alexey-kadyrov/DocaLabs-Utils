@@ -72,14 +72,15 @@
     </Compile>
     <Compile Include="HttpResponseTests.cs" />
     <Compile Include="Mapping\when.cs" />
-    <Compile Include="Serialization\DeserializeFromXmlAttributeTests.cs" />
-    <Compile Include="Serialization\_Utils\request_serialization_test_context.cs" />
-    <Compile Include="Serialization\SerializeAsFormAttributeTests.cs" />
-    <Compile Include="Serialization\SerializeAsJsonAttributeTests.cs" />
-    <Compile Include="Serialization\SerializeAsXmlAttributeTests.cs" />
+    <Compile Include="RequestSerialization\RequestBodySerializationFactoryTests.cs" />
+    <Compile Include="ResponseDeserialization\DeserializeFromXmlAttributeTests.cs" />
+    <Compile Include="_Utils\request_serialization_test_context.cs" />
+    <Compile Include="RequestSerialization\SerializeAsFormAttributeTests.cs" />
+    <Compile Include="RequestSerialization\SerializeAsJsonAttributeTests.cs" />
+    <Compile Include="RequestSerialization\SerializeAsXmlAttributeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialization\DeserializeFromJsonAttributeTests.cs" />
-    <Compile Include="Serialization\_Utils\response_deserialization_test_context.cs" />
+    <Compile Include="ResponseDeserialization\DeserializeFromJsonAttributeTests.cs" />
+    <Compile Include="_Utils\response_deserialization_test_context.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">

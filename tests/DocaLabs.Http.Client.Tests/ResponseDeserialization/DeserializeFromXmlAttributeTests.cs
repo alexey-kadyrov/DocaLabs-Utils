@@ -1,12 +1,11 @@
 ﻿using System.IO;
 using System.Text;
 using DocaLabs.Http.Client.ResponseDeserialization;
-using DocaLabs.Http.Client.Tests.Serialization._Utils;
+using DocaLabs.Http.Client.Tests._Utils;
 using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;
-using It = Machine.Specifications.It;
 
-namespace DocaLabs.Http.Client.Tests.Serialization
+namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
 {
     [Subject(typeof(DeserializeFromXmlAttribute))]
     class when_deserialize_from_xml_attribute_is_used : response_deserialization_test_context

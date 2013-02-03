@@ -92,8 +92,8 @@ namespace DocaLabs.Http.Client.Tests.Mapping
 
     public class TestHttpClient : HttpClient<Query, Result>
     {
-        public TestHttpClient(Uri serviceUrl, string configurationName)
-            : base(serviceUrl, configurationName)
+        public TestHttpClient(Uri baseUrl, string configurationName)
+            : base(baseUrl, configurationName)
         {
         }
 
@@ -106,8 +106,8 @@ namespace DocaLabs.Http.Client.Tests.Mapping
 
     public class TestHttpClient2<TQuery, TResult> : HttpClient<TQuery, TResult>
     {
-        public TestHttpClient2(Uri serviceUrl, string configurationName)
-            : base(serviceUrl, configurationName)
+        public TestHttpClient2(Uri baseUrl, string configurationName)
+            : base(baseUrl, configurationName)
         {
         }
 

@@ -5,7 +5,7 @@ namespace DocaLabs.Http.Client.RequestSerialization
     /// <summary>
     /// Defines methods to get IRequestSerialization for an http client and query. All public methods are thread safe.
     /// </summary>
-    public static class RequestSerializationFactory
+    public static class RequestBodySerializationFactory
     {
         /// <summary>
         /// Gets IRequestSerialization for an http client and query.

@@ -1,12 +1,12 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using DocaLabs.Http.Client.ContentEncoding;
 using DocaLabs.Http.Client.RequestSerialization;
-using DocaLabs.Http.Client.Tests.Serialization._Utils;
+using DocaLabs.Http.Client.Tests._Utils;
 using DocaLabs.Testing.Common.MSpec;
 using Machine.Specifications;
-using It = Machine.Specifications.It;
 
-namespace DocaLabs.Http.Client.Tests.Serialization
+namespace DocaLabs.Http.Client.Tests.RequestSerialization
 {
     [Subject(typeof(SerializeAsJsonAttribute))]
     class when_serialize_as_json_attribute_is_used : request_serialization_test_context
@@ -108,5 +108,42 @@ namespace DocaLabs.Http.Client.Tests.Serialization
 
         It should_set_request_content_encoding_to_null =
             () => attribute.RequestContentEncoding.ShouldBeNull();
+    }
+
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    class when_serialize_as_json_attribute_is_used_with_null_object : request_serialization_test_context
+    {
+        static SerializeAsJsonAttribute attribute;
+
+        Establish context =
+            () => attribute = new SerializeAsJsonAttribute();
+
+        Because of =
+            () => attribute.Serialize(null, mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_json_with_utf_8_charset =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-8");
+
+        It should_serialize_to_empty_string =
+            () => GetRequestData().ShouldBeEmpty();
+    }
+
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    public class when_serialize_as_json_attribute_is_used_with_null_request
+    {
+        static Exception exception;
+        static SerializeAsJsonAttribute attribute;
+
+        Establish context =
+            () => attribute = new SerializeAsJsonAttribute();
+
+        Because of =
+            () => exception = Catch.Exception(() => attribute.Serialize(null, null));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_request_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("request");
     }
 }

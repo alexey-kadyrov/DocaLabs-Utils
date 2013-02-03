@@ -2,7 +2,7 @@
 using System.Net;
 using Moq;
 
-namespace DocaLabs.Http.Client.Tests.Serialization._Utils
+namespace DocaLabs.Http.Client.Tests._Utils
 {
     public class response_deserialization_test_context
     {

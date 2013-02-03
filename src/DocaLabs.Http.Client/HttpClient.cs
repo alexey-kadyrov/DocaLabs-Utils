@@ -71,19 +71,19 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Initializes a new instance of the HttpClient.
         /// </summary>
-        /// <param name="serviceUrl">The URL of the service.</param>
+        /// <param name="baseUrl">The URL of the service.</param>
         /// <param name="configurationName">If the configuration name is not null it'll be used to get the endpoint configuration from the config file.</param>
         /// <param name="retryStrategy">If the parameter null then the default retry strategy will be used.</param>
-        public HttpClient(Uri serviceUrl = null, string configurationName = null, Func<Func<TResult>, TResult> retryStrategy = null)
+        public HttpClient(Uri baseUrl = null, string configurationName = null, Func<Func<TResult>, TResult> retryStrategy = null)
         {
-            BaseUrl = serviceUrl;
+            BaseUrl = baseUrl;
             RetryStrategy = retryStrategy ?? GetDefaultRetryStrategy();
             AutoSetAcceptEncoding = true;
 
             ReadConfiguration(configurationName);
 
             if(BaseUrl == null)
-                throw new ArgumentException(Resources.Text.service_url_is_not_defined, "serviceUrl");
+                throw new ArgumentException(Resources.Text.service_url_is_not_defined, "baseUrl");
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual void TryWriteRequestData(TQuery query, WebRequest request)
         {
-            var serializer = RequestSerializationFactory.GetSerializer(this, query);
+            var serializer = RequestBodySerializationFactory.GetSerializer(this, query);
             if(serializer != null)
                 serializer.Serialize(query, request);
         }

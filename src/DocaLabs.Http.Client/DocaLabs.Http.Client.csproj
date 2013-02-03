@@ -84,7 +84,7 @@
     <Compile Include="Configuration\HttpClientProxyElement.cs" />
     <Compile Include="RequestSerialization\IRequestSerialization.cs" />
     <Compile Include="ResponseDeserialization\IResponseDeserialization.cs" />
-    <Compile Include="RequestSerialization\RequestSerializationFactory.cs" />
+    <Compile Include="RequestSerialization\RequestBodySerializationFactory.cs" />
     <Compile Include="ResponseDeserialization\ResponseParser.cs" />
     <Compile Include="RequestSerialization\SerializeAsFormAttribute.cs" />
     <Compile Include="Mapping\QueryPropertyParserAttribute.cs" />
