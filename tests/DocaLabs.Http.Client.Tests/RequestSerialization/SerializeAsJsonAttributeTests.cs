@@ -129,16 +129,25 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
     }
 
     [Subject(typeof(SerializeAsJsonAttribute))]
-    public class when_serialize_as_json_attribute_is_used_with_null_request
+    public class when_serialize_as_json_attribute_is_used_with_null_request : request_serialization_test_context
     {
         static Exception exception;
+        static TestTarget original_object;
         static SerializeAsJsonAttribute attribute;
 
-        Establish context =
-            () => attribute = new SerializeAsJsonAttribute();
+        Establish context = () =>
+        {
+            original_object = new TestTarget
+            {
+                Value1 = 2012,
+                Value2 = "Hello World!"
+            };
+
+            attribute = new SerializeAsJsonAttribute { CharSet = Encoding.UTF32.WebName };
+        };
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.Serialize(null, null));
+            () => exception = Catch.Exception(() => attribute.Serialize(original_object, null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
