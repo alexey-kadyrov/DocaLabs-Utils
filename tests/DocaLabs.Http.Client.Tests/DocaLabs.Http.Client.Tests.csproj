@@ -73,7 +73,10 @@
     <Compile Include="HttpResponseTests.cs" />
     <Compile Include="Mapping\when.cs" />
     <Compile Include="RequestSerialization\RequestBodySerializationFactoryTests.cs" />
+    <Compile Include="ResponseDeserialization\PlainTextResponseDeserializerTests.cs" />
+    <Compile Include="ResponseDeserialization\XmlResponseDeserializerTests.cs" />
     <Compile Include="ResponseDeserialization\DeserializeFromXmlAttributeTests.cs" />
+    <Compile Include="ResponseDeserialization\JsonResponseDeserializerTests.cs" />
     <Compile Include="_Utils\request_serialization_test_context.cs" />
     <Compile Include="RequestSerialization\SerializeAsFormAttributeTests.cs" />
     <Compile Include="RequestSerialization\SerializeAsJsonAttributeTests.cs" />

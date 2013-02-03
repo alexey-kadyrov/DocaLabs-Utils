@@ -98,7 +98,7 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
                 providers = _providers;
             }
 
-            return providers.FirstOrDefault(x => x.CheckIfSupports(response, resultType));
+            return providers.FirstOrDefault(x => x.CanDeserialize(response, resultType));
         }
     }
 }

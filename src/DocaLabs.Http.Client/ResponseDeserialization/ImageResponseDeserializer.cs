@@ -41,7 +41,7 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
         /// <summary>
         /// Returns true if the content type is 'image/gif'/'image/jpeg'/'image/tiff'/'image/png' and the TResult is not "simple type", like int, string, Guid, double, etc.
         /// </summary>
-        public bool CheckIfSupports(HttpResponse response, Type resultType)
+        public bool CanDeserialize(HttpResponse response, Type resultType)
         {
             if (response == null)
                 throw new ArgumentNullException("response");

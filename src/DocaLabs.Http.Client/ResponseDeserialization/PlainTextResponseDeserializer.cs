@@ -21,7 +21,11 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
 
             try
             {
-                return CustomConverter.Current.ChangeType(response.AsString(), resultType);
+                var value = response.AsString();
+
+                return string.IsNullOrWhiteSpace(value)
+                    ? resultType.GetDefaultValue()
+                    : CustomConverter.Current.ChangeType(value, resultType);
             }
             catch (Exception e)
             {
@@ -33,7 +37,7 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
         /// Returns true if the content type is 'text/plain' and the TResult is "simple type", like int, string, Guid, double, etc.
         /// or if the content type is 'text/html' and the TResult is string.
         /// </summary>
-        public bool CheckIfSupports(HttpResponse response, Type resultType)
+        public bool CanDeserialize(HttpResponse response, Type resultType)
         {
             if (response == null)
                 throw new ArgumentNullException("response");
