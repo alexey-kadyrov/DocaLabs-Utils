@@ -10,6 +10,19 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
     public class XmlResponseDeserializer : IResponseDeserializationProvider
     {
         /// <summary>
+        /// Gets or sets a value that determines the processing of DTDs.  The value is static because the class is meant to be used
+        /// unobtrusively and is not accessible directly in the http request pipeline per instance base.
+        /// The property is not thread safe so it should be set before the first usage.
+        /// The default value is DtdProcessing.Ignore.
+        /// </summary>
+        public static DtdProcessing DtdProcessing { get; set; }
+
+        static XmlResponseDeserializer()
+        {
+            DtdProcessing = DtdProcessing.Ignore;
+        }
+
+        /// <summary>
         /// Deserializes the response stream content using JSON format.
         /// The method is using XmlSerializer with default settings except the DTD processing is set to ignore.
         /// </summary>
@@ -22,7 +35,7 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
                 throw new ArgumentNullException("resultType");
 
             // stream is disposed by the reader
-            using (var reader = XmlReader.Create(response.GetDataStream(), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore }))
+            using (var reader = XmlReader.Create(response.GetDataStream(), GetXmlReaderSettings()))
             {
                 return new XmlSerializer(resultType).Deserialize(reader);
             }
@@ -43,6 +56,15 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
                 (!string.IsNullOrWhiteSpace(response.ContentType)) &&
                 string.Compare(response.ContentType, "text/xml", StringComparison.OrdinalIgnoreCase) == 0 &&
                 (!resultType.IsSimpleType());
+        }
+
+        static XmlReaderSettings GetXmlReaderSettings()
+        {
+            return new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing,
+                ValidationType = DtdProcessing == DtdProcessing.Parse ? ValidationType.DTD : ValidationType.None
+            };
         }
     }
 }

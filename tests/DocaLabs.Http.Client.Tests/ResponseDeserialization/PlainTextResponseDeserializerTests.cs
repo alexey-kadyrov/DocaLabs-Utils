@@ -11,17 +11,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_plain_text_deserializer_is_used_for_string_result : response_deserialization_test_context
     {
         const string data = "Hello World!";
-        static PlainTextResponseDeserializer attribute;
+        static PlainTextResponseDeserializer deserializer;
         static string target;
 
         Establish context = () =>
         {
-            attribute = new PlainTextResponseDeserializer();
+            deserializer = new PlainTextResponseDeserializer();
             Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => target = (string)attribute.Deserialize(http_response, typeof(string));
+            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
 
         It should_deserialize_string = 
             () => target.ShouldEqual("Hello World!");
@@ -31,17 +31,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_plain_text_deserializer_is_used_for_decimal_result : response_deserialization_test_context
     {
         const string data = "42.55";
-        static PlainTextResponseDeserializer attribute;
+        static PlainTextResponseDeserializer deserializer;
         static decimal target;
 
         Establish context = () =>
         {
-            attribute = new PlainTextResponseDeserializer();
+            deserializer = new PlainTextResponseDeserializer();
             Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => target = (decimal)attribute.Deserialize(http_response, typeof(decimal));
+            () => target = (decimal)deserializer.Deserialize(http_response, typeof(decimal));
 
         It should_deserialize_decimal =
             () => target.ShouldEqual(42.55M);
@@ -51,17 +51,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_plain_text_deserializer_is_used_with_empty_response_stream_for_string_result : response_deserialization_test_context
     {
         const string data = "";
-        static PlainTextResponseDeserializer attribute;
+        static PlainTextResponseDeserializer deserializer;
         static string target;
 
         Establish context = () =>
         {
-            attribute = new PlainTextResponseDeserializer();
+            deserializer = new PlainTextResponseDeserializer();
             Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => target = (string)attribute.Deserialize(http_response, typeof(string));
+            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
 
         It should_return_null =
             () => target.ShouldBeNull();
@@ -71,17 +71,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_plain_text_deserializer_is_used_with_empty_response_stream_for_decimal_result : response_deserialization_test_context
     {
         const string data = "";
-        static PlainTextResponseDeserializer attribute;
+        static PlainTextResponseDeserializer deserializer;
         static decimal target;
 
         Establish context = () =>
         {
-            attribute = new PlainTextResponseDeserializer();
+            deserializer = new PlainTextResponseDeserializer();
             Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => target = (decimal)attribute.Deserialize(http_response, typeof(decimal));
+            () => target = (decimal)deserializer.Deserialize(http_response, typeof(decimal));
 
         It should_return_default_value_for_decimal =
             () => target.ShouldEqual(default(decimal));
@@ -92,16 +92,16 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     {
         const string data = "Hello World!";
         static Exception exception;
-        static PlainTextResponseDeserializer attribute;
+        static PlainTextResponseDeserializer deserializer;
 
         Establish context = () =>
         {
-            attribute = new PlainTextResponseDeserializer();
+            deserializer = new PlainTextResponseDeserializer();
             Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.Deserialize(http_response, null));
+            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response, null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -114,13 +114,13 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     public class when_plain_text_deserializer_is_used_with_null_response : response_deserialization_test_context
     {
         static Exception exception;
-        static PlainTextResponseDeserializer attribute;
+        static PlainTextResponseDeserializer deserializer;
 
         Establish context =
-            () => attribute = new PlainTextResponseDeserializer();
+            () => deserializer = new PlainTextResponseDeserializer();
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.Deserialize(null, typeof(string)));
+            () => exception = Catch.Exception(() => deserializer.Deserialize(null, typeof(string)));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();

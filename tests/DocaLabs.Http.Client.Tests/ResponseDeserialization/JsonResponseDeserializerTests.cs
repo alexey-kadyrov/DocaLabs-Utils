@@ -12,17 +12,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_json_deserializer_is_used : response_deserialization_test_context
     {
         const string data = "{Value1:2012, Value2:\"Hello World!\"}";
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
         static TestTarget target;
 
         Establish context = () =>
         {
-            attribute = new JsonResponseDeserializer();
+            deserializer = new JsonResponseDeserializer();
             Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => target = (TestTarget)attribute.Deserialize(http_response, typeof(TestTarget));
+            () => target = (TestTarget)deserializer.Deserialize(http_response, typeof(TestTarget));
 
         It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
         {
@@ -35,17 +35,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_json_deserializer_is_used_with_empty_response_stream : response_deserialization_test_context
     {
         const string data = "";
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
         static TestTarget target;
 
         Establish context = () =>
         {
-            attribute = new JsonResponseDeserializer();
+            deserializer = new JsonResponseDeserializer();
             Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => target = (TestTarget)attribute.Deserialize(http_response, typeof(TestTarget));
+            () => target = (TestTarget)deserializer.Deserialize(http_response, typeof(TestTarget));
 
         It should_return_null_object =
             () => target.ShouldBeNull();
@@ -56,16 +56,16 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     {
         const string data = "{Value1:2012, Value2:\"Hello World!\"}";
         static Exception exception;
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
 
         Establish context = () =>
         {
-            attribute = new JsonResponseDeserializer();
+            deserializer = new JsonResponseDeserializer();
             Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.Deserialize(http_response, null));
+            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response, null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -78,13 +78,13 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     public class when_json_deserializer_is_used_with_null_response : response_deserialization_test_context
     {
         static Exception exception;
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
 
         Establish context =
-            () => attribute = new JsonResponseDeserializer();
+            () => deserializer = new JsonResponseDeserializer();
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.Deserialize(null, typeof(TestTarget)));
+            () => exception = Catch.Exception(() => deserializer.Deserialize(null, typeof(TestTarget)));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -97,17 +97,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_json_deserializer_is_used_on_bad_json_value : response_deserialization_test_context
     {
         const string data = "} : Non JSON string : {";
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
         static Exception exception;
 
         Establish context = () =>
         {
-            attribute = new JsonResponseDeserializer();
+            deserializer = new JsonResponseDeserializer();
             Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.Deserialize(http_response, typeof(TestTarget)));
+            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response, typeof(TestTarget)));
 
         It should_throw_unrecoverable_http_client_exception =
             () => exception.ShouldBeOfType<UnrecoverableHttpClientException>();
@@ -121,16 +121,16 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     {
         const string data = "{Value1:2012, Value2:\"Hello World!\"}";
         static Exception exception;
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
 
         Establish context = () =>
         {
-            attribute = new JsonResponseDeserializer();
+            deserializer = new JsonResponseDeserializer();
             Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.CanDeserialize(http_response, null));
+            () => exception = Catch.Exception(() => deserializer.CanDeserialize(http_response, null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -143,13 +143,13 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     public class when_json_deserializer_is_checking_with_null_response : response_deserialization_test_context
     {
         static Exception exception;
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
 
         Establish context =
-            () => attribute = new JsonResponseDeserializer();
+            () => deserializer = new JsonResponseDeserializer();
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.CanDeserialize(null, typeof(TestTarget)));
+            () => exception = Catch.Exception(() => deserializer.CanDeserialize(null, typeof(TestTarget)));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -162,17 +162,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_json_deserializer_is_checking_response_with_json_content_type : response_deserialization_test_context
     {
         const string data = "{Value1:2012, Value2:\"Hello World!\"}";
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
         static bool can_deserialize;
 
         Establish context = () =>
         {
-            attribute = new JsonResponseDeserializer();
+            deserializer = new JsonResponseDeserializer();
             Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => can_deserialize = attribute.CanDeserialize(http_response, typeof(TestTarget));
+            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
 
         It should_be_able_to_deserialize =
             () => can_deserialize.ShouldBeTrue();
@@ -182,17 +182,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_json_deserializer_is_checking_response_with_json_content_type_all_in_capital : response_deserialization_test_context
     {
         const string data = "{Value1:2012, Value2:\"Hello World!\"}";
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
         static bool can_deserialize;
 
         Establish context = () =>
         {
-            attribute = new JsonResponseDeserializer();
+            deserializer = new JsonResponseDeserializer();
             Setup("APPLICATION/JSON", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => can_deserialize = attribute.CanDeserialize(http_response, typeof(TestTarget));
+            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
 
         It should_be_able_to_deserialize =
             () => can_deserialize.ShouldBeTrue();
@@ -202,17 +202,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_json_deserializer_is_checking_response_with_json_content_type_but_for_simple_type : response_deserialization_test_context
     {
         const string data = "{Value1:2012, Value2:\"Hello World!\"}";
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
         static bool can_deserialize;
 
         Establish context = () =>
         {
-            attribute = new JsonResponseDeserializer();
+            deserializer = new JsonResponseDeserializer();
             Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => can_deserialize = attribute.CanDeserialize(http_response, typeof(string));
+            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(string));
 
         It should_not_be_able_to_deserialize =
             () => can_deserialize.ShouldBeFalse();
@@ -222,17 +222,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_json_deserializer_is_checking_response_with_xml_content_type : response_deserialization_test_context
     {
         const string data = "{Value1:2012, Value2:\"Hello World!\"}";
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
         static bool can_deserialize;
 
         Establish context = () =>
         {
-            attribute = new JsonResponseDeserializer();
+            deserializer = new JsonResponseDeserializer();
             Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => can_deserialize = attribute.CanDeserialize(http_response, typeof(TestTarget));
+            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
 
         It should_not_be_able_to_deserialize =
             () => can_deserialize.ShouldBeFalse();
@@ -242,17 +242,17 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     class when_json_deserializer_is_checking_response_with_empty_content_type : response_deserialization_test_context
     {
         const string data = "{Value1:2012, Value2:\"Hello World!\"}";
-        static JsonResponseDeserializer attribute;
+        static JsonResponseDeserializer deserializer;
         static bool can_deserialize;
 
         Establish context = () =>
         {
-            attribute = new JsonResponseDeserializer();
+            deserializer = new JsonResponseDeserializer();
             Setup("", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
-            () => can_deserialize = attribute.CanDeserialize(http_response, typeof(TestTarget));
+            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
 
         It should_not_be_able_to_deserialize =
             () => can_deserialize.ShouldBeFalse();
