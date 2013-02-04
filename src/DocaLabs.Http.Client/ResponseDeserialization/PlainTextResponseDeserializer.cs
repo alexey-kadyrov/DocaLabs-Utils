@@ -19,10 +19,10 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
+            var value = response.AsString();
+
             try
             {
-                var value = response.AsString();
-
                 return string.IsNullOrWhiteSpace(value)
                     ? resultType.GetDefaultValue()
                     : CustomConverter.Current.ChangeType(value, resultType);
