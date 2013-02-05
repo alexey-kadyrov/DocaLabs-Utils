@@ -76,7 +76,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Text.resx</DependentUpon>
     </Compile>
-    <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

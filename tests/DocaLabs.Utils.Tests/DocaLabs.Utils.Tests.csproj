@@ -82,7 +82,6 @@
     <Compile Include="Conversion\CustomConverterFactoryTests.cs" />
     <Compile Include="ExceptionExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StreamExtensionsTests.cs" />
     <Compile Include="StringExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using DocaLabs.Utils.Conversion;
 using NUnit.Framework;
 
@@ -1173,8 +1174,8 @@ namespace DocaLabs.Utils.Tests.Conversion
             var timeOffset = new DateTimeOffset(DateTime.Now);
             Assert.AreEqual(timeOffset, new DateTimeOffset(DateTime.FromBinary(BitConverter.ToInt64((byte[])converter(timeOffset), 0))));
 
-            var strB64 = Convert.ToBase64String("Hello World!".StringToByteArray());
-            Assert.AreEqual("Hello World!", ((byte[])converter(strB64)).ByteArrayToString());
+            var strB64 = Convert.ToBase64String(Encoding.UTF8.GetBytes("Hello World!"));
+            Assert.AreEqual("Hello World!", Encoding.UTF8.GetString(((byte[])converter(strB64))));
             
             var timeSpan = TimeSpan.FromSeconds(786124);
             Assert.AreEqual(timeSpan, TimeSpan.FromTicks(BitConverter.ToInt64((byte[])converter(timeSpan), 0)));

@@ -67,39 +67,5 @@ namespace DocaLabs.Utils.Tests
         }
 
         #endregion SafeSubstring
-
-        #region EnumerableToString
-
-        [Test]
-        [TestCase("hello", "hello")]
-        [TestCase(";", ";")]
-        [TestCase("hello;world", "hello;world")]
-        [TestCase(";hello;world", ";hello;world")]
-        [TestCase(";hello;world;", ";hello;world;")]
-        [TestCase("hello;world;and;or;", "hello;world;and;or;")]
-        public void ConvertsArrayToString(string source, string expectedResult)
-        {
-            var result = source.Split(new [] { ';' }, StringSplitOptions.None).EnumerableToString();
-
-            Assert.AreEqual(expectedResult, result);
-        }
-
-        [Test]
-        public void ArrayToStringReturnsNullForZeroSizeArray()
-        {
-            var result = new string[0].EnumerableToString();
-
-            Assert.IsNull(result);
-        }
-
-        [Test]
-        public void ArrayToStringReturnsNullForNullArray()
-        {
-            var result = StringExtensions.EnumerableToString(null);
-
-            Assert.IsNull(result);
-        }
-
-        #endregion EnumerableToString
     }
 }

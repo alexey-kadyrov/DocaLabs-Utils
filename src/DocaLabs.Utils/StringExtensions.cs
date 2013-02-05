@@ -39,32 +39,5 @@ namespace DocaLabs.Utils
 
             return length <= 0 ? string.Empty : value.Substring(start, length);
         }
-
-        /// <summary>
-        /// Converts collection of strings to semicolon separated string.
-        /// </summary>
-        /// <param name="in">Input collection of strings.</param>
-        /// <returns>Semicolon separated string consisting of input string values.</returns>
-        public static string EnumerableToString(this IEnumerable<string> @in)
-        {
-            if (@in == null)
-                return null;
-
-            var nameBuilder = new StringBuilder(512);
-
-            var first = true;
-
-            foreach (var value in @in)
-            {
-                if (first)
-                    first = false;
-                else
-                    nameBuilder.Append(";");
-
-                nameBuilder.Append(value);
-            }
-
-            return nameBuilder.Length == 0 ? null: nameBuilder.ToString();
-        }
     }
 }
