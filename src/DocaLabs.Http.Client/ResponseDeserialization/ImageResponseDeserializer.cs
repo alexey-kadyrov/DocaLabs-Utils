@@ -28,11 +28,11 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
 
                 sourceStream.CopyTo(imageStream);
 
-                if(resultType == typeof(Image))
-                    return Image.FromStream(imageStream);
-
-                if (resultType == typeof(Bitmap))
+                if (typeof(Bitmap).IsAssignableFrom(resultType))
                     return new Bitmap(imageStream);
+
+                if (typeof(Image).IsAssignableFrom(resultType))
+                    return Image.FromStream(imageStream);
 
                 throw new UnrecoverableHttpClientException(string.Format(Resources.Text.expected_retsult_to_be_image_or_bitmap_classes, resultType));
             }

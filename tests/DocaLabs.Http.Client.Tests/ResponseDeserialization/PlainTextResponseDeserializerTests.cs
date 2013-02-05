@@ -215,6 +215,26 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     }
 
     [Subject(typeof(PlainTextResponseDeserializer), "checking that can deserialize")]
+    class when_plain_text_deserializer_is_checking_response_with_none_plain_text_or_html_content_type : response_deserialization_test_context
+    {
+        const string data = "{Value1:2012, Value2:\"Hello World!\"}";
+        static PlainTextResponseDeserializer deserializer;
+        static bool can_deserialize;
+
+        Establish context = () =>
+        {
+            deserializer = new PlainTextResponseDeserializer();
+            Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(string));
+
+        It should_not_be_able_to_deserialize =
+            () => can_deserialize.ShouldBeFalse();
+    }
+
+    [Subject(typeof(PlainTextResponseDeserializer), "checking that can deserialize")]
     class when_plain_text_deserializer_is_checking_response_with_plain_text_content_type : response_deserialization_test_context
     {
         const string data = "";
@@ -263,15 +283,10 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
             () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeTrue();
 
         It should_not_be_able_to_deserialize_for_refrence_type =
-            () => deserializer.CanDeserialize(http_response, typeof(TestClass)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
 
         enum TestEnum
         {
-        }
-
-        class TestClass
-        {
-             
         }
     }
 
@@ -324,13 +339,9 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
             () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_refrence_type =
-            () => deserializer.CanDeserialize(http_response, typeof(TestClass)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
 
-        enum TestEnum
-        {
-        }
-
-        class TestClass
+        enum TestEnum 
         {
         }
     }

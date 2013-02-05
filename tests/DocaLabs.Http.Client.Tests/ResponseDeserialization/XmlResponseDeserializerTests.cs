@@ -332,7 +332,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     }
 
     [Subject(typeof(XmlResponseDeserializer), "checking that can deserialize")]
-    class when_xml_deserializer_is_checking_response_with_json_content_type : response_deserialization_test_context
+    class when_xml_deserializer_is_checking_response_with_non_xml_content_type : response_deserialization_test_context
     {
         const string data = "<TestTarget><Value1>2012</Value1><Value2>Hello World!</Value2></TestTarget>";
         static XmlResponseDeserializer deserializer;

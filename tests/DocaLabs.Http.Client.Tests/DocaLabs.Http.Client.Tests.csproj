@@ -59,6 +59,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -73,6 +74,7 @@
     <Compile Include="HttpResponseTests.cs" />
     <Compile Include="Mapping\when.cs" />
     <Compile Include="RequestSerialization\RequestBodySerializationFactoryTests.cs" />
+    <Compile Include="ResponseDeserialization\ImageResponseDeserializerTests.cs" />
     <Compile Include="ResponseDeserialization\PlainTextResponseDeserializerTests.cs" />
     <Compile Include="ResponseDeserialization\XmlResponseDeserializerTests.cs" />
     <Compile Include="ResponseDeserialization\DeserializeFromXmlAttributeTests.cs" />
@@ -101,7 +103,20 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="img.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="img.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="img.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="img.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
