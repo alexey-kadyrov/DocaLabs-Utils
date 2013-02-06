@@ -315,10 +315,10 @@ namespace DocaLabs.Http.Client
                 var info = new List<PropertyInfo>();
                 var values = new List<object>();
 
-                foreach (var propertyInfo in data.NamedArguments.Select(namedArgument => namedArgument.MemberInfo).OfType<PropertyInfo>())
+                foreach (var property in data.NamedArguments.Select(namedArgument => namedArgument.MemberInfo).OfType<PropertyInfo>())
                 {
-                    info.Add(propertyInfo);
-                    values.Add(propertyInfo.GetValue(attributeInstance[0]));
+                    info.Add(property);
+                    values.Add(property.GetValue(attributeInstance[0]));
                 }
 
                 InitializedProperties = info.ToArray();
