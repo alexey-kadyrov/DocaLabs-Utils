@@ -4,7 +4,9 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using DocaLabs.Http.Client.JsonSerialization;
+using DocaLabs.Http.Client.RequestSerialization;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Mapping
@@ -17,6 +19,11 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         Because of = () =>
         {
             var sss = JsonSerializationProvider.Serializer;
+
+            var x1 = HttpClientFactory.CreateInstance<Ix1>(new Uri("http://www.contoso.foo/"));
+            var x2 = HttpClientFactory.CreateInstance<Ix2>(new Uri("http://www.contoso.foo/"));
+            var x3 = HttpClientFactory.CreateInstance<Ix3>(new Uri("http://www.contoso.foo/"));
+            var x4 = HttpClientFactory.CreateInstance<Ix4>(new Uri("http://www.contoso.foo/"));
 
             var s1 = HttpClientFactory.CreateInstance(typeof(TestHttpClient2<,>), typeof(IService1), new Uri("http://www.contoso.foo/")) as IService1;
             s1.Put(new Query());
@@ -63,6 +70,43 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         };
 
         It should = () => b.ShouldBeTrue();
+    }
+
+    [AttributeUsage(AttributeTargets.Interface)]
+    public class Attribute1 : Attribute
+    {
+        
+    }
+
+    public class Attribute2 : Attribute
+    {
+
+    }
+
+    [SerializeAsXml, Attribute1]
+    public interface Ix1
+    {
+        Result Get();
+    }
+
+    [SerializeAsXml(Indent = true, Encoding = "utf8"), Attribute1, Attribute2]
+    public interface Ix2
+    {
+        Result Get();
+    }
+
+    [SerializeAsXml(Indent = true, Encoding = "utf8")]
+    [XmlRoot("root", IsNullable = true)]
+    public interface Ix3
+    {
+        Result Get();
+    }
+
+    [SerializeAsXml(Indent = true, Encoding = "utf8")]
+    [XmlRoot("root")]
+    public interface Ix4
+    {
+        Result Get();
     }
 
     public interface IService1

@@ -7,6 +7,13 @@ namespace DocaLabs.Utils
 {
     public static class ReflectionExtensions
     {
+        public static bool IsValidOn(this CustomAttributeData data, AttributeTargets flags)
+        {
+            var attributes = data.AttributeType.GetCustomAttributes(typeof(AttributeUsageAttribute), true);
+
+            return attributes.Length == 0 || attributes.Any(x => ((AttributeUsageAttribute)x).ValidOn.HasFlag(flags));
+        }
+
         public static IList<MethodInfo> GetAllMethods(this Type type, BindingFlags flags)
         {
             flags |= BindingFlags.FlattenHierarchy;

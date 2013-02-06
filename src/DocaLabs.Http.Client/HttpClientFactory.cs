@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using DocaLabs.Utils;
 
 namespace DocaLabs.Http.Client
 {
@@ -113,11 +115,24 @@ namespace DocaLabs.Http.Client
 
             var typeBuilder = DefineType(baseType, interfaceType);
 
+            TransferAttributes(typeBuilder, interfaceInfo);
+
             BuildConstructor(baseType, interfaceInfo, typeBuilder);
 
             BuildServiceCallMethod(baseType, interfaceInfo, typeBuilder);
 
             return typeBuilder.CreateType();
+        }
+
+        static void TransferAttributes(TypeBuilder typeBuilder, ClientInterfaceInfo interfaceInfo)
+        {
+            foreach (var attribute in interfaceInfo.Attributes)
+            {
+                var builder = new CustomAttributeBuilder(
+                    attribute.Constructor, attribute.ConstructorArguments, attribute.InitializedProperties, attribute.InitializedPropertyValues);
+
+                typeBuilder.SetCustomAttribute(builder);
+            }
         }
 
         static Type MakeBaseType(Type baseType, ClientInterfaceInfo interfaceInfo)
@@ -236,6 +251,7 @@ namespace DocaLabs.Http.Client
             public Type QueryType { get; private set; }
             public Type ResultType { get; private set; }
             public Type RetryStragtegyType { get; private set; }
+            public IEnumerable<AttributeInfo> Attributes { get; private set; }
 
             public ClientInterfaceInfo(Type interfaceType)
             {
@@ -265,6 +281,48 @@ namespace DocaLabs.Http.Client
 
                 // typeof(Func<Func<Result>, Result>)
                 RetryStragtegyType = typeof(Func<,>).MakeGenericType(typeof(Func<>).MakeGenericType(ResultType), ResultType);
+
+                Attributes = interfaceType.CustomAttributes
+                    .Where(x => x.IsValidOn(AttributeTargets.Class))
+                    .Select(x => new AttributeInfo(interfaceType, x));
+            }
+        }
+
+        class AttributeInfo
+        {
+            public ConstructorInfo Constructor { get; private set; }
+            public object[] ConstructorArguments { get; private set; }
+            public PropertyInfo[] InitializedProperties { get; private set; }
+            public object[] InitializedPropertyValues { get; private set; }
+
+            public AttributeInfo(Type interfaceType, CustomAttributeData data)
+            {
+                Constructor = data.Constructor;
+                ConstructorArguments = data.ConstructorArguments.Select(x => x.Value).ToArray();
+
+                ParseProperties(interfaceType, data);
+            }
+
+            void ParseProperties(Type interfaceType, CustomAttributeData data)
+            {
+                if (data.NamedArguments == null)
+                    return;
+
+                var attributeInstance = interfaceType.GetCustomAttributes(data.AttributeType, true);
+                if (attributeInstance.Length == 0)
+                    return;
+
+                var info = new List<PropertyInfo>();
+                var values = new List<object>();
+
+                foreach (var propertyInfo in data.NamedArguments.Select(namedArgument => namedArgument.MemberInfo).OfType<PropertyInfo>())
+                {
+                    info.Add(propertyInfo);
+                    values.Add(propertyInfo.GetValue(attributeInstance[0]));
+                }
+
+                InitializedProperties = info.ToArray();
+                InitializedPropertyValues = values.ToArray();
             }
         }
     }
