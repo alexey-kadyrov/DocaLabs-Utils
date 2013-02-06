@@ -80,7 +80,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
 
     public class Attribute2 : Attribute
     {
-
+        public int Value;
     }
 
     [SerializeAsXml, Attribute1]
@@ -89,7 +89,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         Result Get();
     }
 
-    [SerializeAsXml(Indent = true, Encoding = "utf8"), Attribute1, Attribute2]
+    [SerializeAsXml(RequestContentEncoding = "x-gzip", Encoding = "utf8"), Attribute1, Attribute2(Value = 42)]
     public interface Ix2
     {
         Result Get();
@@ -102,7 +102,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         Result Get();
     }
 
-    [SerializeAsXml(Indent = true, Encoding = "utf8")]
+    [SerializeAsXml(RequestContentEncoding = "x-gzip", Encoding = "utf8")]
     [XmlRoot("root")]
     public interface Ix4
     {

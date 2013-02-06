@@ -126,11 +126,14 @@ namespace DocaLabs.Http.Client
 
         static void TransferAttributes(TypeBuilder typeBuilder, ClientInterfaceInfo interfaceInfo)
         {
-            foreach (var attribute in interfaceInfo.Attributes)
+            foreach (var builder in interfaceInfo.Attributes.Select(x => new CustomAttributeBuilder(
+                                                                        x.Constructor, 
+                                                                        x.ConstructorArguments, 
+                                                                        x.InitializedProperties, 
+                                                                        x.InitializedPropertyValues,
+                                                                        x.InitializedFields,
+                                                                        x.InitializedFieldsValues)))
             {
-                var builder = new CustomAttributeBuilder(
-                    attribute.Constructor, attribute.ConstructorArguments, attribute.InitializedProperties, attribute.InitializedPropertyValues);
-
                 typeBuilder.SetCustomAttribute(builder);
             }
         }
@@ -284,7 +287,7 @@ namespace DocaLabs.Http.Client
 
                 Attributes = interfaceType.CustomAttributes
                     .Where(x => x.IsValidOn(AttributeTargets.Class))
-                    .Select(x => new AttributeInfo(interfaceType, x));
+                    .Select(x => new AttributeInfo(x));
             }
         }
 
@@ -294,35 +297,47 @@ namespace DocaLabs.Http.Client
             public object[] ConstructorArguments { get; private set; }
             public PropertyInfo[] InitializedProperties { get; private set; }
             public object[] InitializedPropertyValues { get; private set; }
+            public FieldInfo[] InitializedFields { get; private set; }
+            public object[] InitializedFieldsValues { get; private set; }
 
-            public AttributeInfo(Type interfaceType, CustomAttributeData data)
+            public AttributeInfo(CustomAttributeData data)
             {
                 Constructor = data.Constructor;
                 ConstructorArguments = data.ConstructorArguments.Select(x => x.Value).ToArray();
 
-                ParseProperties(interfaceType, data);
+                ParseProperties(data);
             }
 
-            void ParseProperties(Type interfaceType, CustomAttributeData data)
+            void ParseProperties(CustomAttributeData data)
             {
                 if (data.NamedArguments == null)
                     return;
 
-                var attributeInstance = interfaceType.GetCustomAttributes(data.AttributeType, true);
-                if (attributeInstance.Length == 0)
-                    return;
+                var properties = new List<PropertyInfo>();
+                var propertyValues = new List<object>();
 
-                var info = new List<PropertyInfo>();
-                var values = new List<object>();
+                var fields = new List<FieldInfo>();
+                var fieldValues = new List<object>();
 
-                foreach (var property in data.NamedArguments.Select(namedArgument => namedArgument.MemberInfo).OfType<PropertyInfo>())
+                foreach (var namedArg in data.NamedArguments)
                 {
-                    info.Add(property);
-                    values.Add(property.GetValue(attributeInstance[0]));
+                    if (namedArg.IsField)
+                    {
+                        fields.Add((FieldInfo)namedArg.MemberInfo);
+                        fieldValues.Add(namedArg.TypedValue.Value);
+                    }
+                    else
+                    {
+                        properties.Add((PropertyInfo) namedArg.MemberInfo);
+                        propertyValues.Add(namedArg.TypedValue.Value);
+                    }
                 }
 
-                InitializedProperties = info.ToArray();
-                InitializedPropertyValues = values.ToArray();
+                InitializedProperties = properties.ToArray();
+                InitializedPropertyValues = propertyValues.ToArray();
+
+                InitializedFields = fields.ToArray();
+                InitializedFieldsValues = fieldValues.ToArray();
             }
         }
     }
