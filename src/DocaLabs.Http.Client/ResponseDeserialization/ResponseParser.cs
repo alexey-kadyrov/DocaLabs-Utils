@@ -11,16 +11,16 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
     public static class ResponseParser
     {
         static readonly object Locker;
-        static List<IResponseDeserializationProvider> _providers;
+        static IList<IResponseDeserializationProvider> _providers;
 
         /// <summary>
         /// Gets or sets the list of deserialization providers.
         /// </summary>
-        public static List<IResponseDeserializationProvider> Providers
+        public static IList<IResponseDeserializationProvider> Providers
         {
             get
             {
-                List<IResponseDeserializationProvider> providers;
+                IList<IResponseDeserializationProvider> providers;
 
                 lock (Locker)
                 {
@@ -32,6 +32,9 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
 
             set
             {
+                if(value == null)
+                    throw new ArgumentNullException("value");
+
                 var providers = value.ToList();
 
                 lock (Locker)
@@ -91,7 +94,7 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
 
         static IResponseDeserialization FindProvider(HttpResponse response, Type resultType)
         {
-            List<IResponseDeserializationProvider> providers;
+            IList<IResponseDeserializationProvider> providers;
 
             lock (Locker)
             {

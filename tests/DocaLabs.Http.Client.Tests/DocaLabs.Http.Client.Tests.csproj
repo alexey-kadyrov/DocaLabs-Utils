@@ -76,6 +76,7 @@
     <Compile Include="RequestSerialization\RequestBodySerializationFactoryTests.cs" />
     <Compile Include="ResponseDeserialization\ImageResponseDeserializerTests.cs" />
     <Compile Include="ResponseDeserialization\PlainTextResponseDeserializerTests.cs" />
+    <Compile Include="ResponseDeserialization\ResponseParserTests.cs" />
     <Compile Include="ResponseDeserialization\XmlResponseDeserializerTests.cs" />
     <Compile Include="ResponseDeserialization\DeserializeFromXmlAttributeTests.cs" />
     <Compile Include="ResponseDeserialization\JsonResponseDeserializerTests.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseDeserialization\DeserializeFromJsonAttributeTests.cs" />
     <Compile Include="_Utils\response_deserialization_test_context.cs" />
+    <Compile Include="_Utils\TestTarget.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">

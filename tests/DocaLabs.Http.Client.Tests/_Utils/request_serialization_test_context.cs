@@ -13,12 +13,6 @@ namespace DocaLabs.Http.Client.Tests._Utils
 {
     public class request_serialization_test_context
     {
-        public class TestTarget
-        {
-            public int Value1 { get; set; }
-            public string Value2 { get; set; }
-        }
-
         static MemoryStream request_data;
         protected static Mock<WebRequest> mock_web_request;
 
