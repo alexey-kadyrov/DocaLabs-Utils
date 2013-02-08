@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using DocaLabs.Http.Client.Resources;
 
 namespace DocaLabs.Http.Client.ContentEncoding
@@ -7,8 +8,9 @@ namespace DocaLabs.Http.Client.ContentEncoding
     /// <summary>
     /// Defines an encoder factory. By default the factory is populated by encoders that use
     /// standard .Net GZipStream and DeflateStream for gzip/x-gzip/deflate encodings.
+    /// All class members are thread safe.
     /// </summary>
-    public class ContentEncoderFactory
+    public static class ContentEncoderFactory
     {
         static readonly ConcurrentDictionary<string, IEncodeContent> Encoders;
 
@@ -33,7 +35,15 @@ namespace DocaLabs.Http.Client.ContentEncoding
             if (Encoders.TryGetValue(encoding, out encoder) && encoder != null)
                 return encoder;
 
-            throw new NotSupportedException(string.Format(Text.compression_format_is_not_suppoerted, encoding));
+            throw new ArgumentException(string.Format(Text.compression_format_is_not_suppoerted, encoding), "encoding");
+        }
+
+        /// <summary>
+        /// Returns list of supported encodings.
+        /// </summary>
+        static public ICollection<string> GetSupportedEncodings()
+        {
+            return Encoders.Keys;
         }
 
         /// <summary>
