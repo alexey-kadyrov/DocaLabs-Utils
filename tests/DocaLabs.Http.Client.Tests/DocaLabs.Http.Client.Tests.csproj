@@ -78,6 +78,7 @@
     <Compile Include="ContentEncoding\GZipContentEncoderTests.cs" />
     <Compile Include="ContentEncoding\DeflateContentDecoderTests.cs" />
     <Compile Include="ContentEncoding\DeflateContentEncoderTests.cs" />
+    <Compile Include="HttpClientExceptionTests.cs" />
     <Compile Include="HttpResponseTests.cs" />
     <Compile Include="JsonSerialization\DefaultJsonDeserializerTests.cs" />
     <Compile Include="JsonSerialization\DefaultJsonSerializerTests.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="ResponseDeserialization\XmlResponseDeserializerTests.cs" />
     <Compile Include="ResponseDeserialization\DeserializeFromXmlAttributeTests.cs" />
     <Compile Include="ResponseDeserialization\JsonResponseDeserializerTests.cs" />
+    <Compile Include="UnrecoverableHttpClientExceptionTests.cs" />
     <Compile Include="_Utils\request_serialization_test_context.cs" />
     <Compile Include="RequestSerialization\SerializeAsFormAttributeTests.cs" />
     <Compile Include="RequestSerialization\SerializeAsJsonAttributeTests.cs" />

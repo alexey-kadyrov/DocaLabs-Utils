@@ -13,7 +13,6 @@ namespace DocaLabs.Http.Client
         /// Initializes a new instance of the HttpClientException class.
         /// </summary>
         public HttpClientException()
-            : base("HttpClientException was thrown.")
         {
         }
 

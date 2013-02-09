@@ -4,8 +4,6 @@ using Machine.Specifications;
 
 namespace DocaLabs.Storage.Core.Tests.Partitioning
 {
-    // ReSharper disable InconsistentNaming
-
     [Subject(typeof(PartitionException))]
     class when_partition_exception_is_newed_using_default_constructor : ExceptionIsNewedUsingDefaultConstructorContext<PartitionException>
     {
@@ -29,6 +27,4 @@ namespace DocaLabs.Storage.Core.Tests.Partitioning
     {
         Behaves_like<ExceptionIsSerializedBehaviour> a_standard_exception;
     }
-
-    // ReSharper restore InconsistentNaming
 }

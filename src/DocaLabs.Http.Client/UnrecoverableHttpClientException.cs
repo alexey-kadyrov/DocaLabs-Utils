@@ -13,7 +13,6 @@ namespace DocaLabs.Http.Client
         /// Initializes a new instance of the UnrecoverableHttpClientException class.
         /// </summary>
         public UnrecoverableHttpClientException()
-            : base("UnrecoverableHttpClientException was thrown.")
         {
         }
 

@@ -8,9 +8,7 @@ using It = Machine.Specifications.It;
 
 namespace DocaLabs.Testing.Common.MSpec
 {
-    // ReSharper disable InconsistentNaming
     // ReSharper disable StaticFieldInGenericType
-    // ReSharper disable AssignNullToNotNullAttribute
 
     public class ExceptionIsNewedUsingDefaultConstructorContext<TException>
         where TException : Exception, new()
@@ -27,7 +25,7 @@ namespace DocaLabs.Testing.Common.MSpec
         protected static Exception exception;
 
         [UsedImplicitly] It should_set_message_to_default_value =
-            () => exception.Message.ShouldEqual("Exception of type 'DocaLabs.Storage.Core.Partitioning.PartitionException' was thrown.");
+            () => exception.Message.ShouldEqual(string.Format("Exception of type '{0}' was thrown.", exception.GetType()));
 
         [UsedImplicitly] It should_set_inner_exception_to_null =
             () => exception.InnerException.ShouldBeNull();
@@ -134,7 +132,5 @@ namespace DocaLabs.Testing.Common.MSpec
             () => deserialized_exception.InnerException.Message.ShouldEqual("inner-message");
     }
 
-    // ReSharper restore AssignNullToNotNullAttribute
     // ReSharper restore StaticFieldInGenericType
-    // ReSharper restore InconsistentNaming
 }
