@@ -72,7 +72,6 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="_Utils\ClassAttributeWithFieldsAttribute.cs" />
     <Compile Include="ContentEncoding\ContentDecoderFactoryTests.cs" />
     <Compile Include="ContentEncoding\ContentEncoderFactoryTests.cs" />
     <Compile Include="ContentEncoding\GZipContentDecoderTests.cs" />
@@ -82,6 +81,7 @@
     <Compile Include="HttpClientExceptionTests.cs" />
     <Compile Include="HttpClientFactoryTests.cs" />
     <Compile Include="HttpResponseTests.cs" />
+    <Compile Include="_Utils\ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute.cs" />
     <Compile Include="_Utils\IDecoratedService.cs" />
     <Compile Include="_Utils\InterfaceOnlyAttribute.cs" />
     <Compile Include="_Utils\IServiceWithoutQueryOrResult.cs" />

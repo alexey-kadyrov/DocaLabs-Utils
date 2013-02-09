@@ -1,8 +1,6 @@
-﻿using DocaLabs.Http.Client.RequestSerialization;
-
-namespace DocaLabs.Http.Client.Tests._Utils
+﻿namespace DocaLabs.Http.Client.Tests._Utils
 {
-    [InterfaceOnly, ClassAttributeWithFields(Value = "Hello World!"), SerializeAsJson(CharSet = "something")]
+    [InterfaceOnly, ClassAttributeWithFieldsPropertiesAndConstructorArgs("one", Field = "two", Property = "three")]
     public interface IDecoratedService
     {
         TestResult GetResult(TestsQuery query);
