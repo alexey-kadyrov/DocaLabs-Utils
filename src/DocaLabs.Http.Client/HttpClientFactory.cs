@@ -63,6 +63,28 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Creates an instance of a concrete class implementing the interfaceType, the class is derived from baseType.
         /// </summary>
+        /// <typeparam name="TInterface">
+        /// Interface which should be implemented, the interface must implement only one method.
+        /// The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
+        /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
+        /// </typeparam>
+        /// <param name="baseType">
+        /// The base class which will be used to generate the concrete type implementing the interface.
+        /// The class must have non default constructor:
+        ///     (Uri baseUrl, string configurationName, Func&lt;Func&lt;TResult>, TResult> retryStrategy) 
+        ///     or
+        ///     (Uri baseUrl, string configurationName)
+        /// </param>
+        /// <param name="baseUrl">The base URL of the service.</param>
+        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
+        public static TInterface CreateInstance<TInterface>(Type baseType, Uri baseUrl = null, string configurationName = null)
+        {
+            return (TInterface)CreateInstance(baseType, typeof(TInterface), baseUrl, configurationName);
+        }
+
+        /// <summary>
+        /// Creates an instance of a concrete class implementing the interfaceType, the class is derived from baseType.
+        /// </summary>
         /// <param name="baseType">
         /// The base class which will be used to generate the concrete type implementing the interface.
         /// The class must have non default constructor:
@@ -143,7 +165,7 @@ namespace DocaLabs.Http.Client
             if (baseType == null)
                 return typeof (HttpClient<,>).MakeGenericType(interfaceInfo.QueryType, interfaceInfo.ResultType);
 
-            if(!baseType.IsGenericType)
+            if(!baseType.IsGenericTypeDefinition)
                 return baseType;
 
             if(baseType.GetGenericArguments().Length != 2)
