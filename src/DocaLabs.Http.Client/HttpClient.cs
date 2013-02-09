@@ -78,7 +78,6 @@ namespace DocaLabs.Http.Client
         {
             BaseUrl = baseUrl;
             RetryStrategy = retryStrategy ?? GetDefaultRetryStrategy();
-            AutoSetAcceptEncoding = true;
 
             ReadConfiguration(configurationName);
 
@@ -277,6 +276,7 @@ namespace DocaLabs.Http.Client
                 BaseUrl = Configuration.BaseUrl;
 
             RequestTimeout = Configuration.Timeout;
+            AutoSetAcceptEncoding = Configuration.AutoSetAcceptEncoding;
         }
 
         HttpClientEndpointElement GetConfigurationElement(string configurationName)

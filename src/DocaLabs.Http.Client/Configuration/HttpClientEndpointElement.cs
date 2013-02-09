@@ -13,6 +13,7 @@ namespace DocaLabs.Http.Client.Configuration
         const string NameProperty = "name";
         const string BaseUrlProperty = "baseUrl";
         const string TimeoutProperty = "timeout";
+        const string AutoSetAcceptEncodingProperty = "autoSetAcceptEncoding";
         const string HeadersProperty = "headers";
         const string ClientCertificatesProperty = "clientCertificates";
         const string ProxyProperty = "proxy";
@@ -54,6 +55,17 @@ namespace DocaLabs.Http.Client.Configuration
         {
             get { return ((int)base[TimeoutProperty]); }
             set { base[TimeoutProperty] = value; }
+        }
+
+        /// <summary>
+        /// Get or sets whenever to add 'Accept-Encoding' header automatically depending on what content decoders are defined in ContentDecoderFactory.
+        /// The default value is true.
+        /// </summary>
+        [ConfigurationProperty(AutoSetAcceptEncodingProperty, IsRequired = false, DefaultValue = true)]
+        public bool AutoSetAcceptEncoding
+        {
+            get { return ((bool)base[AutoSetAcceptEncodingProperty]); }
+            set { base[AutoSetAcceptEncodingProperty] = value; }
         }
 
         /// <summary>
