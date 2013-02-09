@@ -22,20 +22,22 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
                 throw new ArgumentNullException("resultType");
 
             // the Image/Bitmap classes require that the stream was kept open for the lifetime of the image object.
+            var imageStream = new MemoryStream(response.ContentLength <= 0 ? 8192 : (int)response.ContentLength);
+
             using (var sourceStream = response.GetDataStream())
             {
-                var imageStream = new MemoryStream(response.ContentLength <= 0 ? 8192 : (int)response.ContentLength);
-
                 sourceStream.CopyTo(imageStream);
+            }
 
-                if (typeof(Bitmap).IsAssignableFrom(resultType))
+            imageStream.Seek(0, SeekOrigin.Begin);
+
+            if (typeof(Bitmap).IsAssignableFrom(resultType))
                     return new Bitmap(imageStream);
 
-                if (typeof(Image).IsAssignableFrom(resultType))
-                    return Image.FromStream(imageStream);
+            if (typeof(Image).IsAssignableFrom(resultType))
+                return Image.FromStream(imageStream);
 
-                throw new UnrecoverableHttpClientException(string.Format(Resources.Text.expected_retsult_to_be_image_or_bitmap_classes, resultType));
-            }
+            throw new UnrecoverableHttpClientException(string.Format(Resources.Text.expected_retsult_to_be_image_or_bitmap_classes, resultType));
         }
 
         /// <summary>

@@ -6,10 +6,10 @@ using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.ContentEncoding
 {
-    [Subject(typeof(InflatingContentDecoder))]
-    class when_inflating_decoder_is_used
+    [Subject(typeof(DeflateContentDecoder))]
+    class when_deflate_decoder_is_used
     {
-        static InflatingContentDecoder decoder;
+        static DeflateContentDecoder decoder;
         static MemoryStream comressed_stream;
         static Stream decompression_stream;
 
@@ -18,7 +18,7 @@ namespace DocaLabs.Http.Client.Tests.ContentEncoding
 
         Establish context = () =>
         {
-            decoder = new InflatingContentDecoder();
+            decoder = new DeflateContentDecoder();
 
             using (var comressedStream = new MemoryStream())
             {
@@ -35,21 +35,20 @@ namespace DocaLabs.Http.Client.Tests.ContentEncoding
         Because of =
             () => decompression_stream = decoder.GetDecompressionStream(comressed_stream);
 
-        It should_return_gzip_stream =
-            () => decompression_stream.ShouldBeOfType<DeflateStream>();
-
-        It should_wrap_around_original_stream =
-            () => ((DeflateStream)decompression_stream).BaseStream.ShouldBeTheSameAs(comressed_stream);
-
         It should_be_able_to_decomress =
             () => DecomressData().ShouldEqual("Hello World!");
 
         static string DecomressData()
         {
-            var data = new MemoryStream();
-            decompression_stream.CopyTo(data);
-            decompression_stream.Dispose();
-            return Encoding.UTF8.GetString(data.ToArray());
+            using (var data = new MemoryStream())
+            {
+                using (decompression_stream)
+                {
+                    decompression_stream.CopyTo(data);
+                }
+
+                return Encoding.UTF8.GetString(data.ToArray());
+            }
         }
     }
 }

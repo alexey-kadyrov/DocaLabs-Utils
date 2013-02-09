@@ -21,7 +21,7 @@ namespace DocaLabs.Http.Client.ContentEncoding
 
             Decoders[KnownContentEncodings.Gzip] = new GZipContentDecoder();
             Decoders[KnownContentEncodings.XGzip] = new GZipContentDecoder();
-            Decoders[KnownContentEncodings.Deflate] = new InflatingContentDecoder();
+            Decoders[KnownContentEncodings.Deflate] = new DeflateContentDecoder();
         }
 
         /// <summary>

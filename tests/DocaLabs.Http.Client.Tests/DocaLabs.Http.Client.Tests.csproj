@@ -74,7 +74,9 @@
     <Compile Include="ContentEncoding\ContentDecoderFactoryTests.cs" />
     <Compile Include="ContentEncoding\ContentEncoderFactoryTests.cs" />
     <Compile Include="ContentEncoding\GZipContentDecoderTests.cs" />
-    <Compile Include="ContentEncoding\InflatingContentDecoderTests.cs" />
+    <Compile Include="ContentEncoding\GZipContentEncoderTests.cs" />
+    <Compile Include="ContentEncoding\DeflateContentDecoderTests.cs" />
+    <Compile Include="ContentEncoding\DeflateContentEncoderTests.cs" />
     <Compile Include="HttpResponseTests.cs" />
     <Compile Include="Mapping\when.cs" />
     <Compile Include="RequestSerialization\RequestBodySerializationFactoryTests.cs" />

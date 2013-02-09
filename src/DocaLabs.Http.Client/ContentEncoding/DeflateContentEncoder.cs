@@ -6,7 +6,7 @@ namespace DocaLabs.Http.Client.ContentEncoding
     /// <summary>
     /// Defines deflate encoder for the http content.
     /// </summary>
-    public class InflatingContentEncoder : IEncodeContent
+    public class DeflateContentEncoder : IEncodeContent
     {
         /// <summary>
         /// Returns DeflateStream in compress mode.

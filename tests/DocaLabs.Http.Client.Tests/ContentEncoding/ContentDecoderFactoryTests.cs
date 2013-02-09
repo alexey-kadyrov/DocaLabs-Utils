@@ -17,7 +17,7 @@ namespace DocaLabs.Http.Client.Tests.ContentEncoding
             .ShouldContainOnly(KnownContentEncodings.Deflate, KnownContentEncodings.Gzip, KnownContentEncodings.XGzip);
 
         It should_return_decoder_for_deflate_content_encoding =
-            () => ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<InflatingContentDecoder>();
+            () => ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<DeflateContentDecoder>();
 
         It should_return_decoder_for_gzip_content_encoding =
             () => ContentDecoderFactory.Get(KnownContentEncodings.Gzip).ShouldBeOfType<GZipContentDecoder>();
@@ -97,7 +97,7 @@ namespace DocaLabs.Http.Client.Tests.ContentEncoding
             .ShouldContainOnly(KnownContentEncodings.Deflate, KnownContentEncodings.Gzip);
 
         It should_return_decoder_for_deflate_content_encoding =
-            () => ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<InflatingContentDecoder>();
+            () => ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<DeflateContentDecoder>();
 
         It should_return_decoder_for_gzip_content_encoding =
             () => ContentDecoderFactory.Get(KnownContentEncodings.Gzip).ShouldBeOfType<GZipContentDecoder>();
@@ -116,7 +116,7 @@ namespace DocaLabs.Http.Client.Tests.ContentEncoding
             .ShouldContainOnly(KnownContentEncodings.Deflate, KnownContentEncodings.Gzip, KnownContentEncodings.XGzip);
 
         It should_return_decoder_for_deflate_content_encoding =
-            () => ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<InflatingContentDecoder>();
+            () => ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<DeflateContentDecoder>();
 
         It should_return_decoder_for_gzip_content_encoding =
             () => ContentDecoderFactory.Get(KnownContentEncodings.Gzip).ShouldBeOfType<GZipContentDecoder>();
@@ -141,7 +141,7 @@ namespace DocaLabs.Http.Client.Tests.ContentEncoding
             .ShouldContainOnly(KnownContentEncodings.Deflate, KnownContentEncodings.Gzip, KnownContentEncodings.XGzip, "some-wacky-encoding");
 
         It should_return_decoder_for_deflate_content_encoding =
-            () => ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<InflatingContentDecoder>();
+            () => ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<DeflateContentDecoder>();
 
         It should_return_decoder_for_gzip_content_encoding =
             () => ContentDecoderFactory.Get(KnownContentEncodings.Gzip).ShouldBeOfType<GZipContentDecoder>();
@@ -177,7 +177,7 @@ namespace DocaLabs.Http.Client.Tests.ContentEncoding
             .ShouldContainOnly(KnownContentEncodings.Deflate, KnownContentEncodings.Gzip, KnownContentEncodings.XGzip);
 
         It should_return_decoder_for_deflate_content_encoding =
-            () => ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<InflatingContentDecoder>();
+            () => ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<DeflateContentDecoder>();
 
         It should_return_decoder_for_gzip_content_encoding =
             () => ContentDecoderFactory.Get(KnownContentEncodings.Gzip).ShouldBeOfType<GZipContentDecoder>();
@@ -230,7 +230,7 @@ namespace DocaLabs.Http.Client.Tests.ContentEncoding
                     ContentDecoderFactory.GetSupportedEncodings().Count.ShouldBeGreaterThanOrEqualTo(3);
                     break;
                 case 2:
-                    ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<InflatingContentDecoder>();
+                    ContentDecoderFactory.Get(KnownContentEncodings.Deflate).ShouldBeOfType<DeflateContentDecoder>();
                     break;
                 case 3:
                     ContentDecoderFactory.Get(KnownContentEncodings.Gzip).ShouldBeOfType<GZipContentDecoder>();

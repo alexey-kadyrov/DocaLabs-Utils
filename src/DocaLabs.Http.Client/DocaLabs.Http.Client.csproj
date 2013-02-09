@@ -71,8 +71,8 @@
     <Compile Include="ContentEncoding\KnownContentEncodings.cs" />
     <Compile Include="ContentEncoding\GZipContentDecoder.cs" />
     <Compile Include="ContentEncoding\GZipContentEncoder.cs" />
-    <Compile Include="ContentEncoding\InflatingContentDecoder.cs" />
-    <Compile Include="ContentEncoding\InflatingContentEncoder.cs" />
+    <Compile Include="ContentEncoding\DeflateContentDecoder.cs" />
+    <Compile Include="ContentEncoding\DeflateContentEncoder.cs" />
     <Compile Include="ContentEncoding\IDecodeContent.cs" />
     <Compile Include="ContentEncoding\IEncodeContent.cs" />
     <Compile Include="Configuration\HttpClientCertificateCollection.cs" />

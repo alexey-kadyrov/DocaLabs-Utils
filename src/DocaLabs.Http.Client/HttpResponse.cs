@@ -65,14 +65,15 @@ namespace DocaLabs.Http.Client
         /// </summary>
         public byte[] AsByteArray()
         {
-            var memoryStream = new MemoryStream();
-
-            using (var stream = GetDataStream())
+            using (var memoryStream = new MemoryStream())
             {
-                stream.CopyTo(memoryStream);
-            }
+                using (var stream = GetDataStream())
+                {
+                    stream.CopyTo(memoryStream);
+                }
 
-            return memoryStream.ToArray();
+                return memoryStream.ToArray();
+            }
         }
 
         /// <summary>
