@@ -5,6 +5,7 @@ namespace DocaLabs.Http.Client.JsonSerialization
 {
     /// <summary>
     /// Implements IJsonDeserializer using JavaScriptSerializer.
+    /// All members are thread safe.
     /// </summary>
     public class DefaultJsonDeserializer : IJsonDeserializer
     {

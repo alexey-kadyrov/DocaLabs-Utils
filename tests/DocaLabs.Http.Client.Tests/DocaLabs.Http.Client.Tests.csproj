@@ -58,6 +58,7 @@
       <HintPath>..\..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -78,6 +79,9 @@
     <Compile Include="ContentEncoding\DeflateContentDecoderTests.cs" />
     <Compile Include="ContentEncoding\DeflateContentEncoderTests.cs" />
     <Compile Include="HttpResponseTests.cs" />
+    <Compile Include="JsonSerialization\DefaultJsonDeserializerTests.cs" />
+    <Compile Include="JsonSerialization\DefaultJsonSerializerTests.cs" />
+    <Compile Include="JsonSerialization\JsonSerializationProviderTests.cs" />
     <Compile Include="Mapping\when.cs" />
     <Compile Include="RequestSerialization\RequestBodySerializationFactoryTests.cs" />
     <Compile Include="ResponseDeserialization\ImageResponseDeserializerTests.cs" />
@@ -99,6 +103,10 @@
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
       <Project>{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}</Project>
       <Name>DocaLabs.Http.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\DocaLabs.Utils\DocaLabs.Utils.csproj">
+      <Project>{5EF7D2C9-BA29-4EF9-AC6F-CA4A15150A6D}</Project>
+      <Name>DocaLabs.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\DocaLabs.Testing.Common\DocaLabs.Testing.Common.csproj">
       <Project>{40A96AE2-C931-4AC1-A38E-5FBB3045216C}</Project>

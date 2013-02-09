@@ -10,10 +10,20 @@ namespace DocaLabs.Utils
     /// </summary>
     public static class LibraryExtensionsComposer
     {
-        private static readonly CompositionContainer CompositionContainer;
+        static readonly object Locker;
+        static readonly CompositionContainer CompositionContainer;
+
+        /// <summary>
+        /// Gets or sets action which is called when the CompositionException is thrown.
+        /// </summary>
+        public static Action<object, CompositionException> OnCompositionException { get; set; }
 
         static LibraryExtensionsComposer()
         {
+            Locker = new object();
+
+            OnCompositionException = (o,e) => Debug.WriteLine(e.ToString());
+
             // An aggregate catalogue that combines multiple catalogues
             var catalog = new AggregateCatalog();
 
@@ -36,11 +46,15 @@ namespace DocaLabs.Utils
         {
             try
             {
-                CompositionContainer.ComposeParts(o);
+                lock (Locker)
+                {
+                    CompositionContainer.ComposeParts(o);
+                }
             }
             catch (CompositionException e)
             {
-                Debug.WriteLine(e.ToString());
+                if (OnCompositionException != null)
+                    OnCompositionException(o, e);
             }
         }
     }

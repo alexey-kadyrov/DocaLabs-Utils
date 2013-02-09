@@ -4,6 +4,7 @@ namespace DocaLabs.Http.Client.JsonSerialization
 {
     /// <summary>
     /// Defines methods to deserialize an object from string in JSON notation.
+    /// Note for implementation: all members must be thread safe.
     /// </summary>
     public interface IJsonDeserializer
     {

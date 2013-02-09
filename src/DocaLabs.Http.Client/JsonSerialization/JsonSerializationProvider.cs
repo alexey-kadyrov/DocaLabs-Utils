@@ -9,6 +9,7 @@ namespace DocaLabs.Http.Client.JsonSerialization
     /// When the type is accessed for the first time it scans the base folder using MEF for exports of IJsonSerializer
     /// and IJsonDeserializer in assemblies with prefix "DocaLabs.Extensions." if there is nothing found then it will use
     /// DefaultJsonSerializer and DefaultJsonDeserializer.
+    /// All members are thread safe.
     /// </summary>
     public static class JsonSerializationProvider
     {
@@ -81,12 +82,12 @@ namespace DocaLabs.Http.Client.JsonSerialization
         /// </summary>
         public static void ReloadSerializationExtensions()
         {
+            var loader = new ExtensionLoader();
+
+            LibraryExtensionsComposer.ComposePartsFor(loader);
+
             lock (Locker)
             {
-                var loader = new ExtensionLoader();
-
-                LibraryExtensionsComposer.ComposePartsFor(loader);
-
                 _serializer = loader.SerializerExtension ?? new DefaultJsonSerializer();
                 _deserializer = loader.DeserializerExtension ?? new DefaultJsonDeserializer();
             }
