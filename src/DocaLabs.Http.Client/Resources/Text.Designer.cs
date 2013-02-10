@@ -61,6 +61,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Base type argument {0} does not match the original argument {1}..
+        /// </summary>
+        internal static string base_type_does_not_match {
+            get {
+                return ResourceManager.GetString("base_type_does_not_match", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot figure out how to deserialize web response..
         /// </summary>
         internal static string cannot_figure_out_how_to_deserialize {
@@ -111,6 +120,15 @@ namespace DocaLabs.Http.Client.Resources {
         internal static string if_base_class_generic_it_must_have_two_parameters {
             get {
                 return ResourceManager.GetString("if_base_class_generic_it_must_have_two_parameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interface {0} cannot be generic type definition..
+        /// </summary>
+        internal static string interface_cannot_be_generic_type_defienition {
+            get {
+                return ResourceManager.GetString("interface_cannot_be_generic_type_defienition", resourceCulture);
             }
         }
         

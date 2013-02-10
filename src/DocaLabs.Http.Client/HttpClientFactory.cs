@@ -15,7 +15,7 @@ namespace DocaLabs.Http.Client
         const string Suffix = "__http_client_impl";
         static readonly ModuleBuilder ModuleBuilder;
         static readonly object Locker;
-        static readonly Dictionary<Type, ConstructorInfo> Constructors;
+        static readonly Dictionary<Type, CreatedTypeInfo> Constructors;
 
         static HttpClientFactory()
         {
@@ -26,7 +26,7 @@ namespace DocaLabs.Http.Client
                 AssemblyBuilderAccess.Run);
 
             ModuleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName);
-            Constructors = new Dictionary<Type, ConstructorInfo>();
+            Constructors = new Dictionary<Type, CreatedTypeInfo>();
             Locker = new object();
         }
 
@@ -111,16 +111,28 @@ namespace DocaLabs.Http.Client
 
         static ConstructorInfo GetMappedConstructor(Type baseType, Type interfaceType)
         {
+            if (interfaceType == null)
+                throw new ArgumentNullException("interfaceType");
+
             lock (Locker)
             {
-                ConstructorInfo constructor;
+                CreatedTypeInfo constructor;
 
                 if (!Constructors.TryGetValue(interfaceType, out constructor))
                 {
-                    Constructors[interfaceType] = constructor = InitType(baseType, interfaceType);
+                    Constructors[interfaceType] = constructor = new CreatedTypeInfo
+                    {
+                        ConstructorInfo = InitType(baseType, interfaceType),
+                        OriginalBaseType = baseType
+                    };
+                }
+                else
+                {
+                    if(constructor.OriginalBaseType != baseType)
+                        throw new ArgumentException(string.Format(Resources.Text.base_type_does_not_match, baseType.FullName, constructor.OriginalBaseType.FullName), "baseType");
                 }
 
-                return constructor;
+                return constructor.ConstructorInfo;
             }
         }
 
@@ -169,7 +181,7 @@ namespace DocaLabs.Http.Client
                 return baseType;
 
             if(baseType.GetGenericArguments().Length != 2)
-                throw new InvalidOperationException(string.Format(Resources.Text.if_base_class_generic_it_must_have_two_parameters, baseType.FullName));
+                throw new ArgumentException(string.Format(Resources.Text.if_base_class_generic_it_must_have_two_parameters, baseType.FullName), "baseType");
 
             return baseType.MakeGenericType(interfaceInfo.QueryType, interfaceInfo.ResultType);
         }
@@ -216,9 +228,8 @@ namespace DocaLabs.Http.Client
                 baseCtor = baseType.GetConstructor(new[] {typeof (Uri), typeof (string)});
 
                 if (baseCtor == null)
-                    throw new InvalidOperationException(string.Format(Resources.Text.must_implement_constructor,
-                                                                      baseType.FullName,
-                                                                      interfaceInfo.RetryStragtegyType.FullName));
+                    throw new ArgumentException(string.Format(Resources.Text.must_implement_constructor,
+                                                baseType.FullName, interfaceInfo.RetryStragtegyType.FullName), "baseType");
             }
 
             return baseCtor;
@@ -236,8 +247,8 @@ namespace DocaLabs.Http.Client
         {
             var baseExecute = baseType.GetMethod("Execute", new[] { interfaceInfo.QueryType });
             if (baseExecute == null)
-                throw new InvalidOperationException(
-                    string.Format(Resources.Text.must_have_execute_method, baseType.FullName, interfaceInfo.ResultType.FullName, interfaceInfo.QueryType.FullName));
+                throw new ArgumentException(string.Format(Resources.Text.must_have_execute_method, 
+                                            baseType.FullName, interfaceInfo.ResultType.FullName, interfaceInfo.QueryType.FullName), "baseType");
 
             var newExecute = DefineServiceCallMethod(interfaceInfo, typeBuilder);
 
@@ -280,11 +291,11 @@ namespace DocaLabs.Http.Client
 
             public ClientInterfaceInfo(Type interfaceType)
             {
-                if (interfaceType == null)
-                    throw new ArgumentNullException("interfaceType");
-
                 if (!interfaceType.IsInterface)
                     throw new ArgumentException(string.Format(Resources.Text.must_be_interface, interfaceType.FullName), "interfaceType");
+
+                if(interfaceType.IsGenericTypeDefinition)
+                    throw new ArgumentException(string.Format(Resources.Text.interface_cannot_be_generic_type_defienition, interfaceType.FullName), "interfaceType");
 
                 var methods = interfaceType.GetMethods();
                 if (methods.Length != 1)
@@ -361,6 +372,12 @@ namespace DocaLabs.Http.Client
                 InitializedFields = fields.ToArray();
                 InitializedFieldsValues = fieldValues.ToArray();
             }
+        }
+    
+        class CreatedTypeInfo
+        {
+            public ConstructorInfo ConstructorInfo { get; set; }
+            public Type OriginalBaseType { get; set; }
         }
     }
 }

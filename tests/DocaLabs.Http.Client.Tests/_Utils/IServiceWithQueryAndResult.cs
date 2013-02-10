@@ -29,4 +29,34 @@
     {
         TestResult GetResult(TestsQuery query);
     }
+
+    public interface IServiceWithQueryAndResult7
+    {
+        TestResult GetResult(TestsQuery query);
+    }
+
+    public interface IServiceWithQueryAndResult8
+    {
+        TestResult GetResult(TestsQuery query);
+    }
+
+    public interface IServiceWithQueryAndResult9
+    {
+        TestResult GetResult(TestsQuery query);
+    }
+
+    public interface IServiceWithQueryAndResult10
+    {
+        TestResult GetResult(TestsQuery query);
+    }
+
+    public interface IServiceWithQueryAndResult11
+    {
+        TestResult GetResult(TestsQuery query);
+    }
+
+    public interface IServiceWithQueryAndResult12
+    {
+        TestResult GetResult(TestsQuery query);
+    }
 }
