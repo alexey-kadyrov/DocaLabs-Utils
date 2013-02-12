@@ -15,7 +15,7 @@ namespace DocaLabs.Http.Client.Mapping
         /// <summary>
         /// Gets parsed properties.
         /// </summary>
-        public IEnumerable<IParsedProperty> Properties { get; private set; }
+        public IEnumerable<IConvertProperty> Properties { get; private set; }
 
         ParsedType(Type type)
         {
@@ -30,25 +30,25 @@ namespace DocaLabs.Http.Client.Mapping
             return new ParsedType(type);
         }
 
-        static IEnumerable<IParsedProperty> Parse(Type type)
+        static IEnumerable<IConvertProperty> Parse(Type type)
         {
             return type.IsPrimitive
-                ? new List<IParsedProperty>()
+                ? new List<IConvertProperty>()
                 : type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance)
                     .Select(ParseProperty)
                     .Where(x => x != null)
                     .ToList();
         }
 
-        static IParsedProperty ParseProperty(PropertyInfo info)
+        static IConvertProperty ParseProperty(PropertyInfo info)
         {
             if (Ignore(info))
                 return null;
 
             return TryGetCustomPropertyParser(info)
-                ?? ParsedCollectionProperty.TryParse(info)
-                ?? ParsedOrdinaryProperty.TryParse(info)
-                ?? ParsedObjectProperty.TryParse(info);
+                ?? ConvertCollectionProperty.TryParse(info)
+                ?? ConvertOrdinaryProperty.TryParse(info)
+                ?? ConvertObjectProperty.TryParse(info);
         }
 
         static bool Ignore(PropertyInfo info)
@@ -59,11 +59,11 @@ namespace DocaLabs.Http.Client.Mapping
                     info.GetCustomAttributes(typeof(QueryIgnoreAttribute), true).Length > 0;
         }
 
-        static IParsedProperty TryGetCustomPropertyParser(PropertyInfo info)
+        static IConvertProperty TryGetCustomPropertyParser(PropertyInfo info)
         {
-            var attrs = info.GetCustomAttributes(typeof (QueryPropertyParserAttribute), true);
+            var attrs = info.GetCustomAttributes(typeof (QueryPropertyConverterAttribute), true);
             return attrs.Length > 0
-                ? ((QueryPropertyParserAttribute)attrs[0]).GetParser(info)
+                ? ((QueryPropertyConverterAttribute)attrs[0]).GetConverter(info)
                 : null;
         }
     }

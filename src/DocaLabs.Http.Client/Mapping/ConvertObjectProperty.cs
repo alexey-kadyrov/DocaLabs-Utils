@@ -4,17 +4,17 @@ using DocaLabs.Utils;
 
 namespace DocaLabs.Http.Client.Mapping
 {
-    public class ParsedObjectProperty : ParsedPropertyBase, IParsedProperty
+    public class ConvertObjectProperty : ParsedPropertyBase, IConvertProperty
     {
-        ParsedObjectProperty(PropertyInfo info)
+        ConvertObjectProperty(PropertyInfo info)
             : base(info)
         {
         }
 
-        public static IParsedProperty TryParse(PropertyInfo info)
+        public static IConvertProperty TryParse(PropertyInfo info)
         {
             return info.PropertyType.IsPrimitive
-                ? new ParsedObjectProperty(info)
+                ? new ConvertObjectProperty(info)
                 : null;
         }
 

@@ -86,9 +86,9 @@
     <Compile Include="RequestSerialization\RequestBodySerializationFactory.cs" />
     <Compile Include="ResponseDeserialization\ResponseParser.cs" />
     <Compile Include="RequestSerialization\SerializeAsFormAttribute.cs" />
-    <Compile Include="Mapping\Attributes\QueryPropertyParserAttribute.cs" />
+    <Compile Include="Mapping\Attributes\QueryPropertyConverterAttribute.cs" />
     <Compile Include="Mapping\ICustomQueryMapper.cs" />
-    <Compile Include="Mapping\ParsedObjectProperty.cs" />
+    <Compile Include="Mapping\ConvertObjectProperty.cs" />
     <Compile Include="Mapping\ParsedPropertyBase.cs" />
     <Compile Include="Mapping\Attributes\QueryIgnoreAttribute.cs" />
     <Compile Include="Mapping\Attributes\QueryParameterAttribute.cs" />
@@ -102,13 +102,13 @@
     <Compile Include="HttpClient.cs" />
     <Compile Include="HttpClientException.cs" />
     <Compile Include="HttpResponse.cs" />
-    <Compile Include="Mapping\ParsedCollectionProperty.cs" />
-    <Compile Include="Mapping\ParsedOrdinaryProperty.cs" />
-    <Compile Include="Mapping\IParsedProperty.cs" />
+    <Compile Include="Mapping\ConvertCollectionProperty.cs" />
+    <Compile Include="Mapping\ConvertOrdinaryProperty.cs" />
+    <Compile Include="Mapping\IConvertProperty.cs" />
     <Compile Include="Mapping\ParsedType.cs" />
     <Compile Include="Mapping\QueryMapper.cs" />
-    <Compile Include="Mapping\SeparatedCollectionParser.cs" />
-    <Compile Include="Mapping\Attributes\SeparatedCollectionParserAttribute.cs" />
+    <Compile Include="Mapping\SeparatedCollectionConverter.cs" />
+    <Compile Include="Mapping\Attributes\SeparatedCollectionConverterAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Text.Designer.cs">
       <AutoGen>True</AutoGen>

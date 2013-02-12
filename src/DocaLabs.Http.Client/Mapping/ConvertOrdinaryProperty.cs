@@ -5,19 +5,19 @@ using DocaLabs.Utils.Conversion;
 
 namespace DocaLabs.Http.Client.Mapping
 {
-    public class ParsedOrdinaryProperty : ParsedPropertyBase, IParsedProperty
+    public class ConvertOrdinaryProperty : ParsedPropertyBase, IConvertProperty
     {
-        ParsedOrdinaryProperty(PropertyInfo info)
+        ConvertOrdinaryProperty(PropertyInfo info)
             : base(info)
         {
         }
 
-        public static IParsedProperty TryParse(PropertyInfo info)
+        public static IConvertProperty TryParse(PropertyInfo info)
         {
             var propertyType = info.PropertyType;
 
             return propertyType.IsPrimitive || propertyType == typeof(string) || propertyType == typeof(byte[])
-                ? new ParsedOrdinaryProperty(info) 
+                ? new ConvertOrdinaryProperty(info) 
                 : null;
         }
 

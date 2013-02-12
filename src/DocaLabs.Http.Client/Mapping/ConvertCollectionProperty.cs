@@ -8,17 +8,17 @@ using DocaLabs.Utils.Conversion;
 
 namespace DocaLabs.Http.Client.Mapping
 {
-    public class ParsedCollectionProperty : ParsedPropertyBase, IParsedProperty
+    public class ConvertCollectionProperty : ParsedPropertyBase, IConvertProperty
     {
-        ParsedCollectionProperty(PropertyInfo info)
+        ConvertCollectionProperty(PropertyInfo info)
             : base(info)
         {
         }
 
-        public static IParsedProperty TryParse(PropertyInfo info)
+        public static IConvertProperty TryParse(PropertyInfo info)
         {
             return IsEnumerable(info) && GetEnumerableElementType(info).IsPrimitive
-                ? new ParsedCollectionProperty(info)
+                ? new ConvertCollectionProperty(info)
                 : null;
         }
 

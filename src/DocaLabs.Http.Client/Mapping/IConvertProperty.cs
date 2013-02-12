@@ -2,7 +2,7 @@
 
 namespace DocaLabs.Http.Client.Mapping
 {
-    public interface IParsedProperty
+    public interface IConvertProperty
     {
         IEnumerable<KeyValuePair<string, IList<string>>> GetValue(object obj);
     }

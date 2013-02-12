@@ -7,11 +7,11 @@ using DocaLabs.Utils.Conversion;
 
 namespace DocaLabs.Http.Client.Mapping
 {
-    public class SeparatedCollectionParser : ParsedPropertyBase, IParsedProperty
+    public class SeparatedCollectionConverter : ParsedPropertyBase, IConvertProperty
     {
         public char Separator { get; set; }
 
-        public SeparatedCollectionParser(PropertyInfo info)
+        public SeparatedCollectionConverter(PropertyInfo info)
             : base(info)
         {
             Separator = '|';
