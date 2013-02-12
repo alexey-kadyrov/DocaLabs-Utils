@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
@@ -180,9 +181,9 @@ namespace DocaLabs.Http.Client
 
             var type = typeof(TQuery);
 
-            return type.GetCustomAttributes(typeof(RequestSerializationAttribute), true).Length > 0
-                || GetType().GetCustomAttributes(typeof(RequestSerializationAttribute), true).Length > 0
-                || type.GetProperties().Any(property => property.GetCustomAttributes(typeof(RequestSerializationAttribute), true).Length > 0)
+            return type.GetCustomAttribute(typeof(RequestSerializationAttribute), true) != null
+                || GetType().GetCustomAttribute(typeof(RequestSerializationAttribute), true) != null
+                || type.GetProperties().Any(property => property.GetCustomAttribute(typeof(RequestSerializationAttribute), true) != null)
                 ? WebRequestMethods.Http.Post
                 : WebRequestMethods.Http.Get;
         }

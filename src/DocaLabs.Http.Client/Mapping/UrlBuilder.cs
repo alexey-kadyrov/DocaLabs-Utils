@@ -1,4 +1,5 @@
 ﻿using System;
+using DocaLabs.Http.Client.Mapping.Attributes;
 
 namespace DocaLabs.Http.Client.Mapping
 {

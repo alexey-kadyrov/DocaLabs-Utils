@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DocaLabs.Http.Client.Mapping.Attributes;
 using DocaLabs.Utils;
 
 namespace DocaLabs.Http.Client.Mapping

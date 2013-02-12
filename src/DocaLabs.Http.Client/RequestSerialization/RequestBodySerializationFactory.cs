@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace DocaLabs.Http.Client.RequestSerialization
 {
@@ -35,11 +36,11 @@ namespace DocaLabs.Http.Client.RequestSerialization
 
         static IRequestSerialization TryQueryClassLevel(object query)
         {
-            var attrs = query.GetType().GetCustomAttributes(typeof(RequestSerializationAttribute), true);
+            var serializer = query.GetType().GetCustomAttribute(typeof(RequestSerializationAttribute), true);
 
-            return attrs.Length == 0 
+            return serializer == null 
                 ? null 
-                : attrs[0] as IRequestSerialization;
+                : serializer as IRequestSerialization;
         }
 
         static IRequestSerialization TryQueryPropertyLevel(object query)
@@ -47,11 +48,11 @@ namespace DocaLabs.Http.Client.RequestSerialization
             // ReSharper disable LoopCanBeConvertedToQuery
             foreach (var property in query.GetType().GetProperties())
             {
-                var attrs = property.GetCustomAttributes(typeof(RequestSerializationAttribute), true);
-                if (attrs.Length <= 0)
+                var serializer = property.GetCustomAttribute(typeof(RequestSerializationAttribute), true);
+                if (serializer == null)
                     continue;
 
-                return attrs[0] as IRequestSerialization;
+                return serializer as IRequestSerialization;
             }
 
             return null;
@@ -60,11 +61,11 @@ namespace DocaLabs.Http.Client.RequestSerialization
 
         static IRequestSerialization TryHttpClientClassLevel(object httpClient)
         {
-            var attrs = httpClient.GetType().GetCustomAttributes(typeof(RequestSerializationAttribute), true);
+            var serializer = httpClient.GetType().GetCustomAttribute(typeof(RequestSerializationAttribute), true);
 
-            return attrs.Length == 0 
+            return serializer == null 
                 ? null 
-                : attrs[0] as IRequestSerialization;
+                : serializer as IRequestSerialization;
         }
     }
 }

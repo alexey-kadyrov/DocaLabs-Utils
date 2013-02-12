@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace DocaLabs.Http.Client.Mapping
+namespace DocaLabs.Http.Client.Mapping.Attributes
 {
     public abstract class QueryPropertyParserAttribute : Attribute
     {

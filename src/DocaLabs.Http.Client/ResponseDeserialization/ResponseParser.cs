@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 
 namespace DocaLabs.Http.Client.ResponseDeserialization
 {
@@ -78,9 +79,9 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             if(resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            var attrs = resultType.GetCustomAttributes(typeof(ResponseDeserializationAttribute), true);
-            if (attrs.Length > 0)
-                return ((IResponseDeserialization)attrs[0]).Deserialize(response, resultType);
+            var deserializer = resultType.GetCustomAttribute(typeof(ResponseDeserializationAttribute), true);
+            if (deserializer != null)
+                return ((IResponseDeserialization)deserializer).Deserialize(response, resultType);
 
             if (resultType == typeof (VoidType))
                 return VoidType.Value;
