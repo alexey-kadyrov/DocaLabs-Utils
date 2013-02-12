@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
@@ -9,14 +10,14 @@ namespace DocaLabs.Http.Client.Mapping
     /// </summary>
     public class QueryBuilder
     {
-        StringBuilder Builder { get; set; }
+        readonly StringBuilder _builder;
 
         /// <summary>
         /// Initializes a new instance of the QueryBuilder class.
         /// </summary>
         public QueryBuilder()
         {
-            Builder = new StringBuilder();
+            _builder = new StringBuilder();
         }
 
         /// <summary>
@@ -27,15 +28,18 @@ namespace DocaLabs.Http.Client.Mapping
         /// <returns>Self reference, useful for method chaining.</returns>
         public QueryBuilder Add(string key, string value)
         {
+            if(key == null)
+                throw new ArgumentNullException("key");
+
             if (value == null)
                 return this;
 
             value = HttpUtility.UrlEncode(value);
 
-            if (Builder.Length == 0)
-                Builder.Append(key).Append("=").Append(value);
+            if (_builder.Length == 0)
+                _builder.Append(key).Append("=").Append(value);
             else
-                Builder.Append("&").Append(key).Append("=").Append(value);
+                _builder.Append("&").Append(key).Append("=").Append(value);
 
             return this;
         }
@@ -65,7 +69,7 @@ namespace DocaLabs.Http.Client.Mapping
         /// </summary>
         public override string ToString()
         {
-            return Builder.ToString();
+            return _builder.ToString();
         }
     }
 }
