@@ -8,7 +8,7 @@ using DocaLabs.Utils.Conversion;
 
 namespace DocaLabs.Http.Client.Mapping
 {
-    public class ConvertCollectionProperty : ParsedPropertyBase, IConvertProperty
+    public class ConvertCollectionProperty : PropertyConverterBase, IConvertProperty
     {
         ConvertCollectionProperty(PropertyInfo info)
             : base(info)

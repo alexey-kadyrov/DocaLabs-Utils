@@ -7,16 +7,30 @@ using DocaLabs.Utils.Conversion;
 
 namespace DocaLabs.Http.Client.Mapping
 {
-    public class SeparatedCollectionConverter : ParsedPropertyBase, IConvertProperty
+    /// <summary>
+    /// Defines converter for enumerable properties that serializes into delimited string.
+    /// </summary>
+    public class SeparatedCollectionConverter : PropertyConverterBase, IConvertProperty
     {
+        /// <summary>
+        /// String's delimiter. The default value is pipe |.
+        /// </summary>
         public char Separator { get; set; }
 
+        /// <summary>
+        /// Initializes an instance of the SeparatedCollectionConverter class for a specified property.
+        /// </summary>
         public SeparatedCollectionConverter(PropertyInfo info)
             : base(info)
         {
             Separator = '|';
         }
 
+        /// <summary>
+        /// Serializes the property value to the delimited string.
+        /// </summary>
+        /// <param name="obj">Instance of the object which "owns" the property.</param>
+        /// <returns>One key-value pair with single string which contains all items.</returns>
         public IEnumerable<KeyValuePair<string, IList<string>>> GetValue(object obj)
         {
             var values = new CustomNameValueCollection();
@@ -29,10 +43,10 @@ namespace DocaLabs.Http.Client.Mapping
 
                 foreach (var value in collection)
                 {
-                    if (stringBuilder.Length >= 0)
+                    if (stringBuilder.Length > 0)
                         stringBuilder.Append(Separator);
 
-                    stringBuilder.Append(CustomConverter.Current.ChangeType<string>(value));
+                    stringBuilder.Append(ConvertItem(value));
                 }
 
                 if(stringBuilder.Length > 0)
@@ -40,6 +54,13 @@ namespace DocaLabs.Http.Client.Mapping
             }
 
             return values;
+        }
+
+        string ConvertItem(object value)
+        {
+            return string.IsNullOrWhiteSpace(Format)
+                ? CustomConverter.Current.ChangeType<string>(value)
+                : string.Format("{0:" + Format + "}", value);
         }
     }
 }

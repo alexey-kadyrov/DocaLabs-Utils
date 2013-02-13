@@ -4,7 +4,7 @@ using DocaLabs.Utils;
 
 namespace DocaLabs.Http.Client.Mapping
 {
-    public class ConvertObjectProperty : ParsedPropertyBase, IConvertProperty
+    public class ConvertObjectProperty : PropertyConverterBase, IConvertProperty
     {
         ConvertObjectProperty(PropertyInfo info)
             : base(info)

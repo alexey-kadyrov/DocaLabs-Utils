@@ -89,7 +89,7 @@
     <Compile Include="Mapping\Attributes\QueryPropertyConverterAttribute.cs" />
     <Compile Include="Mapping\ICustomQueryMapper.cs" />
     <Compile Include="Mapping\ConvertObjectProperty.cs" />
-    <Compile Include="Mapping\ParsedPropertyBase.cs" />
+    <Compile Include="Mapping\PropertyConverterBase.cs" />
     <Compile Include="Mapping\Attributes\QueryIgnoreAttribute.cs" />
     <Compile Include="Mapping\Attributes\QueryParameterAttribute.cs" />
     <Compile Include="RequestSerialization\RequestSerializationAttribute.cs" />

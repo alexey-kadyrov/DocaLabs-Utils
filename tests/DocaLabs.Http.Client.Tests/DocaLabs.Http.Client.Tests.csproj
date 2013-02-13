@@ -81,7 +81,9 @@
     <Compile Include="HttpClientExceptionTests.cs" />
     <Compile Include="HttpClientFactoryTests.cs" />
     <Compile Include="HttpResponseTests.cs" />
+    <Compile Include="Mapping\Attributes\SeparatedCollectionConverterAttributeTests.cs" />
     <Compile Include="Mapping\QueryBuilderTests.cs" />
+    <Compile Include="Mapping\SeparatedCollectionConverterTests.cs" />
     <Compile Include="_Utils\IGenericService.cs" />
     <Compile Include="_Utils\ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute.cs" />
     <Compile Include="_Utils\IDecoratedService.cs" />

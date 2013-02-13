@@ -3,7 +3,7 @@
 namespace DocaLabs.Http.Client.Mapping.Attributes
 {
     /// <summary>
-    /// Defines converter for enumerable properties that sterilizes into delimited string.
+    /// Defines converter for enumerable properties that serializes into delimited string.
     /// </summary>
     public class SeparatedCollectionConverterAttribute : QueryPropertyConverterAttribute
     {
